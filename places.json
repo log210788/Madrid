@@ -1,0 +1,34 @@
+[
+  {
+    "meta": "03:43 – 16:30",
+    "badge": "Stage 1 • Warm-Up",
+    "title": "1. The Mystery Box & Auxiliary Inversion",
+    "desc": "Starting with a gamified 10-lives guessing challenge lowers cognitive anxiety and naturally prompts spontaneous question inversion ('Is it...', 'Can you...', 'Does it...'). Moving from broad binary categories to specific items without hesitation.",
+    "quote": "\"When you focus on the objective of solving the puzzle, the grammar takes care of itself.\"",
+    "tags": ["deductive", "inversion", "downforce", "suction"]
+  },
+  {
+    "meta": "16:31 – 35:45",
+    "badge": "Stage 2 • Core Syntax",
+    "title": "2. The Sentence Stretcher & Narrative Scaffolding",
+    "desc": "Breaking the habit of brief 3-word answers by methodically scaffolding thoughts into 20–30 word multi-clause sentences: Starting Seed → Adjectives (size before color) → Preposition of place → Cause ('because / due to') → Narrative time clause ('while / until'). Covered robots, runaway zoo buses, Rekordbox DJ crashes, and Elon Musk space rescues.",
+    "quote": "\"We start with a baby 5-word sentence and add layers of descriptive, spatial, and causal detail until long sentences feel completely natural.\"",
+    "tags": ["scaffolding", "adjective-order", "causal-clause", "rekordbox", "motherboard"]
+  },
+  {
+    "meta": "35:46 – 51:15",
+    "badge": "Stage 3 • Agility",
+    "title": "3. UpHeads & The Velocity of Circumlocution",
+    "desc": "Mastering the art of explaining concepts when you don't know the exact word. Diego described retail empires (Zara / Amancio Ortega), medical roles (opticians, surgeons), landmarks (Sagrada Família, North Pole), and drilled 5 essential English idioms: hot potato, butterflies in the stomach, burn the midnight oil, raining cats and dogs, and the ball is in your court.",
+    "quote": "\"Circumlocution is the hallmark of real-world fluency: never freezing, pivoting immediately, and painting a vivid mental picture.\"",
+    "tags": ["circumlocution", "optician", "surgeon", "sagrada-familia", "hot-potato", "ball-in-court"]
+  },
+  {
+    "meta": "01:00:46 – 01:33:01",
+    "badge": "Stage 5 • Real-Time Simulation",
+    "title": "4. Keep Talking & Nobody Explodes: Operational Precision",
+    "desc": "A simulation drilling verbal precision under countdown timer pressure. One player sees the explosive device, the other holds the technical defusal manual. Requires instantaneous color verification, wire counting, button timer releases, symbol deciphering, and navigating homophone hazards ('read', 'reed', 'red', 'you', 'ur').",
+    "quote": "\"Under intense time pressure, ambiguity is lethal. Precision of speech, active listening, and phonetic confirmation become matters of life and death.\"",
+    "tags": ["defuse", "detonate", "serial-number", "homophone", "operational-clarity", "resilience"]
+  }
+]

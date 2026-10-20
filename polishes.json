@@ -1,0 +1,62 @@
+[
+  {
+    "topic": "Prepositions of Material (Made of vs. Made from)",
+    "time": "04:20",
+    "said": "Is it made out from plastic?",
+    "natural": "Is it made of plastic?",
+    "why": "Use 'made of' when the material retains its physical identity without chemical transformation. Use 'made from' when it transforms (e.g., paper is made from wood).",
+    "spoken": "Is it made out from plastic?",
+    "polished": "Is it made of plastic?",
+    "note": "Use 'made of' when the material retains its physical identity without chemical transformation. Use 'made from' when it transforms (e.g. paper is made from wood)."
+  },
+  {
+    "topic": "Adjective Ordering (Size Precedes Color)",
+    "time": "22:07",
+    "said": "The bus is green and large",
+    "natural": "The large green bus...",
+    "why": "In standard English adjective sequence, physical dimension and size always precede color: Opinion → Size → Age → Shape → Color.",
+    "spoken": "The bus is green and large",
+    "polished": "The large green bus...",
+    "note": "In standard English adjective sequence, physical dimension and size always precede color: Opinion → Size → Age → Shape → Color."
+  },
+  {
+    "topic": "Professional Hardware Terminology",
+    "time": "25:41",
+    "said": "My laptop was upset because doing too much things",
+    "natural": "My laptop froze / crashed because it was handling too many background tasks simultaneously.",
+    "why": "Personifying hardware as 'upset' is endearing, but 'froze / crashed' and 'too many tasks' (countable) represents polished professional English.",
+    "spoken": "My laptop was upset because doing too much things",
+    "polished": "My laptop froze / crashed because it was handling too many background tasks simultaneously.",
+    "note": "Personifying hardware as 'upset' is endearing, but 'froze / crashed' and 'too many tasks' (countable) represents polished professional English."
+  },
+  {
+    "topic": "Past Continuous Narrative",
+    "time": "26:45",
+    "said": "The monkey driving the bus in the zoo",
+    "natural": "The monkey was driving the bus through the zoo while the tourists ran away...",
+    "why": "Anchor continuous background actions in past narratives with the past continuous (was/were + -ing) combined with a time conjunction (while / as).",
+    "spoken": "The monkey driving the bus in the zoo",
+    "polished": "The monkey was driving the bus through the zoo while the tourists ran away...",
+    "note": "Anchor continuous background actions in past narratives with the past continuous (was/were + -ing) combined with a time conjunction (while / as)."
+  },
+  {
+    "topic": "Causal Connectors (Due to vs. Because)",
+    "time": "34:10",
+    "said": "The spaceship crashed because the speed",
+    "natural": "The spaceship crashed due to extreme speed / because of its extreme speed",
+    "why": "'Because' introduces a full clause (subject + verb); 'due to' or 'because of' introduces a noun phrase ('its extreme speed').",
+    "spoken": "The spaceship crashed because the speed",
+    "polished": "The spaceship crashed due to extreme speed / because of its extreme speed",
+    "note": "'Because' introduces a full clause (subject + verb); 'due to' or 'because of' introduces a noun phrase ('its extreme speed')."
+  },
+  {
+    "topic": "Subject-Verb Agreement",
+    "time": "01:32:30",
+    "said": "The words is difficult",
+    "natural": "The words are difficult / The word module is challenging",
+    "why": "Subject-verb agreement: 'words' is plural, requiring the plural verb 'are'.",
+    "spoken": "The words is difficult",
+    "polished": "The words are difficult / The word module is challenging",
+    "note": "Subject-verb agreement: 'words' is plural, requiring the plural verb 'are'."
+  }
+]

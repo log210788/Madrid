@@ -1,0 +1,14 @@
+[
+  { "time": "03:43", "speaker": "Louie", "wrong": "Hi, Dega, how are you doing today?", "right": "Hi, Diego, how are you doing today?", "note": "The automated note-taker mistranscribed Diego's name as 'Dega'." },
+  { "time": "06:11", "speaker": "Louie", "wrong": "Yeah I do like the nat to 60...", "right": "Yeah, I do like the 0 to 60 (acceleration)...", "note": "ASR misheard the British colloquial acceleration metric 'nought to 60' (0–60 mph) as 'nat to 60'." },
+  { "time": "08:00", "speaker": "Diego", "wrong": "Can you buy a fin in the streets?", "right": "Can you buy a thing / it in the street?", "note": "Speech-to-text recorded 'thing' as 'fin'." },
+  { "time": "10:15", "speaker": "Diego", "wrong": "Is it a mummy fer?", "right": "Is it a mammal?", "note": "Note-taker heard the biological classification 'mammal' as 'mummy fer'." },
+  { "time": "17:26", "speaker": "Diego", "wrong": "The Rob will uhh open the the box. In inside fence. With his ha his hands.", "right": "The robot opened the box inside the fence with its hands.", "note": "Speech-to-text captured initial false starts and pronoun slip ('his hands' -> 'its hands')." },
+  { "time": "22:07", "speaker": "Louie", "wrong": "the tree is green and large. No, large and green, so I think size normally comes before.", "right": "Adjective ordering rule: Size precedes color ('large green tree')", "note": "Spoken correction highlighting that physical dimension precedes color in English syntax." },
+  { "time": "28:15", "speaker": "Diego", "wrong": "when I run record box with many tracks", "right": "when I run Rekordbox with many tracks", "note": "ASR split the Pioneer DJ software title 'Rekordbox' into two separate words 'record box'." },
+  { "time": "30:20", "speaker": "Louie", "wrong": "I was playing tek", "right": "I was playing Tekken", "note": "Note-taker cut off the iconic fighting video game title 'Tekken' as 'tek'." },
+  { "time": "42:30", "speaker": "Diego", "wrong": "the sa familiar church in Barcelona", "right": "the Sagrada Família church in Barcelona", "note": "ASR severely mangled the Catalan landmark name 'Sagrada Família' into 'the sa familiar'." },
+  { "time": "46:12", "speaker": "Diego", "wrong": "is it an aracid?", "right": "is it an arachnid?", "note": "Acoustic mishearing of the zoological term 'arachnid' as 'aracid'." },
+  { "time": "01:12:30", "speaker": "Louie", "wrong": "read, reed, or red", "right": "Homophone trap: R-E-A-D vs R-E-E-D vs R-E-D", "note": "High-stakes homophone confusion during the 'Who's on First' bomb defusal module." },
+  { "time": "01:31:48", "speaker": "Diego", "wrong": "In the superstition...", "right": "In the third position / sub-position...", "note": "Note-taker heard 'third position / sub-position' as the surreal word 'superstition'." }
+]

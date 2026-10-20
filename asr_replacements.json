@@ -1,0 +1,50 @@
+[
+  {
+    "match": "Hi, Dega, how are you doing today?",
+    "replace": "Hi, Diego, how are you doing today? <span class=\"asr-fix-pill\" title=\"Note-taker misheard 'Diego' as 'Dega'\">✨ Fixed: \"Diego\" <span class=\"text-slate-400\">(note-taker: \"Dega\")</span></span>"
+  },
+  {
+    "match": "nat to 60",
+    "replace": "0 to 60 <span class=\"asr-fix-pill\" title=\"ASR misheard British colloquial 'nought to 60' (0-60 mph) as 'nat to 60'\">✨ Fixed: \"0 to 60\" <span class=\"text-slate-400\">(note-taker: \"nat to 60\")</span></span>"
+  },
+  {
+    "match": "Can you buy a fin in the streets?",
+    "replace": "Can you buy a thing / it in the street? <span class=\"asr-fix-pill\" title=\"ASR transcribed 'thing' as 'fin'\">✨ Fixed: \"thing / it\" <span class=\"text-slate-400\">(note-taker: \"fin\")</span></span>"
+  },
+  {
+    "match": "a mummy fer",
+    "replace": "a mammal <span class=\"asr-fix-pill\" title=\"Note-taker heard 'mammal' as 'mummy fer'\">✨ Fixed: \"mammal\" <span class=\"text-slate-400\">(note-taker: \"mummy fer\")</span></span>"
+  },
+  {
+    "match": "The Rob will uhh open the the box. In inside fence. With his ha his hands.",
+    "replace": "The robot opened the box inside the fence with its hands. <span class=\"asr-fix-pill\" title=\"Speech-to-text recorded hesitations and pronoun slip ('his' -> 'its')\">✨ Fixed: \"The robot opened...\" <span class=\"text-slate-400\">(note-taker: \"The Rob will...\")</span></span>"
+  },
+  {
+    "match": "the tree is green and large. No, large and green, so I think size normally comes before.",
+    "replace": "the tree is <span class=\"vocab-mark\" data-vkey=\"adjective-order\" onclick=\"inspectVocab('adjective-order')\">large and green</span> (size before color) <span class=\"asr-fix-pill\" title=\"Adjective order: size precedes color in English\">✨ Syntax Rule: \"Size before color\"</span>"
+  },
+  {
+    "match": "record box",
+    "replace": "<span class=\"vocab-mark\" data-vkey=\"rekordbox\" onclick=\"inspectVocab('rekordbox')\">Rekordbox</span> <span class=\"asr-fix-pill\" title=\"ASR split Pioneer DJ software 'Rekordbox' into 'record box'\">✨ Fixed: \"Rekordbox\" <span class=\"text-slate-400\">(note-taker: \"record box\")</span></span>"
+  },
+  {
+    "match": "I was playing tek",
+    "replace": "I was playing <span class=\"vocab-mark\" data-vkey=\"tekken\" onclick=\"inspectVocab('tekken')\">Tekken</span> <span class=\"asr-fix-pill\" title=\"Note-taker clipped fighting game title 'Tekken' as 'tek'\">✨ Fixed: \"Tekken\" <span class=\"text-slate-400\">(note-taker: \"tek\")</span></span>"
+  },
+  {
+    "match": "the sa familiar",
+    "replace": "<span class=\"vocab-mark\" data-vkey=\"sagrada-familia\" onclick=\"inspectVocab('sagrada-familia')\">Sagrada Família</span> <span class=\"asr-fix-pill\" title=\"ASR mangled Catalan landmark 'Sagrada Família' into 'the sa familiar'\">✨ Fixed: \"Sagrada Família\" <span class=\"text-slate-400\">(note-taker: \"the sa familiar\")</span></span>"
+  },
+  {
+    "match": "aracid",
+    "replace": "<span class=\"vocab-mark\" data-vkey=\"arachnid\" onclick=\"inspectVocab('arachnid')\">arachnid</span> <span class=\"asr-fix-pill\" title=\"Acoustic mishearing of 'arachnid' as 'aracid'\">✨ Fixed: \"arachnid\" <span class=\"text-slate-400\">(note-taker: \"aracid\")</span></span>"
+  },
+  {
+    "match": "read, reed, or red",
+    "replace": "<span class=\"vocab-mark\" data-vkey=\"homophone\" onclick=\"inspectVocab('homophone')\">read, reed, or red</span> <span class=\"asr-fix-pill\" title=\"Homophone trap in Keep Talking bomb disposal\">✨ Homophone Drill: \"READ / REED / RED\"</span>"
+  },
+  {
+    "match": "In the superstition...",
+    "replace": "In the third position / sub-position... <span class=\"asr-fix-pill\" title=\"ASR misheard 'third position / sub-position' as 'superstition'\">✨ Fixed: \"third position\" <span class=\"text-slate-400\">(note-taker: \"superstition\")</span></span>"
+  }
+]

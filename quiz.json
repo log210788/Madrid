@@ -1,0 +1,68 @@
+[
+  {
+    "q": "Which sentence follows standard English adjective ordering for physical descriptions?",
+    "options": [
+      "He drove a blue large bus through the zoo.",
+      "He drove a large blue bus through the zoo.",
+      "He drove a large and blue bus through the zoo.",
+      "He drove a bus blue and large through the zoo."
+    ],
+    "correct": 1,
+    "exp": "In English adjective order, physical dimension and size always precede color: 'a large blue bus'."
+  },
+  {
+    "q": "What is 'circumlocution' in language learning?",
+    "options": [
+      "Speaking in circles to avoid answering directly",
+      "Describing a concept or object smoothly when you don't know the exact word",
+      "Translating every word literally from Spanish",
+      "Using only one-syllable words in conversation"
+    ],
+    "correct": 1,
+    "exp": "Circumlocution is the vital fluency skill of describing an item's function, appearance, or context without freezing."
+  },
+  {
+    "q": "If someone says 'The ball is in your court,' what do they mean?",
+    "options": [
+      "It is time to play tennis",
+      "It is now your turn or responsibility to make the next decision or take action",
+      "The situation has become dangerous",
+      "You have lost the argument"
+    ],
+    "correct": 1,
+    "exp": "'The ball is in your court' means it is your turn to take action or make the next move."
+  },
+  {
+    "q": "Choose the grammatically correct causal connector: 'The spaceship crashed _______ its extreme speed.'",
+    "options": [
+      "because",
+      "due to",
+      "while",
+      "although"
+    ],
+    "correct": 1,
+    "exp": "'Due to' (or 'because of') introduces a noun phrase ('its extreme speed'), whereas 'because' requires a full subject + verb clause."
+  },
+  {
+    "q": "In high-stakes operational communication (like bomb disposal), why is acoustic confirmation critical for words like 'READ'?",
+    "options": [
+      "Because 'READ' is an irregular verb",
+      "Because 'READ' has multiple homophones and forms (read, red, reed) that sound identical",
+      "Because 'READ' must always be spoken in uppercase",
+      "Because 'READ' is only used in British English"
+    ],
+    "correct": 1,
+    "exp": "Homophones sound identical, making phonetic spelling (R-E-A-D vs R-E-E-D) essential under time pressure."
+  },
+  {
+    "q": "What does the idiom 'to burn the midnight oil' mean?",
+    "options": [
+      "To cause an accidental kitchen fire",
+      "To waste precious energy resources",
+      "To work or study late into the night",
+      "To drive a car with poor fuel efficiency"
+    ],
+    "correct": 2,
+    "exp": "'To burn the midnight oil' means to work, code, or study deep into the late hours of the night."
+  }
+]
