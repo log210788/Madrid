@@ -18,7 +18,14 @@ $asrReplacements = $asrRaw | ConvertFrom-Json
 $vocabTagsRaw = [System.IO.File]::ReadAllText("$PSScriptRoot\vocab_tags.json", [System.Text.Encoding]::UTF8)
 $vocabTags = $vocabTagsRaw | ConvertFrom-Json
 
-$rawLines = Get-Content "$PSScriptRoot\Transcript\Lesson01.txt" -Encoding UTF8
+# Sort vocab tags by pattern length descending to avoid substring clashes
+$vocabTags = $vocabTags | Sort-Object { $_.p.Length } -Descending
+
+$transcriptPath = "$PSScriptRoot\Transcript\10-23-2026.txt"
+if (-not (Test-Path $transcriptPath)) {
+    throw "Transcript file not found: $transcriptPath"
+}
+$rawLines = Get-Content $transcriptPath -Encoding UTF8
 $rawTurns = @()
 $currentSpeaker = ''
 $currentTime = ''
@@ -52,24 +59,20 @@ if ($currentSpeaker -ne '') {
     }
 }
 
-# Diego's real lesson dialogue starts at 03:43 (sec = 223)
-$lessonTurns = $rawTurns | Where-Object { $_.sec -ge 223 }
-Write-Host "Filtered to $($lessonTurns.Count) lesson dialogue turns (03:43 - 01:33:01)."
+Write-Host "Parsed $($rawTurns.Count) raw speaking turns from transcript."
 
-# Track which chapters have been assigned
 $assignedChaps = @{}
-
 $finalTurns = @()
 
-for ($i = 0; $i -lt $lessonTurns.Count; $i++) {
-    $t = $lessonTurns[$i]
+for ($i = 0; $i -lt $rawTurns.Count; $i++) {
+    $t = $rawTurns[$i]
     $turnNum = $i + 1
     $turnId = "turn-$turnNum"
     
     $chapId = ''
     $chapTitle = ''
 
-    # Check each chapter in order
+    # Check each chapter in sequence
     foreach ($ch in $chapters) {
         if (-not $assignedChaps.ContainsKey($ch.id) -and $t.sec -ge $ch.minSec) {
             $chapId = $ch.id
@@ -79,24 +82,54 @@ for ($i = 0; $i -lt $lessonTurns.Count; $i++) {
         }
     }
 
-    $speaker = if ($t.rawSpeaker -eq 'louie') { 'Louie' } else { 'Diego' }
+    $speaker = if ($t.rawSpeaker -eq 'Diego') { 'Diego' } else { 'Louie' }
     $text = $t.text
 
-    # Apply ASR replacements
+    # Apply forensic ASR replacements
     foreach ($asr in $asrReplacements) {
         if ($text.Contains($asr.match)) {
             $text = $text.Replace($asr.match, $asr.replace)
         }
     }
 
-    # Apply Vocab tagging
+    # Tag vocabulary safely outside existing HTML tags
     foreach ($vt in $vocabTags) {
-        $patt = [regex]::Escape($vt.p)
-        $regexPattern = "(?i)(?<!data-vkey=[`"'][^`"']*)\b($patt)\b(?![^<]*>)"
-        if ([regex]::IsMatch($text, $regexPattern)) {
-            $replacement = "<span class=`"vocab-mark`" data-vkey=`"$($vt.k)`" onclick=`"inspectVocab('$($vt.k)')`">`$1</span>"
-            $text = [regex]::Replace($text, $regexPattern, $replacement)
+        if ($text.Contains("data-vkey=`"$($vt.k)`"")) {
+            continue
         }
+
+        $tokens = [regex]::Split($text, "(<[^>]+>)")
+        $newTokens = @()
+        $insideSpan = 0
+        $tagged = $false
+
+        for ($j = 0; $j -lt $tokens.Count; $j++) {
+            $tok = $tokens[$j]
+            if ($tok.StartsWith("<") -and $tok.EndsWith(">")) {
+                if ($tok -match '^<span\b') { $insideSpan++ }
+                elseif ($tok -match '^</span\b') { if ($insideSpan -gt 0) { $insideSpan-- } }
+                $newTokens += $tok
+            } else {
+                if ($insideSpan -eq 0 -and -not $tagged -and $tok.Trim() -ne "") {
+                    $patt = [regex]::Escape($vt.p)
+                    $regexPattern = "(?i)\b($patt)\b"
+                    if ([regex]::IsMatch($tok, $regexPattern)) {
+                        $replacement = "<span class=`"vocab-mark`" data-vkey=`"$($vt.k)`" onclick=`"inspectVocab('$($vt.k)')`">`$1</span>"
+                        $tok = [regex]::Replace($tok, $regexPattern, $replacement, 1)
+                        $tagged = $true
+                    }
+                }
+                $newTokens += $tok
+            }
+        }
+        $text = $newTokens -join ""
+    }
+
+    # Validate tag pairing for this turn
+    $openSpans = ([regex]::Matches($text, "<span\b")).Count
+    $closeSpans = ([regex]::Matches($text, "</span>")).Count
+    if ($openSpans -ne $closeSpans) {
+        Write-Warning "Mismatched span tags in $turnId ($($t.time)): $openSpans open, $closeSpans close."
     }
 
     $finalTurns += [PSCustomObject]@{

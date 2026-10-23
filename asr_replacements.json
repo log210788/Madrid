@@ -1,50 +1,78 @@
 [
   {
-    "match": "Hi, Dega, how are you doing today?",
-    "replace": "Hi, Diego, how are you doing today? <span class=\"asr-fix-pill\" title=\"Note-taker misheard 'Diego' as 'Dega'\">✨ Fixed: \"Diego\" <span class=\"text-slate-400\">(note-taker: \"Dega\")</span></span>"
+    "match": "For. My. Candidature- Is, uh,",
+    "replace": "For my <span class=\"vocab-mark\" data-vkey=\"candidacy\" onclick=\"inspectVocab('candidacy')\">candidacy</span> <span class=\"asr-fix-pill\" title=\"ASR captured literal Spanish 'candidatura' instead of English 'candidacy / campaign'\">✨ Fixed: \"candidacy\" (note-taker: \"Candidature\")</span> is, uh,"
   },
   {
-    "match": "nat to 60",
-    "replace": "0 to 60 <span class=\"asr-fix-pill\" title=\"ASR misheard British colloquial 'nought to 60' (0-60 mph) as 'nat to 60'\">✨ Fixed: \"0 to 60\" <span class=\"text-slate-400\">(note-taker: \"nat to 60\")</span></span>"
+    "match": "-the. Poor.",
+    "replace": "-the <span class=\"vocab-mark\" data-vkey=\"poverty\" onclick=\"inspectVocab('poverty')\">poverty</span> <span class=\"asr-fix-pill\" title=\"ASR transcribed 'the poor' instead of economic condition 'poverty'\">✨ Fixed: \"poverty\" (note-taker: \"the. Poor\")</span>."
   },
   {
-    "match": "Can you buy a fin in the streets?",
-    "replace": "Can you buy a thing / it in the street? <span class=\"asr-fix-pill\" title=\"ASR transcribed 'thing' as 'fin'\">✨ Fixed: \"thing / it\" <span class=\"text-slate-400\">(note-taker: \"fin\")</span></span>"
+    "match": "How do you say, impuestos? Do you know?",
+    "replace": "How do you say, impuestos? <span class=\"asr-fix-pill\" title=\"Diego paused to retrieve the English term for taxes (impuestos)\">✨ Fixed: \"taxes\" (Spanish: \"impuestos\")</span> Do you know?"
   },
   {
-    "match": "a mummy fer",
-    "replace": "a mammal <span class=\"asr-fix-pill\" title=\"Note-taker heard 'mammal' as 'mummy fer'\">✨ Fixed: \"mammal\" <span class=\"text-slate-400\">(note-taker: \"mummy fer\")</span></span>"
+    "match": "so, uh, dil. uting.",
+    "replace": "so, uh, <span class=\"vocab-mark\" data-vkey=\"diluting\" onclick=\"inspectVocab('diluting')\">diluting</span>. <span class=\"asr-fix-pill\" title=\"ASR split 'diluting' into two fragments with a period\">✨ Fixed: \"diluting\" (note-taker: \"dil. uting\")</span>"
   },
   {
-    "match": "The Rob will uhh open the the box. In inside fence. With his ha his hands.",
-    "replace": "The robot opened the box inside the fence with its hands. <span class=\"asr-fix-pill\" title=\"Speech-to-text recorded hesitations and pronoun slip ('his' -> 'its')\">✨ Fixed: \"The robot opened...\" <span class=\"text-slate-400\">(note-taker: \"The Rob will...\")</span></span>"
+    "match": "Uh, weight, weight is like salary, no?",
+    "replace": "Uh, <span class=\"vocab-mark\" data-vkey=\"wage\" onclick=\"inspectVocab('wage')\">wage</span>, wage is like salary, no? <span class=\"asr-fix-pill\" title=\"ASR acoustic homophone: heard 'weight' instead of economic term 'wage'\">✨ Fixed: \"wage\" (note-taker: \"weight\")</span>"
   },
   {
-    "match": "the tree is green and large. No, large and green, so I think size normally comes before.",
-    "replace": "the tree is <span class=\"vocab-mark\" data-vkey=\"adjective-order\" onclick=\"inspectVocab('adjective-order')\">large and green</span> (size before color) <span class=\"asr-fix-pill\" title=\"Adjective order: size precedes color in English\">✨ Syntax Rule: \"Size before color\"</span>"
+    "match": "They add two it's too strong. It's too strong.",
+    "replace": "They argue it's too strong / They added to it, it's too strong. <span class=\"asr-fix-pill\" title=\"Speech-to-text garbled Louie's critique of the triple lock pension\">✨ Fixed: \"They argue it's too strong\" (note-taker: \"They add two\")</span>"
   },
   {
-    "match": "record box",
-    "replace": "<span class=\"vocab-mark\" data-vkey=\"rekordbox\" onclick=\"inspectVocab('rekordbox')\">Rekordbox</span> <span class=\"asr-fix-pill\" title=\"ASR split Pioneer DJ software 'Rekordbox' into 'record box'\">✨ Fixed: \"Rekordbox\" <span class=\"text-slate-400\">(note-taker: \"record box\")</span></span>"
+    "match": "Where I make a more day. I get one down in a second if you wait. I.",
+    "replace": "[Note-taker acoustic glitch / audio artifact] <span class=\"asr-fix-pill\" title=\"Automated note-taker ghost turn from background audio\">✨ Cleaned ASR Glitch</span>"
   },
   {
-    "match": "I was playing tek",
-    "replace": "I was playing <span class=\"vocab-mark\" data-vkey=\"tekken\" onclick=\"inspectVocab('tekken')\">Tekken</span> <span class=\"asr-fix-pill\" title=\"Note-taker clipped fighting game title 'Tekken' as 'tek'\">✨ Fixed: \"Tekken\" <span class=\"text-slate-400\">(note-taker: \"tek\")</span></span>"
+    "match": "California Cation or something.",
+    "replace": "<span class=\"vocab-mark\" data-vkey=\"californication\" onclick=\"inspectVocab('californication')\">Californication</span> or something. <span class=\"asr-fix-pill\" title=\"ASR butchered iconic Red Hot Chili Peppers album 'Californication'\">✨ Fixed: \"Californication\" (note-taker: \"California Cation\")</span>"
   },
   {
-    "match": "the sa familiar",
-    "replace": "<span class=\"vocab-mark\" data-vkey=\"sagrada-familia\" onclick=\"inspectVocab('sagrada-familia')\">Sagrada Família</span> <span class=\"asr-fix-pill\" title=\"ASR mangled Catalan landmark 'Sagrada Família' into 'the sa familiar'\">✨ Fixed: \"Sagrada Família\" <span class=\"text-slate-400\">(note-taker: \"the sa familiar\")</span></span>"
+    "match": "wallpaper is. Messy.",
+    "replace": "wallpaper is <span class=\"vocab-mark\" data-vkey=\"messi\" onclick=\"inspectVocab('messi')\">Messi</span>. <span class=\"asr-fix-pill\" title=\"ASR confused footballer Lionel Messi with adjective 'messy'\">✨ Fixed: \"Messi\" (note-taker: \"Messy\")</span>"
   },
   {
-    "match": "aracid",
-    "replace": "<span class=\"vocab-mark\" data-vkey=\"arachnid\" onclick=\"inspectVocab('arachnid')\">arachnid</span> <span class=\"asr-fix-pill\" title=\"Acoustic mishearing of 'arachnid' as 'aracid'\">✨ Fixed: \"arachnid\" <span class=\"text-slate-400\">(note-taker: \"aracid\")</span></span>"
+    "match": "second half of the. Uh, Spain president.",
+    "replace": "<span class=\"vocab-mark\" data-vkey=\"deputy-assistant\" onclick=\"inspectVocab('deputy-assistant')\">second-in-command / assistant</span> to the President of Spain. <span class=\"asr-fix-pill\" title=\"Diego described the Prime Minister's personal assistant in Moncloa\">✨ Fixed: \"second-in-command / assistant\" (note-taker: \"second half\")</span>"
   },
   {
-    "match": "read, reed, or red",
-    "replace": "<span class=\"vocab-mark\" data-vkey=\"homophone\" onclick=\"inspectVocab('homophone')\">read, reed, or red</span> <span class=\"asr-fix-pill\" title=\"Homophone trap in Keep Talking bomb disposal\">✨ Homophone Drill: \"READ / REED / RED\"</span>"
+    "match": "messes assigned messy shirt",
+    "replace": "Messi's <span class=\"vocab-mark\" data-vkey=\"signed-jersey\" onclick=\"inspectVocab('signed-jersey')\">signed shirt</span> <span class=\"asr-fix-pill\" title=\"ASR double-mangled Lionel Messi's name as 'messes' and 'messy'\">✨ Fixed: \"Messi's signed shirt\" (note-taker: \"messes assigned messy shirt\")</span>"
   },
   {
-    "match": "In the superstition...",
-    "replace": "In the third position / sub-position... <span class=\"asr-fix-pill\" title=\"ASR misheard 'third position / sub-position' as 'superstition'\">✨ Fixed: \"third position\" <span class=\"text-slate-400\">(note-taker: \"superstition\")</span></span>"
+    "match": "With, uh. Collabs.",
+    "replace": "With clips / hooks (colgado en la pared) <span class=\"asr-fix-pill\" title=\"ASR misheard Spanish root for hanging as 'collabs'\">✨ Fixed: \"clips / hooks\" (note-taker: \"collabs\")</span>"
+  },
+  {
+    "match": "Maybe, uh, Giselle. Oh. To see, uh, amazing buildings, or.",
+    "replace": "Maybe, uh, <span class=\"vocab-mark\" data-vkey=\"design\" onclick=\"inspectVocab('design')\">design (diseño)</span> / architecture... to see amazing buildings. <span class=\"asr-fix-pill\" title=\"ASR mistranscribed Spanish 'diseño' as 'Giselle'\">✨ Fixed: \"design (diseño)\" (note-taker: \"Giselle\")</span>"
+  },
+  {
+    "match": "Love. Love. L-U-S-T. It's when you,",
+    "replace": "<span class=\"vocab-mark\" data-vkey=\"lust\" onclick=\"inspectVocab('lust')\">Lust. Lust. L-U-S-T.</span> It's when you, <span class=\"asr-fix-pill\" title=\"Note-taker transcribed 'Love' even while Louie literally spelled L-U-S-T\">✨ Fixed: \"Lust\" (note-taker: \"Love. Love. L-U-S-T\")</span>"
+  },
+  {
+    "match": "reach. My achieves outside.",
+    "replace": "reach my <span class=\"vocab-mark\" data-vkey=\"achievements\" onclick=\"inspectVocab('achievements')\">achievements / goals</span> abroad. <span class=\"asr-fix-pill\" title=\"Diego used 'achieves' as a noun and 'outside' for 'abroad'\">✨ Fixed: \"goals abroad\" (note-taker: \"achieves outside\")</span>"
+  },
+  {
+    "match": "I have too much, uh, uh. C-CV. That, that the others.",
+    "replace": "I have a <span class=\"vocab-mark\" data-vkey=\"stronger-cv\" onclick=\"inspectVocab('stronger-cv')\">much stronger CV</span> than the others. <span class=\"asr-fix-pill\" title=\"Spanish idiom 'demasiado currículum' -> 'a much stronger CV'\">✨ Fixed: \"much stronger CV\" (note-taker: \"too much CV that the others\")</span>"
+  },
+  {
+    "match": "croc. Riches. How do you? It's a thing said. The cucaraches.",
+    "replace": "<span class=\"vocab-mark\" data-vkey=\"cockroaches\" onclick=\"inspectVocab('cockroaches')\">cockroaches</span> (cucarachas) <span class=\"asr-fix-pill\" title=\"ASR phonetically fractured 'cockroaches' as 'croc. Riches'\">✨ Fixed: \"cockroaches\" (note-taker: \"croc. Riches / cucaraches\")</span>"
+  },
+  {
+    "match": "Tet, right? So we, we, we have Tet here. And it's deeply. Uh, pseudo. Science. Right?",
+    "replace": "<span class=\"vocab-mark\" data-vkey=\"tet\" onclick=\"inspectVocab('tet')\">Tết</span>, right? So we have Tết here. And it's deeply <span class=\"vocab-mark\" data-vkey=\"pseudoscience\" onclick=\"inspectVocab('pseudoscience')\">pseudoscience</span>, right? <span class=\"asr-fix-pill\" title=\"Vietnamese Lunar New Year (Tết Nguyên Đán) & pseudoscience\">✨ Fixed: \"Tết / pseudoscience\" (note-taker: \"Tet / pseudo. Science\")</span>"
+  },
+  {
+    "match": "Thank you very much, David. I have to go to the next lesson.",
+    "replace": "Thank you very much, Diego. I have to go to the next lesson. <span class=\"asr-fix-pill\" title=\"Teacher accidentally slipped on student name before saying Diego at 01:04:04\">✨ Corrected Name: \"Diego\" (spoken slip: \"David\")</span>"
   }
 ]

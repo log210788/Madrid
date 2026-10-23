@@ -1,68 +1,68 @@
 [
   {
-    "q": "Which sentence follows standard English adjective ordering for physical descriptions?",
+    "q": "What does the British 'Triple Lock' pension formula guarantee to UK retirees?",
     "options": [
-      "He drove a blue large bus through the zoo.",
-      "He drove a large blue bus through the zoo.",
-      "He drove a large and blue bus through the zoo.",
-      "He drove a bus blue and large through the zoo."
+      "It locks retirement funds into three government-approved private banks",
+      "State pensions increase annually by whichever is highest: inflation, average wage growth, or 2.5%",
+      "Workers must contribute to three separate pension schemes simultaneously",
+      "Retirees receive triple their final working salary upon reaching age 67"
     ],
     "correct": 1,
-    "exp": "In English adjective order, physical dimension and size always precede color: 'a large blue bus'."
+    "exp": "The UK Triple Lock guarantees that the state pension rises each year by the highest of: inflation (CPI), average wage growth, or a minimum 2.5%."
   },
   {
-    "q": "What is 'circumlocution' in language learning?",
+    "q": "Which sentence follows correct English syntax for modal auxiliary verbs?",
     "options": [
-      "Speaking in circles to avoid answering directly",
-      "Describing a concept or object smoothly when you don't know the exact word",
-      "Translating every word literally from Spanish",
-      "Using only one-syllable words in conversation"
-    ],
-    "correct": 1,
-    "exp": "Circumlocution is the vital fluency skill of describing an item's function, appearance, or context without freezing."
-  },
-  {
-    "q": "If someone says 'The ball is in your court,' what do they mean?",
-    "options": [
-      "It is time to play tennis",
-      "It is now your turn or responsibility to make the next decision or take action",
-      "The situation has become dangerous",
-      "You have lost the argument"
-    ],
-    "correct": 1,
-    "exp": "'The ball is in your court' means it is your turn to take action or make the next move."
-  },
-  {
-    "q": "Choose the grammatically correct causal connector: 'The spaceship crashed _______ its extreme speed.'",
-    "options": [
-      "because",
-      "due to",
-      "while",
-      "although"
-    ],
-    "correct": 1,
-    "exp": "'Due to' (or 'because of') introduces a noun phrase ('its extreme speed'), whereas 'because' requires a full subject + verb clause."
-  },
-  {
-    "q": "In high-stakes operational communication (like bomb disposal), why is acoustic confirmation critical for words like 'READ'?",
-    "options": [
-      "Because 'READ' is an irregular verb",
-      "Because 'READ' has multiple homophones and forms (read, red, reed) that sound identical",
-      "Because 'READ' must always be spoken in uppercase",
-      "Because 'READ' is only used in British English"
-    ],
-    "correct": 1,
-    "exp": "Homophones sound identical, making phonetic spelling (R-E-A-D vs R-E-E-D) essential under time pressure."
-  },
-  {
-    "q": "What does the idiom 'to burn the midnight oil' mean?",
-    "options": [
-      "To cause an accidental kitchen fire",
-      "To waste precious energy resources",
-      "To work or study late into the night",
-      "To drive a car with poor fuel efficiency"
+      "People can came to the country easily.",
+      "People can coming to the country easily.",
+      "People can come to the country easily.",
+      "People can to come to the country easily."
     ],
     "correct": 2,
-    "exp": "'To burn the midnight oil' means to work, code, or study deep into the late hours of the night."
+    "exp": "Modal auxiliary verbs (can, could, should, must, will) are always followed directly by the bare infinitive ('come') without 'to' or past-tense endings."
+  },
+  {
+    "q": "In the lesson's philosophical checkers discussion, how was 'lust' distinguished from 'love'?",
+    "options": [
+      "Lust is a permanent legal contract, whereas love is temporary",
+      "Lust is an emotional dependency, whereas love requires shared bank accounts",
+      "Lust is superficial physical attraction, whereas love is an enduring commitment that stays even when challenging",
+      "Lust only applies to food and material items, whereas love only applies to family"
+    ],
+    "correct": 2,
+    "exp": "Louie and Diego defined lust as superficial physical attraction, whereas true love is a deep, unconditional bond that perseveres even when circumstances are difficult."
+  },
+  {
+    "q": "What iconic 1999 Red Hot Chili Peppers album and single did the automated note-taker mishear as 'California Cation'?",
+    "options": [
+      "Blood Sugar Sex Magik",
+      "Californication",
+      "Under the Bridge",
+      "By the Way"
+    ],
+    "correct": 1,
+    "exp": "The automated note-taker acoustically mangled the famous album and title track 'Californication' into two separate words: 'California Cation'."
+  },
+  {
+    "q": "What is the core pedagogical insight behind the proverb 'Comparison is the thief of joy'?",
+    "options": [
+      "Comparing prices in supermarkets always saves you money",
+      "Constantly measuring your own life or achievements against others erodes your inner peace and happiness",
+      "Successful professionals must compare themselves to competitors to remain motivated",
+      "Having multiple social media accounts improves emotional equilibrium"
+    ],
+    "correct": 1,
+    "exp": "Attributed to Theodore Roosevelt, this proverb teaches that constantly measuring your personal journey against someone else's external reality destroys present contentment."
+  },
+  {
+    "q": "According to Diego and Louie, why does working abroad provide a significant long-term career advantage?",
+    "options": [
+      "It eliminates the legal obligation to contribute to domestic state pensions",
+      "It completely prevents any possibility of company redundancy or downsizing",
+      "It exposes you to diverse operational methodologies, sharpens bilingual agility, and creates a far stronger CV upon returning home",
+      "It guarantees immediate promotion to senior executive within six months"
+    ],
+    "correct": 2,
+    "exp": "Working abroad teaches different organizational structures, sharpens cross-cultural communication, and provides a distinctive competitive edge in any job market."
   }
 ]

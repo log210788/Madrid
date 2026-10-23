@@ -1,34 +1,34 @@
 [
   {
-    "meta": "03:43 – 16:30",
-    "badge": "Stage 1 • Warm-Up",
-    "title": "1. The Mystery Box & Auxiliary Inversion",
-    "desc": "Starting with a gamified 10-lives guessing challenge lowers cognitive anxiety and naturally prompts spontaneous question inversion ('Is it...', 'Can you...', 'Does it...'). Moving from broad binary categories to specific items without hesitation.",
-    "quote": "\"When you focus on the objective of solving the puzzle, the grammar takes care of itself.\"",
-    "tags": ["deductive", "inversion", "downforce", "suction"]
+    "meta": "00:00 – 06:30",
+    "badge": "Stage 1 • Rhetoric & Economics",
+    "title": "1. The 16-Second Pitch & Macroeconomic Realities",
+    "desc": "Training rapid cognitive articulation under strict time limits. Diego pitched his presidential campaign focusing on urban well-being, green public spaces, and poverty reduction. Louie probed the economic mechanics of salary raises, leading to a debate on currency printing, inflation, and immigration pressures across Southern Europe.",
+    "quote": "\"You have 16 seconds to convince me why you should be president... I will invest in the quality of life, new housing, and gardens where everyone can walk in calm.\"",
+    "tags": ["rhetoric", "presidential-pitch", "quality-of-life", "inflation", "macroeconomics"]
   },
   {
-    "meta": "16:31 – 35:45",
-    "badge": "Stage 2 • Core Syntax",
-    "title": "2. The Sentence Stretcher & Narrative Scaffolding",
-    "desc": "Breaking the habit of brief 3-word answers by methodically scaffolding thoughts into 20–30 word multi-clause sentences: Starting Seed → Adjectives (size before color) → Preposition of place → Cause ('because / due to') → Narrative time clause ('while / until'). Covered robots, runaway zoo buses, Rekordbox DJ crashes, and Elon Musk space rescues.",
-    "quote": "\"We start with a baby 5-word sentence and add layers of descriptive, spatial, and causal detail until long sentences feel completely natural.\"",
-    "tags": ["scaffolding", "adjective-order", "causal-clause", "rekordbox", "motherboard"]
+    "meta": "06:31 – 20:45",
+    "badge": "Stage 2 • Public Policy & Demographics",
+    "title": "2. The Triple Lock Pension, 401(k) & Generational Divides",
+    "desc": "A deep comparative breakdown of retirement safety nets. Louie analyzed the UK 'Triple Lock' (pension increases tied to inflation, average wages, or 2.5%) and government dilution of benefits. Diego contrasted this with Spain's 35-year state pension and his brother's US 401(k) retirement match, examining the generational economic gap between asset-rich pensioners and taxed young workers.",
+    "quote": "\"In England we have the Triple Lock Pension... it raises every year at the rate of inflation or average wage. It sounds good, but we can't afford it.\"",
+    "tags": ["triple-lock", "state-pension", "401k", "generational-wealth", "retirement-age"]
   },
   {
-    "meta": "35:46 – 51:15",
-    "badge": "Stage 3 • Agility",
-    "title": "3. UpHeads & The Velocity of Circumlocution",
-    "desc": "Mastering the art of explaining concepts when you don't know the exact word. Diego described retail empires (Zara / Amancio Ortega), medical roles (opticians, surgeons), landmarks (Sagrada Família, North Pole), and drilled 5 essential English idioms: hot potato, butterflies in the stomach, burn the midnight oil, raining cats and dogs, and the ball is in your court.",
-    "quote": "\"Circumlocution is the hallmark of real-world fluency: never freezing, pivoting immediately, and painting a vivid mental picture.\"",
-    "tags": ["circumlocution", "optician", "surgeon", "sagrada-familia", "hot-potato", "ball-in-court"]
+    "meta": "20:46 – 36:50",
+    "badge": "Stage 3 • Deductive Strategy & Storytelling",
+    "title": "3. Two Truths and a Lie: Celebrity Doors, Moncloa & Messi",
+    "desc": "A masterclass in cross-examination and narrative suspense. Louie shared authentic backstage encounters (refusing entry to M.I.A. at venue openings, having beers with the Red Hot Chili Peppers over charity skateboards, and fabricating an O2 Arena meeting with Michael Jackson). Diego countered with a signed Lionel Messi FC Barcelona jersey hanging in his home and a Mallorca wedding where he unknowingly partied with the Spanish Prime Minister's personal assistant.",
+    "quote": "\"One of them told me that he was the assistant of the President of Spain. I really didn't know who he was until the end of the wedding.\"",
+    "tags": ["two-truths-and-a-lie", "interrogation", "reggaeton", "lionel-messi", "fc-barcelona", "moncloa"]
   },
   {
-    "meta": "01:00:46 – 01:33:01",
-    "badge": "Stage 5 • Real-Time Simulation",
-    "title": "4. Keep Talking & Nobody Explodes: Operational Precision",
-    "desc": "A simulation drilling verbal precision under countdown timer pressure. One player sees the explosive device, the other holds the technical defusal manual. Requires instantaneous color verification, wire counting, button timer releases, symbol deciphering, and navigating homophone hazards ('read', 'reed', 'red', 'you', 'ur').",
-    "quote": "\"Under intense time pressure, ambiguity is lethal. Precision of speech, active listening, and phonetic confirmation become matters of life and death.\"",
-    "tags": ["defuse", "detonate", "serial-number", "homophone", "operational-clarity", "resilience"]
+    "meta": "36:51 – 01:04:07",
+    "badge": "Stage 4 • Existential Equilibrium & Global Ambition",
+    "title": "4. The Game of Life: Emotional Nuances, Ambition & Vietnamese Tết",
+    "desc": "Using a checkers board to unlock profound philosophical discussions. Diego defined the purpose of art as revealing unseen truths and distinguished unconditional love from superficial lust and emotional attachment. The conversation explored Theodore Roosevelt's maxim ('Comparison is the thief of joy'), career acceleration through working abroad, and surviving wild wildlife encounters during Vietnamese Lunar New Year (Tết).",
+    "quote": "\"Comparison is the thief of joy... When you live and work in another country, you learn different ways to do everything, and you return with far more experience.\"",
+    "tags": ["purpose-of-art", "love-vs-lust", "ambition", "contentment", "thief-of-joy", "international-career", "tet-vietnam"]
   }
 ]

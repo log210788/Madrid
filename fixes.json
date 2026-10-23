@@ -1,14 +1,142 @@
 [
-  { "time": "03:43", "speaker": "Louie", "wrong": "Hi, Dega, how are you doing today?", "right": "Hi, Diego, how are you doing today?", "note": "The automated note-taker mistranscribed Diego's name as 'Dega'." },
-  { "time": "06:11", "speaker": "Louie", "wrong": "Yeah I do like the nat to 60...", "right": "Yeah, I do like the 0 to 60 (acceleration)...", "note": "ASR misheard the British colloquial acceleration metric 'nought to 60' (0–60 mph) as 'nat to 60'." },
-  { "time": "08:00", "speaker": "Diego", "wrong": "Can you buy a fin in the streets?", "right": "Can you buy a thing / it in the street?", "note": "Speech-to-text recorded 'thing' as 'fin'." },
-  { "time": "10:15", "speaker": "Diego", "wrong": "Is it a mummy fer?", "right": "Is it a mammal?", "note": "Note-taker heard the biological classification 'mammal' as 'mummy fer'." },
-  { "time": "17:26", "speaker": "Diego", "wrong": "The Rob will uhh open the the box. In inside fence. With his ha his hands.", "right": "The robot opened the box inside the fence with its hands.", "note": "Speech-to-text captured initial false starts and pronoun slip ('his hands' -> 'its hands')." },
-  { "time": "22:07", "speaker": "Louie", "wrong": "the tree is green and large. No, large and green, so I think size normally comes before.", "right": "Adjective ordering rule: Size precedes color ('large green tree')", "note": "Spoken correction highlighting that physical dimension precedes color in English syntax." },
-  { "time": "28:15", "speaker": "Diego", "wrong": "when I run record box with many tracks", "right": "when I run Rekordbox with many tracks", "note": "ASR split the Pioneer DJ software title 'Rekordbox' into two separate words 'record box'." },
-  { "time": "30:20", "speaker": "Louie", "wrong": "I was playing tek", "right": "I was playing Tekken", "note": "Note-taker cut off the iconic fighting video game title 'Tekken' as 'tek'." },
-  { "time": "42:30", "speaker": "Diego", "wrong": "the sa familiar church in Barcelona", "right": "the Sagrada Família church in Barcelona", "note": "ASR severely mangled the Catalan landmark name 'Sagrada Família' into 'the sa familiar'." },
-  { "time": "46:12", "speaker": "Diego", "wrong": "is it an aracid?", "right": "is it an arachnid?", "note": "Acoustic mishearing of the zoological term 'arachnid' as 'aracid'." },
-  { "time": "01:12:30", "speaker": "Louie", "wrong": "read, reed, or red", "right": "Homophone trap: R-E-A-D vs R-E-E-D vs R-E-D", "note": "High-stakes homophone confusion during the 'Who's on First' bomb defusal module." },
-  { "time": "01:31:48", "speaker": "Diego", "wrong": "In the superstition...", "right": "In the third position / sub-position...", "note": "Note-taker heard 'third position / sub-position' as the surreal word 'superstition'." }
+  {
+    "time": "01:46",
+    "speaker": "Diego",
+    "wrong": "the best option for my candidature is...",
+    "right": "the best option for my candidacy / campaign is...",
+    "note": "ASR captured the literal Spanish false-friend 'candidatura' rather than the natural English term 'candidacy' or 'campaign'."
+  },
+  {
+    "time": "02:54",
+    "speaker": "Diego",
+    "wrong": "to reduce the poor",
+    "right": "to reduce / alleviate poverty",
+    "note": "Speech-to-text recorded 'the poor' (people) instead of the abstract economic condition 'poverty', which Louie then clarified."
+  },
+  {
+    "time": "06:02",
+    "speaker": "Diego",
+    "wrong": "and increase the. How do you say, impuestos?",
+    "right": "and increase the... taxes (impuestos)",
+    "note": "Diego paused to retrieve the English word for 'impuestos', which Louie identified as 'taxes'."
+  },
+  {
+    "time": "07:03",
+    "speaker": "Louie",
+    "wrong": "so, uh, dil. uting",
+    "right": "so, uh, diluting",
+    "note": "The automated note-taker broke the continuous verb 'diluting' into two fragments with a punctuation mark."
+  },
+  {
+    "time": "09:00",
+    "speaker": "Diego",
+    "wrong": "weight, weight is like salary, no?",
+    "right": "wage, wage is like salary, no?",
+    "note": "Acoustic homophone error: speech-to-text heard Diego say 'weight' instead of the economic term 'wage'."
+  },
+  {
+    "time": "10:06",
+    "speaker": "Louie",
+    "wrong": "They add two it's too strong. It's too strong.",
+    "right": "They argue it's too strong / They added to... it's too strong.",
+    "note": "Speech-to-text garbled Louie's critique of the pension policy into 'They add two'."
+  },
+  {
+    "time": "16:05",
+    "speaker": "Louie",
+    "wrong": "is it a 401(k)?",
+    "right": "is it a 401(k) retirement plan?",
+    "note": "ASR transcribed the American tax-advantaged defined-contribution retirement account number without full context."
+  },
+  {
+    "time": "22:58",
+    "speaker": "Speaker 3",
+    "wrong": "Where I make a more day. I get one down in a second if you wait. I.",
+    "right": "[Acoustic artifact / Note-taker mic hallucination]",
+    "note": "An automated speech-to-text ghost turn attributed to a third speaker right before Louie explained his history with M.I.A."
+  },
+  {
+    "time": "24:50",
+    "speaker": "Louie",
+    "wrong": "they sing California Cation or something",
+    "right": "they sing 'Californication' or something",
+    "note": "Note-taker butchered the title of the famous 1999 Red Hot Chili Peppers album and single 'Californication'."
+  },
+  {
+    "time": "29:12",
+    "speaker": "Diego",
+    "wrong": "my wallpaper is Messy",
+    "right": "my wallpaper is Messi (Lionel Messi)",
+    "note": "ASR confused the legendary footballer Lionel Messi's surname with the English adjective 'messy' (untidy)."
+  },
+  {
+    "time": "30:04",
+    "speaker": "Diego",
+    "wrong": "that was the second half of the Spain president",
+    "right": "that was the second-in-command / personal assistant to the Prime Minister of Spain",
+    "note": "Diego described the deputy / chief assistant of the Spanish President of the Government (Moncloa)."
+  },
+  {
+    "time": "34:47",
+    "speaker": "Louie",
+    "wrong": "how did you get messes assigned messy shirt?",
+    "right": "how did you get Messi's signed Messi shirt?",
+    "note": "Speech-to-text double-garbled Lionel Messi's name as 'messes' and 'messy shirt'."
+  },
+  {
+    "time": "36:03",
+    "speaker": "Diego",
+    "wrong": "With, uh... Collabs... hanging on the wall",
+    "right": "With clips / hooks (colgado en la pared)",
+    "note": "Diego referenced wall hangers/clips, which ASR misheard as 'collabs' (collaborations)."
+  },
+  {
+    "time": "38:33",
+    "speaker": "Diego",
+    "wrong": "Maybe, uh, Giselle. Oh. To see, uh, amazing buildings",
+    "right": "Maybe, uh, design (diseño) / architecture... to see amazing buildings",
+    "note": "ASR hallucinated the French name 'Giselle' when Diego pronounced 'diseño' (design/architecture)."
+  },
+  {
+    "time": "40:33",
+    "speaker": "Louie",
+    "wrong": "Love. Love. L-U-S-T. It's when you...",
+    "right": "Lust. Lust. L-U-S-T. It's when you...",
+    "note": "The note-taker transcribed 'Love' even while Louie was literally spelling out L-U-S-T for sexual/superficial attraction!"
+  },
+  {
+    "time": "50:08",
+    "speaker": "Diego",
+    "wrong": "and try to reach my achieves outside",
+    "right": "and try to achieve my goals / reach milestones abroad",
+    "note": "Diego used 'achieves' as a noun instead of 'achievements' or 'goals', and 'outside' for 'abroad'."
+  },
+  {
+    "time": "51:00",
+    "speaker": "Diego",
+    "wrong": "I have too much CV that the others",
+    "right": "I have a stronger CV / much more experience than the others",
+    "note": "Diego translated Spanish 'demasiado currículum' directly, meaning a significantly stronger resume."
+  },
+  {
+    "time": "57:35",
+    "speaker": "Diego",
+    "wrong": "croc. Riches... cucaraches",
+    "right": "cockroaches... cucarachas",
+    "note": "Diego searched for the English word for 'cucarachas', which the note-taker phoneticized as 'croc. Riches'."
+  },
+  {
+    "time": "01:00:25",
+    "speaker": "Louie",
+    "wrong": "So. Tet, right?",
+    "right": "So, Tết, right? (Vietnamese Lunar New Year)",
+    "note": "ASR missed the Vietnamese diacritic in Tết Nguyên Đán, the most important celebration in Vietnam."
+  },
+  {
+    "time": "01:03:44",
+    "speaker": "Louie",
+    "wrong": "Thank you very much, David.",
+    "right": "Thank you very much, Diego.",
+    "note": "Teacher slipped on student's name in the closing rush before immediately correcting to Diego."
+  }
 ]

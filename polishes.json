@@ -1,62 +1,62 @@
 [
   {
-    "topic": "Prepositions of Material (Made of vs. Made from)",
-    "time": "04:20",
-    "said": "Is it made out from plastic?",
-    "natural": "Is it made of plastic?",
-    "why": "Use 'made of' when the material retains its physical identity without chemical transformation. Use 'made from' when it transforms (e.g., paper is made from wood).",
-    "spoken": "Is it made out from plastic?",
-    "polished": "Is it made of plastic?",
-    "note": "Use 'made of' when the material retains its physical identity without chemical transformation. Use 'made from' when it transforms (e.g. paper is made from wood)."
+    "topic": "Political Rhetoric (Candidacy vs. Candidature)",
+    "time": "01:46",
+    "said": "The best option for my candidature is to reduce the poor",
+    "natural": "The core focus of my candidacy / campaign is to alleviate poverty",
+    "why": "In Spanish, 'candidatura' is translated as 'candidacy' (the state of being a candidate) or 'campaign'. In English, we 'alleviate poverty' (the condition) rather than 'reduce the poor' (the people).",
+    "spoken": "The best option for my candidature is to reduce the poor",
+    "polished": "The core focus of my candidacy / campaign is to alleviate poverty",
+    "note": "In Spanish, 'candidatura' is translated as 'candidacy' (the state of being a candidate) or 'campaign'. In English, we 'alleviate poverty' (the condition) rather than 'reduce the poor' (the people)."
   },
   {
-    "topic": "Adjective Ordering (Size Precedes Color)",
-    "time": "22:07",
-    "said": "The bus is green and large",
-    "natural": "The large green bus...",
-    "why": "In standard English adjective sequence, physical dimension and size always precede color: Opinion → Size → Age → Shape → Color.",
-    "spoken": "The bus is green and large",
-    "polished": "The large green bus...",
-    "note": "In standard English adjective sequence, physical dimension and size always precede color: Opinion → Size → Age → Shape → Color."
+    "topic": "Time Expressions (In a short time vs. In a few time)",
+    "time": "03:01",
+    "said": "Maybe in a few time, we can increase the salaries",
+    "natural": "In the near future / Soon, we will be able to raise salaries",
+    "why": "'Time' as continuous duration is uncountable, so we say 'in a short time' or 'in the near future', never 'in a few time'. In economic contexts, 'raise salaries' is the standard institutional phrasing.",
+    "spoken": "Maybe in a few time, we can increase the salaries",
+    "polished": "In the near future / Soon, we will be able to raise salaries",
+    "note": "'Time' as continuous duration is uncountable, so we say 'in a short time' or 'in the near future', never 'in a few time'. In economic contexts, 'raise salaries' is the standard institutional phrasing."
   },
   {
-    "topic": "Professional Hardware Terminology",
-    "time": "25:41",
-    "said": "My laptop was upset because doing too much things",
-    "natural": "My laptop froze / crashed because it was handling too many background tasks simultaneously.",
-    "why": "Personifying hardware as 'upset' is endearing, but 'froze / crashed' and 'too many tasks' (countable) represents polished professional English.",
-    "spoken": "My laptop was upset because doing too much things",
-    "polished": "My laptop froze / crashed because it was handling too many background tasks simultaneously.",
-    "note": "Personifying hardware as 'upset' is endearing, but 'froze / crashed' and 'too many tasks' (countable) represents polished professional English."
+    "topic": "Modal Auxiliary Syntax (Can + Bare Infinitive)",
+    "time": "04:44",
+    "said": "People can came... they can't came easily",
+    "natural": "People can come... they cannot come easily",
+    "why": "Modal auxiliary verbs (can, could, should, must, will) must always be followed directly by the base bare infinitive ('come'), never the past simple form ('came').",
+    "spoken": "People can came... they can't came easily",
+    "polished": "People can come... they cannot come easily",
+    "note": "Modal auxiliary verbs (can, could, should, must, will) must always be followed directly by the base bare infinitive ('come'), never the past simple form ('came')."
   },
   {
-    "topic": "Past Continuous Narrative",
-    "time": "26:45",
-    "said": "The monkey driving the bus in the zoo",
-    "natural": "The monkey was driving the bus through the zoo while the tourists ran away...",
-    "why": "Anchor continuous background actions in past narratives with the past continuous (was/were + -ing) combined with a time conjunction (while / as).",
-    "spoken": "The monkey driving the bus in the zoo",
-    "polished": "The monkey was driving the bus through the zoo while the tourists ran away...",
-    "note": "Anchor continuous background actions in past narratives with the past continuous (was/were + -ing) combined with a time conjunction (while / as)."
+    "topic": "Preposition Collocations (Trust someone on something)",
+    "time": "27:15",
+    "said": "I trust on you in that story",
+    "natural": "I trust you on that story / I believe you regarding that story",
+    "why": "The verb 'trust' takes a direct personal object ('I trust you'). To anchor your trust to a particular statement or event, connect with 'on' ('I trust you on that matter').",
+    "spoken": "I trust on you in that story",
+    "polished": "I trust you on that story / I believe you regarding that story",
+    "note": "The verb 'trust' takes a direct personal object ('I trust you'). To anchor your trust to a particular statement or event, connect with 'on' ('I trust you on that matter')."
   },
   {
-    "topic": "Causal Connectors (Due to vs. Because)",
-    "time": "34:10",
-    "said": "The spaceship crashed because the speed",
-    "natural": "The spaceship crashed due to extreme speed / because of its extreme speed",
-    "why": "'Because' introduces a full clause (subject + verb); 'due to' or 'because of' introduces a noun phrase ('its extreme speed').",
-    "spoken": "The spaceship crashed because the speed",
-    "polished": "The spaceship crashed due to extreme speed / because of its extreme speed",
-    "note": "'Because' introduces a full clause (subject + verb); 'due to' or 'because of' introduces a noun phrase ('its extreme speed')."
+    "topic": "Hypothetical Conditionals (Would panic vs. Be in panic)",
+    "time": "59:16",
+    "said": "I don't know how you can to live there... I probably be in panic",
+    "natural": "I don't know how you can live there... I would probably panic / I'd be in a total panic",
+    "why": "Omit 'to' after modal 'can' ('how you can live'). When imagining hypothetical reactions to extreme situations, use conditional 'would' ('I would probably panic').",
+    "spoken": "I don't know how you can to live there... I probably be in panic",
+    "polished": "I don't know how you can live there... I would probably panic / I'd be in a total panic",
+    "note": "Omit 'to' after modal 'can' ('how you can live'). When imagining hypothetical reactions to extreme situations, use conditional 'would' ('I would probably panic')."
   },
   {
-    "topic": "Subject-Verb Agreement",
-    "time": "01:32:30",
-    "said": "The words is difficult",
-    "natural": "The words are difficult / The word module is challenging",
-    "why": "Subject-verb agreement: 'words' is plural, requiring the plural verb 'are'.",
-    "spoken": "The words is difficult",
-    "polished": "The words are difficult / The word module is challenging",
-    "note": "Subject-verb agreement: 'words' is plural, requiring the plural verb 'are'."
+    "topic": "Comparative Quantifiers (Much more vs. Too much)",
+    "time": "51:00",
+    "said": "I have too much CV that the others... only for work abroad I have too much experience than the others",
+    "natural": "I have a much stronger CV than the others... just by working abroad, I have far more experience than them",
+    "why": "'Too much' implies an excessive negative defect ('too much debt'). In positive comparative statements, use 'far more experience than' or 'a much stronger CV'. Prepositions require the gerund ('by working abroad').",
+    "spoken": "I have too much CV that the others... only for work abroad I have too much experience than the others",
+    "polished": "I have a much stronger CV than the others... just by working abroad, I have far more experience than them",
+    "note": "'Too much' implies an excessive negative defect ('too much debt'). In positive comparative statements, use 'far more experience than' or 'a much stronger CV'. Prepositions require the gerund ('by working abroad')."
   }
 ]
