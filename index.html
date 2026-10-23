@@ -734,7 +734,6 @@
     "ipa": "/ˈjuː.njən ˈpen.ʃən/",
     "pos": "noun phrase",
     "level": "B2",
-    "time = 11:00",
     "time": "11:07",
     "turnId": "turn-173",
     "cat": "economics",
@@ -9499,7 +9498,8 @@
       "Retirees receive triple their final working salary upon reaching age 67"
     ],
     "correct": 1,
-    "exp": "The UK Triple Lock guarantees that the state pension rises each year by the highest of: inflation (CPI), average wage growth, or a minimum 2.5%."
+    "exp": "The UK Triple Lock guarantees that the state pension rises each year by the highest of: inflation (CPI), average wage growth, or a minimum 2.5%.",
+    "explain": "The UK Triple Lock guarantees that the state pension rises each year by the highest of: inflation (CPI), average wage growth, or a minimum 2.5%."
   },
   {
     "q": "Which sentence follows correct English syntax for modal auxiliary verbs?",
@@ -9510,7 +9510,8 @@
       "People can to come to the country easily."
     ],
     "correct": 2,
-    "exp": "Modal auxiliary verbs (can, could, should, must, will) are always followed directly by the bare infinitive ('come') without 'to' or past-tense endings."
+    "exp": "Modal auxiliary verbs (can, could, should, must, will) are always followed directly by the bare infinitive ('come') without 'to' or past-tense endings.",
+    "explain": "Modal auxiliary verbs (can, could, should, must, will) are always followed directly by the bare infinitive ('come') without 'to' or past-tense endings."
   },
   {
     "q": "In the lesson's philosophical checkers discussion, how was 'lust' distinguished from 'love'?",
@@ -9521,7 +9522,8 @@
       "Lust only applies to food and material items, whereas love only applies to family"
     ],
     "correct": 2,
-    "exp": "Louie and Diego defined lust as superficial physical attraction, whereas true love is a deep, unconditional bond that perseveres even when circumstances are difficult."
+    "exp": "Louie and Diego defined lust as superficial physical attraction, whereas true love is a deep, unconditional bond that perseveres even when circumstances are difficult.",
+    "explain": "Louie and Diego defined lust as superficial physical attraction, whereas true love is a deep, unconditional bond that perseveres even when circumstances are difficult."
   },
   {
     "q": "What iconic 1999 Red Hot Chili Peppers album and single did the automated note-taker mishear as 'California Cation'?",
@@ -9532,7 +9534,8 @@
       "By the Way"
     ],
     "correct": 1,
-    "exp": "The automated note-taker acoustically mangled the famous album and title track 'Californication' into two separate words: 'California Cation'."
+    "exp": "The automated note-taker acoustically mangled the famous album and title track 'Californication' into two separate words: 'California Cation'.",
+    "explain": "The automated note-taker acoustically mangled the famous album and title track 'Californication' into two separate words: 'California Cation'."
   },
   {
     "q": "What is the core pedagogical insight behind the proverb 'Comparison is the thief of joy'?",
@@ -9543,7 +9546,8 @@
       "Having multiple social media accounts improves emotional equilibrium"
     ],
     "correct": 1,
-    "exp": "Attributed to Theodore Roosevelt, this proverb teaches that constantly measuring your personal journey against someone else's external reality destroys present contentment."
+    "exp": "Attributed to Theodore Roosevelt, this proverb teaches that constantly measuring your personal journey against someone else's external reality destroys present contentment.",
+    "explain": "Attributed to Theodore Roosevelt, this proverb teaches that constantly measuring your personal journey against someone else's external reality destroys present contentment."
   },
   {
     "q": "According to Diego and Louie, why does working abroad provide a significant long-term career advantage?",
@@ -9554,7 +9558,8 @@
       "It guarantees immediate promotion to senior executive within six months"
     ],
     "correct": 2,
-    "exp": "Working abroad teaches different organizational structures, sharpens cross-cultural communication, and provides a distinctive competitive edge in any job market."
+    "exp": "Working abroad teaches different organizational structures, sharpens cross-cultural communication, and provides a distinctive competitive edge in any job market.",
+    "explain": "Working abroad teaches different organizational structures, sharpens cross-cultural communication, and provides a distinctive competitive edge in any job market."
   }
 ];
     const FLASHCARD_KEYS = Object.keys(VOCAB_DB).slice(0, 12);
@@ -9892,7 +9897,7 @@
         if (idx === q.correct) btn.className = 'px-3 py-1.5 rounded-xl border border-sage-500 bg-sage-600 text-white text-xs font-semibold';
         else if (idx === oIdx) btn.className = 'px-3 py-1.5 rounded-xl border border-autumn-300 bg-autumn-100 text-autumn-900 text-xs';
       });
-      expEl.textContent = `✨ ${q.explain}`;
+      expEl.textContent = `✨ ${q.explain || q.exp || ''}`;
       expEl.classList.remove('hidden');
       if (oIdx === q.correct && !quizAnswered.has(qIdx)) {
         quizAnswered.add(qIdx);
