@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diego's Executive Sanctuary | 3D Triad Game Show & Work Vocabulary</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js r128 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- GSAP for Showmanship Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            parchment: {
+              50: '#fbf9f5',
+              100: '#f6f1e7',
+              200: '#ede3d1',
+              300: '#dfd0b5',
+              400: '#cbb38e',
+              500: '#b6966b',
+            },
+            autumn: {
+              50: '#fcf6f0',
+              100: '#f7e9db',
+              200: '#eed0b5',
+              300: '#e2b086',
+              400: '#d38c57',
+              500: '#be6f38',
+              600: '#a3582b',
+              700: '#854524',
+              800: '#6c3921',
+            },
+            sage: {
+              50: '#f4f7f5',
+              100: '#e4ece7',
+              200: '#cadad1',
+              300: '#a5bfb1',
+              400: '#7b9f8d',
+              500: '#5b826f',
+              600: '#476858',
+              700: '#3a5448',
+              800: '#30443b',
+            },
+            slatewarm: {
+              700: '#3d4441',
+              800: '#2b312e',
+              900: '#1e2321',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-overlay: rgba(249, 246, 240, 0.76);
+      --card-bg: rgba(255, 253, 249, 0.88);
+      --card-border: rgba(217, 200, 176, 0.85);
+      --text-primary: #1e2321;
+      --text-secondary: #4a544f;
+    }
+
+    body.club-mode {
+      --bg-overlay: rgba(11, 15, 23, 0.72);
+      --card-bg: rgba(20, 26, 38, 0.84);
+      --card-border: rgba(211, 140, 87, 0.40);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      color: #f8fafc;
+    }
+
+    body {
+      background-color: #f9f6f0;
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.5s ease, color 0.4s ease;
+    }
+
+    body.club-mode {
+      background-color: #090d14;
+    }
+
+    /* Fullscreen Three.js Canvas */
+    #three-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Interactive 3D Stage Banner Canvas */
+    #stage-3d-container {
+      position: relative;
+      height: 220px;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      background: radial-gradient(circle at 50% 50%, rgba(30, 35, 33, 0.92), rgba(12, 15, 20, 0.98));
+      box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.35);
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      transition: background 0.4s ease, border-color 0.4s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .triad-node-card {
+      transform-style: preserve-3d;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+    }
+    .triad-node-card:hover {
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: 0 22px 40px -12px rgba(190, 111, 56, 0.28);
+    }
+
+    .tab-active {
+      background: linear-gradient(135deg, #be6f38 0%, #a3582b 100%);
+      color: #ffffff !important;
+      box-shadow: 0 8px 20px -4px rgba(190, 111, 56, 0.45);
+      border-color: transparent !important;
+    }
+
+    .level-active {
+      border-color: #be6f38 !important;
+      box-shadow: 0 0 0 3px rgba(190, 111, 56, 0.22), 0 12px 25px -8px rgba(190, 111, 56, 0.25) !important;
+    }
+
+    @keyframes buzzerShake {
+      0%, 100% { transform: translateX(0); }
+      15%, 45%, 75% { transform: translateX(-12px) rotate(-1deg); }
+      30%, 60%, 90% { transform: translateX(12px) rotate(1deg); }
+    }
+    .shake-error {
+      animation: buzzerShake 0.55s ease-in-out;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased pb-20">
+
+  <!-- FULLSCREEN AMBIENT THREE.JS CANVAS -->
+  <canvas id="three-canvas"></canvas>
+
+  <!-- STICKY SHOWMANSHIP HEADER -->
+  <header class="sticky top-0 z-40 glass-card border-b px-4 py-3 shadow-md">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand Title -->
+      <div class="flex items-center gap-3">
+        <div class="relative flex items-center justify-center w-11 h-11 rounded-2xl bg-gradient-to-br from-autumn-500 to-autumn-700 text-white font-serif font-bold text-2xl shadow-lg">
+          🎙️
+          <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-sage-500 border-2 border-white animate-ping"></span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-serif text-2xl font-bold tracking-tight">Diego's 3D Triad Arena</h1>
+            <span class="px-2 py-0.5 rounded-md bg-autumn-500/15 text-autumn-600 font-mono text-xs font-bold">LESSON 03 LIVE</span>
+          </div>
+          <p class="text-xs opacity-75 font-medium">Interactive Three.js Sonic Visualizer • Executive Nuance & Work Vocabulary</p>
+        </div>
+      </div>
+
+      <!-- SHOWMANSHIP CONTROLS: MIC REACTIVITY, CLUB MODE, BUZZER, SCORE & TIMER -->
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- Live Mic Visualizer Toggle -->
+        <button id="mic-btn" onclick="toggleMicVisualizer()" class="px-3 py-1.5 rounded-xl bg-sage-600/15 hover:bg-sage-600/25 text-sage-700 dark:text-sage-300 border border-sage-500/30 text-xs font-bold transition flex items-center gap-1.5" title="Make the 3D Triad react to Diego's live voice!">
+          <span id="mic-dot" class="w-2 h-2 rounded-full bg-sage-500"></span>
+          <span id="mic-label">🎙️ Voice Sync: OFF</span>
+        </button>
+
+        <!-- Theme Switcher: Sanctuary vs. DJ Club Booth -->
+        <button id="theme-btn" onclick="toggleClubMode()" class="px-3 py-1.5 rounded-xl bg-slatewarm-800 text-white hover:bg-slatewarm-900 text-xs font-bold transition shadow-sm">
+          🌙 DJ Booth Mode
+        </button>
+
+        <!-- Taboo Buzzer Button -->
+        <button onclick="triggerTabooBuzzer()" class="px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 text-white text-xs font-extrabold uppercase tracking-wider shadow-md transition flex items-center gap-1">
+          🚨 Taboo Buzzer
+        </button>
+
+        <!-- Score Counter + Confetti Trigger -->
+        <div class="flex items-center gap-1.5 bg-white/90 text-slatewarm-900 border border-[#d9c8b0] rounded-xl px-2.5 py-1 shadow-sm">
+          <span class="text-xs font-bold uppercase tracking-wider text-sage-700">PTS</span>
+          <button onclick="updateScore(-1)" class="w-6 h-6 rounded-lg bg-parchment-100 hover:bg-parchment-200 font-bold text-sm leading-none">-</button>
+          <span id="score-display" class="font-mono font-extrabold text-lg text-autumn-600 min-w-[2ch] text-center">0</span>
+          <button onclick="awardPointWithShowmanship()" class="px-2 h-6 rounded-lg bg-sage-600 hover:bg-sage-700 text-white font-bold text-xs leading-none flex items-center gap-1" title="Award Point + 3D Burst!">
+            +1 🎉
+          </button>
+        </div>
+
+        <!-- Countdown Timer -->
+        <div class="flex items-center gap-1.5 bg-white/90 text-slatewarm-900 border border-[#d9c8b0] rounded-xl px-2.5 py-1 shadow-sm">
+          <span id="timer-display" class="font-mono font-extrabold text-lg text-slatewarm-900 min-w-[4.5ch] text-center">01:30</span>
+          <button id="timer-btn" onclick="toggleTimer()" class="px-2.5 py-1 rounded-lg bg-autumn-500 hover:bg-autumn-600 text-white text-xs font-bold transition">Start</button>
+          <button onclick="resetTimer(90)" class="px-1.5 py-1 rounded-lg bg-parchment-100 hover:bg-parchment-200 text-slatewarm-700 text-xs font-mono font-bold">90s</button>
+          <button onclick="resetTimer(60)" class="px-1.5 py-1 rounded-lg bg-parchment-100 hover:bg-parchment-200 text-slatewarm-700 text-xs font-mono font-bold">60s</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-stage" class="relative z-10 max-w-6xl mx-auto px-4 pt-5 space-y-5">
+
+    <!-- ==========================================================
+         INTERACTIVE 3D THREE.JS HERO STAGE ("THE SONIC TRIAD CORE")
+         ========================================================== -->
+    <div id="stage-3d-container" class="group cursor-grab active:cursor-grabbing" onclick="pulse3DStage()">
+      <canvas id="hero-3d-canvas" class="w-full h-full block"></canvas>
+
+      <!-- Overlay HUD inside the 3D Stage -->
+      <div class="absolute inset-0 pointer-events-none p-5 flex flex-col justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-white/15 text-autumn-300 font-mono text-xs font-bold uppercase tracking-widest">
+              ⚡ THREE.JS SONIC TRIAD ENGINE
+            </span>
+            <span id="hud-category-label" class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-md text-white font-mono text-xs font-semibold">
+              Work & Systems
+            </span>
+          </div>
+          <div class="px-3 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 text-white/80 font-mono text-xs">
+            Click 3D stage to trigger Bass Drop • Move mouse to orbit
+          </div>
+        </div>
+
+        <!-- Live 3D Node Labels Floating at Bottom of Stage -->
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="bg-black/55 backdrop-blur-md border border-autumn-400/40 rounded-xl py-1.5 px-3">
+            <span class="block font-mono text-xs text-autumn-300 uppercase">Node Alpha</span>
+            <span id="hud-word-0" class="font-serif text-lg font-bold text-white">Bug</span>
+          </div>
+          <div class="bg-black/55 backdrop-blur-md border border-sage-400/40 rounded-xl py-1.5 px-3">
+            <span class="block font-mono text-xs text-sage-300 uppercase">Node Beta</span>
+            <span id="hud-word-1" class="font-serif text-lg font-bold text-white">Bottleneck</span>
+          </div>
+          <div class="bg-black/55 backdrop-blur-md border border-amber-300/40 rounded-xl py-1.5 px-3">
+            <span class="block font-mono text-xs text-amber-200 uppercase">Node Gamma</span>
+            <span id="hud-word-2" class="font-serif text-lg font-bold text-white">Design Flaw</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAMMAR SCAFFOLD BANNER (FIXING DIEGO'S LESSON 02 SLIPS) -->
+    <section class="glass-card rounded-2xl p-4 shadow-sm border-l-4 border-l-sage-500">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-0.5 rounded-full bg-sage-500 text-white font-mono text-xs font-bold">🎯 +1 BONUS POINT GRAMMAR FRAMES</span>
+          <span class="text-xs opacity-80 font-medium">Use any of these 4 target structures while explaining to earn an instant bonus point:</span>
+        </div>
+        <button onclick="document.getElementById('scaffold-grid').classList.toggle('hidden')" class="text-xs font-bold text-autumn-500 hover:underline">Hide / Show Frames</button>
+      </div>
+      <div id="scaffold-grid" class="grid grid-cols-1 md:grid-cols-4 gap-2.5 text-xs">
+        <div class="bg-parchment-50/90 text-slatewarm-900 border border-[#e6decb] rounded-xl p-2.5">
+          <div class="text-red-700 line-through opacity-75">❌ "Has too much experience than..."</div>
+          <div class="text-sage-800 font-bold mt-0.5">✅ "Involves <u>far more</u> depth <u>than</u>..."</div>
+          <div class="text-sage-800 font-bold">✅ "Gives <u>a much stronger</u> result <u>than</u>..."</div>
+        </div>
+        <div class="bg-parchment-50/90 text-slatewarm-900 border border-[#e6decb] rounded-xl p-2.5">
+          <div class="text-red-700 line-through opacity-75">❌ "Only for work / for practice..."</div>
+          <div class="text-sage-800 font-bold mt-0.5">✅ "You master X <u>by practicing</u>..."</div>
+          <div class="text-sage-800 font-bold">✅ "Just <u>by implementing</u> X..."</div>
+        </div>
+        <div class="bg-parchment-50/90 text-slatewarm-900 border border-[#e6decb] rounded-xl p-2.5">
+          <div class="text-red-700 line-through opacity-75">❌ "Can came / how you can to live..."</div>
+          <div class="text-sage-800 font-bold mt-0.5">✅ "Anyone <u>can acquire</u> X, but..."</div>
+          <div class="text-sage-800 font-bold">✅ "You <u>cannot replicate</u> Y..."</div>
+        </div>
+        <div class="bg-parchment-50/90 text-slatewarm-900 border border-[#e6decb] rounded-xl p-2.5">
+          <div class="text-red-700 line-through opacity-75">❌ "I probably be in panic..."</div>
+          <div class="text-sage-800 font-bold mt-0.5">✅ "Without X, the system <u>would fail</u>."</div>
+          <div class="text-sage-800 font-bold">✅ "I <u>would prioritize</u> Z over Y."</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN NAVIGATION TABS -->
+    <div class="flex flex-wrap gap-2 border-b border-[#d9c8b0]/50 pb-3">
+      <button onclick="switchTab('game')" id="tab-btn-game" class="tab-active px-5 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2">
+        <span>🎮</span> Tab 1: The Nuance Triad Game (20 Cards)
+      </button>
+      <button onclick="switchTab('vocab')" id="tab-btn-vocab" class="glass-card px-5 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2 hover:border-autumn-400">
+        <span>💼</span> Tab 2: Diego's Work Vocabulary (30 Terms)
+      </button>
+      <button onclick="switchTab('guide')" id="tab-btn-guide" class="glass-card px-5 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2 hover:border-autumn-400">
+        <span>📖</span> Tab 3: How to Play & Live Scripts
+      </button>
+    </div>
+
+    <!-- ==========================================
+         TAB 1: THE NUANCE TRIAD GAME
+         ========================================== -->
+    <section id="tab-game" class="space-y-5">
+
+      <!-- STEP 1: CHOOSE GAME LEVEL -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <button onclick="setGameLevel(1)" id="level-btn-1" class="level-active glass-card text-left p-4 rounded-2xl border-2 transition">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full bg-sage-600 text-white font-mono text-xs font-bold">LEVEL 1 • WARM-UP</span>
+            <span class="text-xs font-mono opacity-75">⏱️ 90s</span>
+          </div>
+          <h3 class="font-serif text-xl font-bold mt-1">"Draw the Line"</h3>
+          <p class="text-xs opacity-80 mt-1">Diego sees all 3 words and explains where one ends and the next begins—without saying the <strong>Forbidden Taboo Words</strong>.</p>
+        </button>
+
+        <button onclick="setGameLevel(2)" id="level-btn-2" class="glass-card text-left p-4 rounded-2xl border-2 transition">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full bg-autumn-500 text-white font-mono text-xs font-bold">LEVEL 2 • DETECTIVE</span>
+            <span class="text-xs font-mono opacity-75">🕵️‍♂️ 3 Questions</span>
+          </div>
+          <h3 class="font-serif text-xl font-bold mt-1">"Blind Triad Taboo"</h3>
+          <p class="text-xs opacity-80 mt-1">Click <strong>"Pick Secret Target"</strong>. Louie describes a real work/life scenario or answers 3 Yes/No questions; Diego diagnoses which word it is.</p>
+        </button>
+
+        <button onclick="setGameLevel(3)" id="level-btn-3" class="glass-card text-left p-4 rounded-2xl border-2 transition">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full bg-slatewarm-900 text-amber-300 font-mono text-xs font-bold">LEVEL 3 • BOSS DEBATE</span>
+            <span class="text-xs font-mono opacity-75">🏆 Assign Roles</span>
+          </div>
+          <h3 class="font-serif text-xl font-bold mt-1">"Villain, Trap & Ideal"</h3>
+          <p class="text-xs opacity-80 mt-1">Click each card to assign <strong>🦹 The Villain</strong> (toxic), <strong>🪤 The Trap</strong> (looks safe, holds you back), and <strong>🏆 The Ideal</strong>.</p>
+        </button>
+      </div>
+
+      <!-- STEP 2: CATEGORY FILTER & DECK CONTROLS -->
+      <div class="glass-card flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl">
+        <div class="flex flex-wrap items-center gap-1.5" id="category-filters">
+          <button onclick="filterCards('all')" data-cat="all" class="cat-btn bg-autumn-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-sm">All Cards (20)</button>
+          <button onclick="filterCards('Work & Systems')" data-cat="Work & Systems" class="cat-btn bg-parchment-100 text-slatewarm-900 hover:bg-parchment-200 px-3 py-1.5 rounded-xl text-xs font-bold transition">💻 Work & IT Systems (5)</button>
+          <button onclick="filterCards('Audio & DJing')" data-cat="Audio & DJing" class="cat-btn bg-parchment-100 text-slatewarm-900 hover:bg-parchment-200 px-3 py-1.5 rounded-xl text-xs font-bold transition">🎧 Audio & Live DJing (4)</button>
+          <button onclick="filterCards('Career & Global')" data-cat="Career & Global" class="cat-btn bg-parchment-100 text-slatewarm-900 hover:bg-parchment-200 px-3 py-1.5 rounded-xl text-xs font-bold transition">🌍 Career & Mobility (4)</button>
+          <button onclick="filterCards('Design & Mindset')" data-cat="Design & Mindset" class="cat-btn bg-parchment-100 text-slatewarm-900 hover:bg-parchment-200 px-3 py-1.5 rounded-xl text-xs font-bold transition">🏛️ Design & Mindset (4)</button>
+          <button onclick="filterCards('Wealth & Policy')" data-cat="Wealth & Policy" class="cat-btn bg-parchment-100 text-slatewarm-900 hover:bg-parchment-200 px-3 py-1.5 rounded-xl text-xs font-bold transition">📈 Wealth & Policy (3)</button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="prevCard()" class="px-3 py-1.5 rounded-xl bg-parchment-100 hover:bg-parchment-200 text-slatewarm-900 text-xs font-bold transition">← Prev</button>
+          <span id="card-counter" class="font-mono text-xs font-extrabold px-2">1 / 20</span>
+          <button onclick="nextCard()" class="px-3.5 py-1.5 rounded-xl bg-autumn-500 hover:bg-autumn-600 text-white text-xs font-bold shadow-sm transition">Next Card →</button>
+          <button onclick="randomCard()" class="px-3 py-1.5 rounded-xl bg-sage-600 hover:bg-sage-700 text-white text-xs font-bold shadow-sm transition">🎲 Spin 3D Triad</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: ACTIVE FLASHCARD ARENA -->
+      <div id="flashcard-stage" class="glass-card rounded-3xl p-6 md:p-8 shadow-xl border-2 relative overflow-hidden">
+        <!-- Card Header -->
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+          <div class="flex items-center gap-2">
+            <span id="card-badge" class="px-3 py-1 rounded-full bg-autumn-500 text-white font-mono text-xs font-bold uppercase tracking-wider shadow-sm">Work & Systems</span>
+            <span id="level-indicator" class="px-3 py-1 rounded-full bg-sage-500/20 text-sage-700 font-mono text-xs font-bold">Level 1: Draw the Line</span>
+          </div>
+          <div id="level2-controls" class="hidden">
+            <button onclick="pickSecretTarget()" class="px-3.5 py-1.5 rounded-xl bg-autumn-600 hover:bg-autumn-700 text-white text-xs font-bold shadow-md transition">
+              🎲 Pick Secret Target Word (Louie Only)
+            </button>
+          </div>
+        </div>
+
+        <!-- THE 3 TRIAD NODES -->
+        <div id="triad-words-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- FORBIDDEN TABOO WORDS BAR -->
+        <div class="bg-red-500/10 border-2 border-red-400/40 rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="px-3 py-1 rounded-lg bg-red-600 text-white font-mono text-xs font-extrabold uppercase tracking-wider shadow-sm">🚫 Forbidden Taboo Words</span>
+            <span class="text-xs font-semibold opacity-90">Click any word below if Diego says it to trigger the Taboo Buzzer:</span>
+          </div>
+          <div id="card-taboo-list" class="flex flex-wrap gap-2">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- FOLLOW-UP PROBE & TEACHER ANSWER KEY -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Louie's Follow-Up Probe -->
+          <div class="bg-parchment-100/80 text-slatewarm-900 border border-[#d9c8b0] rounded-2xl p-4">
+            <div class="text-xs font-mono font-bold uppercase tracking-wider text-autumn-700 mb-1">🎤 Louie's Follow-Up Cross-Examination Question</div>
+            <p id="card-probe" class="text-sm font-semibold text-slatewarm-900 italic leading-relaxed"></p>
+          </div>
+
+          <!-- Collapsible Nuance Answer Key & Target Work Vocab -->
+          <div class="bg-sage-100/85 text-slatewarm-900 border border-sage-300 rounded-2xl p-4">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-mono font-bold uppercase tracking-wider text-sage-800">💡 C1 Nuance Key & Target Work Vocab</span>
+              <button onclick="toggleAnswerKey()" id="toggle-key-btn" class="px-3 py-1 rounded-lg bg-sage-600 hover:bg-sage-700 text-white text-xs font-bold transition shadow-sm">Reveal Key ✨</button>
+            </div>
+            <div id="card-answer-key" class="hidden space-y-2 text-xs text-slatewarm-900">
+              <!-- Populated by JS -->
+            </div>
+            <p id="card-answer-placeholder" class="text-xs text-slatewarm-700 italic">Click "Reveal Key" after Diego finishes speaking to compare his definitions with the C1 executive definitions.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==========================================
+         TAB 2: DIEGO'S WORK VOCABULARY (30 TERMS)
+         ========================================== -->
+    <section id="tab-vocab" class="hidden space-y-5">
+      <div class="glass-card rounded-2xl p-5 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 class="font-serif text-2xl font-bold">💼 Diego's Work & Technical Vocabulary Sanctuary</h2>
+            <p class="text-xs opacity-80 mt-0.5">30 C1/C2 terms across <strong>IT & Business Systems Implementation</strong>, <strong>Live Audio / DJing (Rekordbox)</strong>, and <strong>Executive Strategy</strong>.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <input type="text" id="vocab-search" oninput="renderVocab()" placeholder="Search English or Spanish..." class="px-3.5 py-2 rounded-xl border border-[#d9c8b0] bg-white text-slatewarm-900 text-xs focus:outline-none focus:ring-2 focus:ring-autumn-400" />
+            <select id="vocab-domain-filter" onchange="renderVocab()" class="px-3 py-2 rounded-xl border border-[#d9c8b0] bg-white text-xs font-bold text-slatewarm-900">
+              <option value="all">All Work Domains (30)</option>
+              <option value="Systems & IT">💻 Systems & IT Implementation (10)</option>
+              <option value="Audio & DJing">🎧 Audio Engineering & DJing (10)</option>
+              <option value="Executive & PM">📊 Executive & Project Strategy (10)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div id="vocab-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- ==========================================
+         TAB 3: HOW TO PLAY & LIVE SCRIPTS
+         ========================================== -->
+    <section id="tab-guide" class="hidden space-y-5">
+      <div class="glass-card rounded-2xl p-6 shadow-sm space-y-4">
+        <h2 class="font-serif text-2xl font-bold">📖 How the Triad Game Works (4 Simple Steps)</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+          <div class="bg-parchment-50 text-slatewarm-900 p-4 rounded-xl border border-[#e6decb]">
+            <span class="font-mono text-xs font-bold text-autumn-600">STEP 01</span>
+            <h4 class="font-bold mt-1">Show 3 Similar Words</h4>
+            <p class="text-xs text-slatewarm-700 mt-1">Pick a card (e.g. <strong>Bug — Bottleneck — Design Flaw</strong> or <strong>Price — Cost — Value</strong>).</p>
+          </div>
+          <div class="bg-parchment-50 text-slatewarm-900 p-4 rounded-xl border border-[#e6decb]">
+            <span class="font-mono text-xs font-bold text-autumn-600">STEP 02</span>
+            <h4 class="font-bold mt-1">Start the 90s Timer</h4>
+            <p class="text-xs text-slatewarm-700 mt-1">Ask Diego: <em>"Where does one end and the next begin?"</em> Click <strong>Start</strong> on the top-right timer.</p>
+          </div>
+          <div class="bg-parchment-50 text-slatewarm-900 p-4 rounded-xl border border-[#e6decb]">
+            <span class="font-mono text-xs font-bold text-autumn-600">STEP 03</span>
+            <h4 class="font-bold mt-1">Enforce Taboo Words</h4>
+            <p class="text-xs text-slatewarm-700 mt-1">If he says a red Forbidden Word, click the <strong>🚨 Taboo Buzzer</strong>! This forces C1 work vocabulary.</p>
+          </div>
+          <div class="bg-parchment-50 text-slatewarm-900 p-4 rounded-xl border border-[#e6decb]">
+            <span class="font-mono text-xs font-bold text-autumn-600">STEP 04</span>
+            <h4 class="font-bold mt-1">Award +1 🎉 & Probe</h4>
+            <p class="text-xs text-slatewarm-700 mt-1">Click <strong>+1 🎉</strong> for confetti & 3D burst, then ask the <strong>Follow-Up Question</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEVEL SCRIPTS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="glass-card rounded-2xl p-5 space-y-2">
+          <span class="px-2.5 py-0.5 rounded-full bg-sage-600 text-white font-mono text-xs font-bold">LEVEL 1 EXAMPLE SCRIPT</span>
+          <h3 class="font-serif text-xl font-bold">Card: Patch vs. Workaround vs. Overhaul</h3>
+          <p class="text-xs opacity-85 leading-relaxed">
+            <strong>Louie:</strong> "Diego, 90 seconds! Explain the difference between a <strong>Patch</strong>, a <strong>Workaround</strong>, and an <strong>Overhaul</strong> in software systems. Forbidden words: <em>fix, problem, change, new</em>."<br><br>
+            <strong>Diego:</strong> "Okay, a <strong>Workaround</strong> is a temporary detour when a feature fails—you achieve the goal <u>by using</u> an alternative route without touching the code. A <strong>Patch</strong> is a targeted software update deployed to repair a specific bug. An <strong>Overhaul</strong> is <u>far more</u> radical <u>than</u> a patch—you rebuild the entire legacy architecture from scratch."
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 space-y-2">
+          <span class="px-2.5 py-0.5 rounded-full bg-autumn-500 text-white font-mono text-xs font-bold">LEVEL 2 EXAMPLE SCRIPT</span>
+          <h3 class="font-serif text-xl font-bold">Card: Loudness vs. Headroom vs. Clarity</h3>
+          <p class="text-xs opacity-85 leading-relaxed">
+            <strong>Louie:</strong> "I've picked one of the three. Listen to this DJ scenario: <em>'At a club in Madrid, the opening DJ pushes the channel gain and master fader into the red all night. The bass sounds distorted and flat, and when the headliner comes on at 2 AM, there is zero margin left on the sound system to make the drop hit harder.'</em> Which word did the opening DJ destroy?"<br><br>
+            <strong>Diego:</strong> "He destroyed the <strong>Headroom</strong>! Because he confused raw <strong>Loudness</strong> with impact, caused signal clipping, and killed the <strong>Clarity</strong>."
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 space-y-2">
+          <span class="px-2.5 py-0.5 rounded-full bg-slatewarm-900 text-amber-300 font-mono text-xs font-bold">LEVEL 3 EXAMPLE SCRIPT</span>
+          <h3 class="font-serif text-xl font-bold">Card: Output vs. Deliverable vs. Outcome</h3>
+          <p class="text-xs opacity-85 leading-relaxed">
+            <strong>Louie:</strong> "Assign <strong>The Villain</strong>, <strong>The Trap</strong>, and <strong>The Ideal</strong> in a consulting project."<br><br>
+            <strong>Diego:</strong><br>
+            • 🦹 <strong>The Villain is Raw Output:</strong> "Just writing 10,000 lines of code or working 60 hours with zero strategic direction."<br>
+            • 🪤 <strong>The Trap is The Deliverable:</strong> "Teams celebrate just handing over the software on time, even if the client's staff doesn't know how to use it!"<br>
+            • 🏆 <strong>The Ideal is The Business Outcome:</strong> "When the deployment actually streamlines their workflow and boosts ROI."
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // ==========================================
+    // 20 CURATED TRIAD CARDS
+    // ==========================================
+    const TRIAD_CARDS = [
+      {
+        category: "Work & Systems",
+        words: ["Bug", "Bottleneck", "Design Flaw"],
+        taboo: ["Problem", "Slow", "Error", "Bad"],
+        probe: "In a software deployment, why is a structural design flaw far more expensive to fix than a coding bug?",
+        defs: [
+          "<strong>Bug:</strong> An isolated coding or logic defect where the system behaves unintendedly (can be fixed with a quick patch).",
+          "<strong>Bottleneck:</strong> A single stage in a workflow or server pipeline where limited capacity slows down the entire system's throughput.",
+          "<strong>Design Flaw:</strong> A fundamental architectural mistake built into the blueprint—even if the code has zero bugs, the system fails to meet the real-world need."
+        ]
+      },
+      {
+        category: "Work & Systems",
+        words: ["Patch", "Workaround", "Overhaul"],
+        taboo: ["Fix", "Change", "New", "Repair"],
+        probe: "Tell me about a time at work when a client wanted a quick workaround, but you knew the legacy system needed a complete overhaul.",
+        defs: [
+          "<strong>Workaround:</strong> A temporary, clever bypass used by staff to get the job done despite a broken feature, without altering the underlying system.",
+          "<strong>Patch:</strong> A targeted software update deployed to resolve a specific security vulnerability or glitch.",
+          "<strong>Overhaul:</strong> A comprehensive reconstruction of a legacy system from the ground up to make it future-proof."
+        ]
+      },
+      {
+        category: "Work & Systems",
+        words: ["Output", "Deliverable", "Outcome"],
+        taboo: ["Result", "Work", "Finish", "Product"],
+        probe: "Why do many technical teams fall into the trap of measuring project success by deliverables rather than actual business outcomes?",
+        defs: [
+          "<strong>Output:</strong> The raw volume of activity produced (e.g., hours logged, lines of code written, meetings held).",
+          "<strong>Deliverable:</strong> The tangible, contractually agreed artifact handed over to the client (e.g., a configured CRM, an audio rig installation).",
+          "<strong>Outcome:</strong> The real-world measurable impact and ROI achieved by implementing that deliverable (e.g., 40% faster client onboarding)."
+        ]
+      },
+      {
+        category: "Work & Systems",
+        words: ["Automation", "Integration", "Optimization"],
+        taboo: ["Fast", "Computer", "Connect", "Better"],
+        probe: "What happens if a company automates a messy business workflow before optimizing it first?",
+        defs: [
+          "<strong>Automation:</strong> Replacing repetitive manual human tasks with self-executing software scripts or hardware triggers.",
+          "<strong>Integration:</strong> Connecting separate software platforms (interoperability) so data flows seamlessly between them without manual copy-pasting.",
+          "<strong>Optimization:</strong> Streamlining a process to eliminate waste, latency, and bottlenecks for maximum efficiency."
+        ]
+      },
+      {
+        category: "Work & Systems",
+        words: ["Backup", "System Redundancy", "Made Redundant"],
+        taboo: ["Copy", "Save", "Fired", "Extra"],
+        probe: "Notice how 'redundancy' is an ideal in engineering (failover protection), but a nightmare in HR ('made redundant' from Lesson 02). How do you make yourself irreplaceable at work?",
+        defs: [
+          "<strong>Backup:</strong> An offline copy of data stored separately to restore files after a crash (takes time to recover).",
+          "<strong>System Redundancy:</strong> Duplicate mission-critical hardware or servers running in parallel so failover is instantaneous with zero downtime.",
+          "<strong>Being Made Redundant (HR):</strong> Having your job role terminated because the company restructured or automated your function."
+        ]
+      },
+      {
+        category: "Audio & DJing",
+        words: ["Technique", "Technology", "Taste"],
+        taboo: ["Computer", "Button", "Good", "Music"],
+        probe: "If Rekordbox and AI master both technology and beatmatching technique in the near future, can they ever replace human taste at 2:00 AM?",
+        defs: [
+          "<strong>Technology:</strong> The digital tools, decks, mixers, and software features (e.g., auto-sync, stems, effects).",
+          "<strong>Technique:</strong> Mechanical skill acquired by practicing—gain staging, EQ sculpting, and seamless phrase mixing.",
+          "<strong>Taste:</strong> Curatorial instinct and crowd reading—knowing the exact track to play to elevate the room's emotional energy."
+        ]
+      },
+      {
+        category: "Audio & DJing",
+        words: ["Loudness", "Headroom", "Clarity"],
+        taboo: ["Volume", "Red", "Sound", "High"],
+        probe: "Why do amateur DJs push every fader into clipping, and how would you explain 'headroom' to a club owner?",
+        defs: [
+          "<strong>Loudness:</strong> Perceived acoustic intensity or decibel pressure in the venue.",
+          "<strong>Headroom:</strong> The safety margin (in dB) between your normal operating signal level and the point where harsh digital clipping occurs.",
+          "<strong>Clarity:</strong> Acoustic definition and frequency separation where the kick, vocals, and synths occupy distinct space without muddiness."
+        ]
+      },
+      {
+        category: "Audio & DJing",
+        words: ["Playlist", "Live Mix", "Set Progression"],
+        taboo: ["Songs", "Spotify", "Play", "List"],
+        probe: "How do you structure a 3-hour set progression differently from a 45-minute festival slot?",
+        defs: [
+          "<strong>Playlist:</strong> A static collection of tracks grouped by mood or genre with no transition architecture.",
+          "<strong>Live Mix:</strong> Technically blended tracks beatmatched in real time so the rhythm never drops.",
+          "<strong>Set Progression (Sonic Journey):</strong> A deliberate narrative arc of tension, release, peaks, and valleys tailored dynamically by reading the crowd."
+        ]
+      },
+      {
+        category: "Audio & DJing",
+        words: ["Hearing", "Listening", "Feeling"],
+        taboo: ["Ears", "Noise", "Body", "Loud"],
+        probe: "When you walk into a club or event space in Madrid, what is the first acoustic detail you listen for that an average guest only hears?",
+        defs: [
+          "<strong>Hearing:</strong> Passive physiological reception of sound waves.",
+          "<strong>Listening:</strong> Active analytical focus on frequencies, room acoustics, and arrangement.",
+          "<strong>Feeling:</strong> Visceral physical and emotional resonance when sub-bass, architecture, and crowd energy align."
+        ]
+      },
+      {
+        category: "Career & Global",
+        words: ["Networking", "Nepotism", "Cronyism"],
+        taboo: ["Family", "Friend", "Job", "Unfair"],
+        probe: "At high-society events like your cousin's Mallorca wedding, where is the exact ethical line between strategic networking and cronyism?",
+        defs: [
+          "<strong>Networking:</strong> Cultivating mutually valuable professional relationships grounded in competence and shared ambition.",
+          "<strong>Nepotism:</strong> Favoring blood relatives or spouses in hiring and promotions regardless of merit.",
+          "<strong>Cronyism:</strong> Appointing political allies or inner-circle friends to positions of authority to maintain loyalty."
+        ]
+      },
+      {
+        category: "Career & Global",
+        words: ["A Job", "A Career", "A Calling"],
+        taboo: ["Money", "Work", "Office", "Salary"],
+        probe: "Why is a comfortable corporate career often 'The Trap' that stops talented engineers from pursuing their true calling?",
+        defs: [
+          "<strong>A Job:</strong> Short-term transactional labor performed strictly to afford bills.",
+          "<strong>A Career:</strong> A multi-year trajectory of promotions, achievements, and a progressively stronger CV.",
+          "<strong>A Calling:</strong> Intrinsic purpose where your talent meets deep passion—something you would build even after winning the lottery."
+        ]
+      },
+      {
+        category: "Career & Global",
+        words: ["Tourist", "Expat", "Immigrant"],
+        taboo: ["Travel", "Holiday", "Visa", "Country"],
+        probe: "How does working abroad as an expat give you a much stronger professional mindset than visiting 20 countries as a tourist?",
+        defs: [
+          "<strong>Tourist:</strong> A temporary visitor who consumes a destination's leisure and culture superficially before returning home.",
+          "<strong>Expat:</strong> A professional living and working abroad to accelerate career velocity while keeping ties to their homeland.",
+          "<strong>Immigrant:</strong> Someone who permanently relocates across borders to establish roots and citizenship in a new nation."
+        ]
+      },
+      {
+        category: "Career & Global",
+        words: ["Boss", "Manager", "Leader"],
+        taboo: ["Tell", "Order", "Company", "Chief"],
+        probe: "Think of the best stakeholder or director you have ever worked with—what did they do that made them a Leader rather than just a Manager?",
+        defs: [
+          "<strong>Boss:</strong> Relies on formal hierarchy and authority to demand compliance.",
+          "<strong>Manager:</strong> Focuses on processes, deliverables, bandwidth, and keeping existing systems on schedule.",
+          "<strong>Leader:</strong> Inspires stakeholder buy-in, sets an audacious vision, and empowers the team to grow."
+        ]
+      },
+      {
+        category: "Design & Mindset",
+        words: ["Art", "Design", "Engineering"],
+        taboo: ["Building", "Draw", "Pretty", "Math"],
+        probe: "In Lesson 02 you highlighted architecture as your favorite art form. What happens to a building when Art overpowers Engineering, or Engineering kills Design?",
+        defs: [
+          "<strong>Art:</strong> Pure expressive creation meant to provoke emotion and reflect unseen human truths.",
+          "<strong>Design (Diseño):</strong> Intentional aesthetic and ergonomic planning centered on human interaction.",
+          "<strong>Engineering:</strong> Rigorous structural and technical execution ensuring the system performs safely under real-world constraints."
+        ]
+      },
+      {
+        category: "Design & Mindset",
+        words: ["Confidence", "Arrogance", "Delusional Grit"],
+        taboo: ["Best", "Ego", "Proud", "Smart"],
+        probe: "Louie credited 'being delusional' for his biggest achievements. When does healthy Delusional Grit turn into dangerous Arrogance?",
+        defs: [
+          "<strong>Confidence:</strong> Quiet self-assurance earned by having lived through past trials and proven your competence.",
+          "<strong>Arrogance:</strong> Compensating for insecurity by acting superior and dismissing feedback.",
+          "<strong>Delusional Grit:</strong> Unshakeable conviction to pursue an audacious goal that skeptics call impossible, paired with relentless research and execution."
+        ]
+      },
+      {
+        category: "Design & Mindset",
+        words: ["Solitude", "Isolation", "Loneliness"],
+        taboo: ["Alone", "Sad", "People", "Nobody"],
+        probe: "If you relocated abroad to New York or London by yourself, how would you make sure your weekends felt like restorative solitude rather than loneliness?",
+        defs: [
+          "<strong>Solitude:</strong> Voluntary, peaceful time with your own thoughts that recharges creativity and contentment.",
+          "<strong>Isolation:</strong> Objective physical or geographic separation from others.",
+          "<strong>Loneliness:</strong> The painful psychological feeling of being disconnected—even in a crowded VIP room."
+        ]
+      },
+      {
+        category: "Design & Mindset",
+        words: ["Fear", "Phobia", "Anxiety"],
+        taboo: ["Scared", "Panic", "Cockroach", "Snake"],
+        probe: "Why does a harmless insect trigger a visceral phobia, whereas complex career risks trigger long-term anxiety?",
+        defs: [
+          "<strong>Fear:</strong> A rational, immediate fight-or-flight response to a clear and present physical danger.",
+          "<strong>Phobia:</strong> An overwhelming, disproportionate aversion to a specific trigger (like cockroaches) even when safety is guaranteed.",
+          "<strong>Anxiety:</strong> Future-oriented mental tension caused by anticipating hypothetical worst-case scenarios."
+        ]
+      },
+      {
+        category: "Wealth & Policy",
+        words: ["Price", "Cost", "Value"],
+        taboo: ["Money", "Euro", "Buy", "Pay"],
+        probe: "In business systems, why does choosing the lowest-price software vendor often result in the highest long-term cost?",
+        defs: [
+          "<strong>Price:</strong> The upfront figure printed on the invoice at the moment of transaction.",
+          "<strong>Cost:</strong> The total sacrifice over the lifecycle—including maintenance, downtime, training, and opportunity cost.",
+          "<strong>Value:</strong> The net transformation in quality of life, revenue, or peace of mind delivered."
+        ]
+      },
+      {
+        category: "Wealth & Policy",
+        words: ["Rich", "Wealthy", "Financially Free"],
+        taboo: ["Millionaire", "Bank", "Ferrari", "Lottery"],
+        probe: "Why do many top athletes and reggaeton stars become Rich in their twenties without ever becoming Wealthy?",
+        defs: [
+          "<strong>Rich:</strong> High active cash flow paired with lavish spending; vulnerable if income stops.",
+          "<strong>Wealthy:</strong> Substantial compounding capital and inheritable assets (like real estate or a matched 401(k)) that outlive you.",
+          "<strong>Financially Free:</strong> When passive investment returns permanently exceed your personal contentment expenses."
+        ]
+      },
+      {
+        category: "Wealth & Policy",
+        words: ["Promise", "Pledge", "Guarantee"],
+        taboo: ["Say", "Truth", "Lie", "Word"],
+        probe: "During a presidential candidacy, why do politicians make campaign pledges rather than legally binding guarantees?",
+        defs: [
+          "<strong>Promise:</strong> A personal moral assurance between individuals ('I trust you on that').",
+          "<strong>Pledge:</strong> A solemn public or political commitment made during a campaign, which governments sometimes dilute under fiscal pressure.",
+          "<strong>Guarantee:</strong> A binding contractual or institutional warranty backed by automatic compensation if breached."
+        ]
+      }
+    ];
+
+    // ==========================================
+    // 30 WORK VOCABULARY ITEMS FOR DIEGO
+    // ==========================================
+    const WORK_VOCAB = [
+      { domain: "Systems & IT", term: "scalability", ipa: "/ˌskeɪ.ləˈbɪl.ə.ti/", cefr: "C1", es: "escalabilidad del sistema", def: "The capacity of a software system or architecture to handle a growing amount of work smoothly without crashing.", ex: "By designing the database with cloud scalability in mind, we avoided a major crash during peak ticket sales." },
+      { domain: "Systems & IT", term: "bottleneck", ipa: "/ˈbɒt.əl.nek/", cefr: "B2", es: "cuello de botella", def: "A single congested point in a technical workflow or network that slows down the entire system's performance.", ex: "Manual data approval was the main bottleneck preventing a faster deployment." },
+      { domain: "Systems & IT", term: "seamless integration", ipa: "/ˈsiːm.ləs ˌɪn.tɪˈɡreɪ.ʃən/", cefr: "C1", es: "integración fluida / sin fisuras", def: "Connecting two different software or hardware platforms so they work together effortlessly with zero friction.", ex: "Clients expect seamless integration between their CRM software and their automated billing platform." },
+      { domain: "Systems & IT", term: "legacy system", ipa: "/ˈleɡ.ə.si ˈsɪs.təm/", cefr: "C1", es: "sistema heredado / obsoleto", def: "Outdated computing software or hardware that is still in use because replacing it requires a complex overhaul.", ex: "Many Spanish institutions still rely on slow legacy systems from the early 2000s." },
+      { domain: "Systems & IT", term: "deployment", ipa: "/dɪˈplɔɪ.mənt/", cefr: "C1", es: "despliegue / puesta en producción", def: "All the technical activities that make a new software system or hardware setup live and available for use.", ex: "Thorough research before deployment is what separates engineering success from chaos." },
+      { domain: "Systems & IT", term: "failover & redundancy", ipa: "/ˈfeɪlˌəʊ.vər/", cefr: "C2", es: "respaldo automático y redundancia", def: "Backup operational mode in which a secondary system automatically takes over if the primary component fails.", ex: "For mission-critical live events, we always build dual redundancy so failover happens in milliseconds." },
+      { domain: "Systems & IT", term: "latency", ipa: "/ˈleɪ.tən.si/", cefr: "C1", es: "latencia / retardo de señal", def: "The time delay between a user input (or audio signal) and the system's response.", ex: "Even 15 milliseconds of audio latency would make live beatmatching impossible for a DJ." },
+      { domain: "Systems & IT", term: "streamline", ipa: "/ˈstriːm.laɪn/", cefr: "C1", es: "optimizar / agilizar procesos", def: "To make an organization or system far more efficient by employing faster or simpler working methods.", ex: "We can streamline the entire onboarding process just by automating three repetitive steps." },
+      { domain: "Systems & IT", term: "interoperability", ipa: "/ˌɪn.tər.ɒp.ər.əˈbɪl.ə.ti/", cefr: "C2", es: "interoperabilidad", def: "The ability of different computer systems, devices, or software applications to exchange and make use of information.", ex: "True interoperability allows Pioneer DJ hardware to communicate directly with venue lighting consoles." },
+      { domain: "Systems & IT", term: "proof of concept (PoC)", ipa: "/pruːf əv ˈkɒn.sept/", cefr: "C1", es: "prueba de concepto", def: "A small pilot test or prototype built to demonstrate that a technical design or business idea is feasible.", ex: "Before asking for the full budget, I built a working proof of concept in two weeks." },
+      { domain: "Audio & DJing", term: "signal chain", ipa: "/ˈsɪɡ.nəl tʃeɪn/", cefr: "C1", es: "cadena de señal de audio", def: "The exact path an audio signal travels from the source (Rekordbox/deck) through mixers, processors, and amplifiers to the speakers.", ex: "If one cheap cable compromises the signal chain, a €50,000 sound system will sound terrible." },
+      { domain: "Audio & DJing", term: "headroom", ipa: "/ˈhed.ruːm/", cefr: "C1", es: "margen dinámico (headroom)", def: "The safety zone between the average audio signal level and the maximum threshold before digital distortion occurs.", ex: "Always leave at least 6 dB of headroom on the master bus so the climax of your set hits cleanly." },
+      { domain: "Audio & DJing", term: "clipping", ipa: "/ˈklɪp.ɪŋ/", cefr: "B2", es: "recorte / saturación de señal", def: "Harsh waveform distortion that happens when an amplifier or mixer is pushed beyond its maximum limit (redlining).", ex: "When the DJ pushed all the EQs to maximum, the master output started clipping." },
+      { domain: "Audio & DJing", term: "gain staging", ipa: "/ɡeɪn ˈsteɪ.dʒɪŋ/", cefr: "C2", es: "ajuste de estructura de ganancia", def: "Managing the relative volume levels at every step of the audio signal flow to prevent noise and distortion.", ex: "Proper gain staging gives your mix a much stronger punch than simply turning up the master volume." },
+      { domain: "Audio & DJing", term: "acoustic treatment", ipa: "/əˈkuː.stɪk ˈtriːt.mənt/", cefr: "B2", es: "acondicionamiento acústico", def: "Using architectural panels, bass traps, and diffusers to control echo and reflections inside a room.", ex: "Great club architecture combines striking visual design with precision acoustic treatment." },
+      { domain: "Audio & DJing", term: "line check vs. soundcheck", ipa: "/ˈsaʊnd.tʃek/", cefr: "B2", es: "comprobación de líneas vs. prueba de sonido", def: "Verifying that audio signals pass through each channel (line check) versus balancing the full room acoustics and EQ (soundcheck).", ex: "Because the festival ran late, we only had time for a 2-minute line check before going live." },
+      { domain: "Audio & DJing", term: "crowd reading", ipa: "/kraʊd ˈriː.dɪŋ/", cefr: "C1", es: "lectura de pista / público", def: "Observing the body language and energy of the audience to adapt track selection spontaneously.", ex: "No AI algorithm can replicate intuitive crowd reading in an underground club." },
+      { domain: "Audio & DJing", term: "set progression", ipa: "/set prəˈɡreʃ.ən/", cefr: "C1", es: "progresión narrativa del set", def: "The deliberate pacing of tempo, harmonic key, and energy across a live DJ performance.", ex: "His set progression built suspense over two hours before dropping the anthem at 3:00 AM." },
+      { domain: "Audio & DJing", term: "transient response", ipa: "/ˈtræn.zi.ənt rɪˈspɒns/", cefr: "C2", es: "respuesta a transitorios (pegada)", def: "How accurately a speaker or system reproduces sudden, percussive bursts of sound like kick drums and snares.", ex: "High-end club sound systems are famous for their razor-sharp transient response." },
+      { domain: "Audio & DJing", term: "booth monitor", ipa: "/buːð ˈmɒn.ɪ.tər/", cefr: "B2", es: "monitor de cabina", def: "Dedicated speakers aimed directly at the DJ inside the booth to allow precise beatmatching without room delay.", ex: "Without a clear booth monitor, the slapback echo from the venue walls would ruin your timing." },
+      { domain: "Executive & PM", term: "scope creep", ipa: "/skəʊp kriːp/", cefr: "C2", es: "expansión descontrolada del alcance", def: "When a client or manager continuously adds extra features or requirements to a project without increasing the budget or timeline.", ex: "We have to set clear boundaries early on; otherwise, scope creep will delay the launch by months." },
+      { domain: "Executive & PM", term: "deliverables", ipa: "/dɪˈlɪv.ər.ə.bəlz/", cefr: "C1", es: "entregables del proyecto", def: "The specific, quantifiable goods, software modules, or services that must be provided upon completion of a project phase.", ex: "Before signing the contract, we defined all five technical deliverables and their deadlines." },
+      { domain: "Executive & PM", term: "stakeholder buy-in", ipa: "/ˈsteɪkˌhəʊl.dər ˈbaɪ.ɪn/", cefr: "C2", es: "respaldo de los interesados / directivos", def: "Securing active support and commitment from key decision-makers before rolling out a new system or policy.", ex: "Even the best software architecture will fail if you don't secure stakeholder buy-in from the department heads." },
+      { domain: "Executive & PM", term: "trade-off", ipa: "/ˈtreɪd.ɒf/", cefr: "C1", es: "compromiso / sacrificio compensatorio", def: "A strategic balance achieved between two desirable but incompatible features (e.g., speed vs. customization).", ex: "In every systems implementation, there is an inevitable trade-off between rapid deployment and custom design." },
+      { domain: "Executive & PM", term: "bandwidth", ipa: "/ˈbænd.wɪdθ/", cefr: "C1", es: "capacidad de tiempo / energía mental", def: "In business slang, the mental capacity, time, or team resources available to take on additional work.", ex: "Our engineering team simply doesn't have the bandwidth to take on another client this month." },
+      { domain: "Executive & PM", term: "mission-critical", ipa: "/ˈmɪʃ.ən ˈkrɪt.ɪ.kəl/", cefr: "C1", es: "crítico para el negocio / vital", def: "Any factor, component, or system that is essential to the survival or core operation of an organization.", ex: "You should never test experimental updates on mission-critical production servers." },
+      { domain: "Executive & PM", term: "workaround", ipa: "/ˈwɜːk.ə.raʊnd/", cefr: "C1", es: "solución temporal / alternativa", def: "A temporary method for achieving a task when the primary system is malfunctioning.", ex: "While the engineers developed the permanent patch, we gave the sales team a simple workaround." },
+      { domain: "Executive & PM", term: "root cause analysis", ipa: "/ruːt kɔːz əˈnæl.ə.sɪs/", cefr: "C1", es: "análisis de causa raíz", def: "A methodical investigation to discover the fundamental structural reason why a failure occurred, rather than just treating symptoms.", ex: "After the server outage, we conducted a root cause analysis to ensure it could never happen again." },
+      { domain: "Executive & PM", term: "future-proof", ipa: "/ˈfjuː.tʃə.pruːf/", cefr: "C1", es: "preparado para el futuro", def: "Designed not to become obsolete as technology or business requirements evolve in the near future.", ex: "Investing in modular hardware is the smartest way to future-proof our audio setup." },
+      { domain: "Executive & PM", term: "return on investment (ROI)", ipa: "/rɪˈtɜːn ɒn ɪnˈvest.mənt/", cefr: "B2", es: "retorno de la inversión", def: "A performance measure used to evaluate the financial efficiency or time savings gained from an expenditure.", ex: "Working abroad for two years delivers an extraordinary return on investment for your long-term CV." }
+    ];
+
+    // ==========================================
+    // WEB AUDIO SYNTHESIZER (GAME SHOW SFX + MIC ANALYSER)
+    // ==========================================
+    let audioCtx = null;
+    let micAnalyser = null;
+    let micDataArray = null;
+    let micActive = false;
+
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function playWhooshChord() {
+      try {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+        [261.63, 329.63, 392.00, 523.25].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq * 0.8, now);
+          osc.frequency.exponentialRampToValueAtTime(freq, now + 0.18);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.05, now + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45 + i * 0.05);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.55);
+        });
+      } catch (e) {}
+    }
+
+    function playSuccessFanfare() {
+      try {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+          gain.gain.setValueAtTime(0.001, now + idx * 0.07);
+          gain.gain.linearRampToValueAtTime(0.09, now + idx * 0.07 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.07 + 0.5);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.07);
+          osc.stop(now + idx * 0.07 + 0.55);
+        });
+      } catch (e) {}
+    }
+
+    function playBuzzerSfx() {
+      try {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+        [110, 116.5].forEach(freq => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(freq, now);
+          osc.frequency.linearRampToValueAtTime(freq * 0.78, now + 0.45);
+          gain.gain.setValueAtTime(0.09, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.48);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.5);
+        });
+      } catch (e) {}
+    }
+
+    async function toggleMicVisualizer() {
+      const btn = document.getElementById('mic-btn');
+      const label = document.getElementById('mic-label');
+      const dot = document.getElementById('mic-dot');
+
+      if (micActive) {
+        micActive = false;
+        label.textContent = "🎙️ Voice Sync: OFF";
+        dot.className = "w-2 h-2 rounded-full bg-sage-500";
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const ctx = getAudioCtx();
+        const source = ctx.createMediaStreamSource(stream);
+        micAnalyser = ctx.createAnalyser();
+        micAnalyser.fftSize = 64;
+        source.connect(micAnalyser);
+        micDataArray = new Uint8Array(micAnalyser.frequencyBinCount);
+        micActive = true;
+        label.textContent = "🎙️ Voice Sync: LIVE";
+        dot.className = "w-2 h-2 rounded-full bg-red-500 animate-ping";
+      } catch (err) {
+        alert("Microphone permission wasn't granted — using simulated sonic beat instead!");
+      }
+    }
+
+    // ==========================================
+    // THREE.JS ENGINE: HERO 3D STAGE + AMBIENT PARTICLES
+    // ==========================================
+    let heroScene, heroCamera, heroRenderer;
+    let triadGroup, nodeMeshes = [], beamLine, centerCore, waveGridGeo;
+    let bgScene, bgCamera, bgRenderer, bgParticles;
+    let mouseX = 0, mouseY = 0;
+    let stageEnergy = 0;
+
+    function initThreeJS() {
+      // 1. HERO 3D TRIAD STAGE
+      const container = document.getElementById("stage-3d-container");
+      const canvas = document.getElementById("hero-3d-canvas");
+      heroScene = new THREE.Scene();
+      heroCamera = new THREE.PerspectiveCamera(48, container.clientWidth / container.clientHeight, 0.1, 100);
+      heroCamera.position.set(0, 1.8, 7.8);
+
+      heroRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      heroRenderer.setSize(container.clientWidth, container.clientHeight);
+      heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Lighting
+      const ambient = new THREE.AmbientLight(0xffffff, 0.75);
+      heroScene.add(ambient);
+      const point1 = new THREE.PointLight(0xbe6f38, 2.5, 25);
+      point1.position.set(4, 4, 4);
+      heroScene.add(point1);
+      const point2 = new THREE.PointLight(0x5b826f, 2.5, 25);
+      point2.position.set(-4, -2, 4);
+      heroScene.add(point2);
+
+      // Triad Orbit Group
+      triadGroup = new THREE.Group();
+      heroScene.add(triadGroup);
+
+      // Center Wireframe Core
+      const coreGeo = new THREE.OctahedronGeometry(0.75, 1);
+      const coreMat = new THREE.MeshStandardMaterial({
+        color: 0xe2b086,
+        wireframe: true,
+        emissive: 0xbe6f38,
+        emissiveIntensity: 0.45
+      });
+      centerCore = new THREE.Mesh(coreGeo, coreMat);
+      triadGroup.add(centerCore);
+
+      // 3 Orbiting Triad Nodes (Alpha, Beta, Gamma)
+      const nodeColors = [0xbe6f38, 0x5b826f, 0xe2b086];
+      const radius = 2.45;
+      const beamPoints = [];
+
+      for (let i = 0; i < 3; i++) {
+        const angle = (i * Math.PI * 2) / 3 + Math.PI / 6;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * (radius * 0.55);
+        const z = Math.sin(angle * 2) * 0.5;
+
+        const geo = new THREE.IcosahedronGeometry(0.52, 1);
+        const mat = new THREE.MeshStandardMaterial({
+          color: nodeColors[i],
+          roughness: 0.25,
+          metalness: 0.7,
+          emissive: nodeColors[i],
+          emissiveIntensity: 0.35
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(x, y, z);
+
+        // Outer Wireframe Halo Ring around each node
+        const ringGeo = new THREE.TorusGeometry(0.76, 0.025, 12, 48);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        mesh.add(ring);
+
+        triadGroup.add(mesh);
+        nodeMeshes.push(mesh);
+        beamPoints.push(new THREE.Vector3(x, y, z));
+      }
+      beamPoints.push(beamPoints[0].clone()); // Close the triangle loop
+
+      // Glowing Triad Connection Beams
+      const lineGeo = new THREE.BufferGeometry().setFromPoints(beamPoints);
+      const lineMat = new THREE.LineBasicMaterial({ color: 0xf7e9db, transparent: true, opacity: 0.75 });
+      beamLine = new THREE.Line(lineGeo, lineMat);
+      triadGroup.add(beamLine);
+
+      // DJ Equalizer Sonic Floor Grid
+      waveGridGeo = new THREE.PlaneGeometry(22, 10, 44, 20);
+      const waveMat = new THREE.MeshBasicMaterial({
+        color: 0x5b826f,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.24
+      });
+      const waveMesh = new THREE.Mesh(waveGridGeo, waveMat);
+      waveMesh.rotation.x = -Math.PI / 2.2;
+      waveMesh.position.y = -2.1;
+      heroScene.add(waveMesh);
+
+      // 2. FULLSCREEN BACKGROUND PARTICLE FIELD
+      const bgCanvas = document.getElementById("three-canvas");
+      bgScene = new THREE.Scene();
+      bgCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+      bgCamera.position.z = 12;
+
+      bgRenderer = new THREE.WebGLRenderer({ canvas: bgCanvas, antialias: true, alpha: true });
+      bgRenderer.setSize(window.innerWidth, window.innerHeight);
+      bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      const pCount = 260;
+      const pPositions = new Float32Array(pCount * 3);
+      for (let i = 0; i < pCount * 3; i++) {
+        pPositions[i] = (Math.random() - 0.5) * 32;
+      }
+      const pGeo = new THREE.BufferGeometry();
+      pGeo.setAttribute("position", new THREE.BufferAttribute(pPositions, 3));
+      const pMat = new THREE.PointsMaterial({
+        color: 0xbe6f38,
+        size: 0.09,
+        transparent: true,
+        opacity: 0.45
+      });
+      bgParticles = new THREE.Points(pGeo, pMat);
+      bgScene.add(bgParticles);
+
+      // Mouse Parallax Listener
+      window.addEventListener("mousemove", (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+
+      window.addEventListener("resize", () => {
+        if (!container) return;
+        heroCamera.aspect = container.clientWidth / container.clientHeight;
+        heroCamera.updateProjectionMatrix();
+        heroRenderer.setSize(container.clientWidth, container.clientHeight);
+
+        bgCamera.aspect = window.innerWidth / window.innerHeight;
+        bgCamera.updateProjectionMatrix();
+        bgRenderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      animateThreeJS();
+    }
+
+    let clock = new THREE.Clock();
+    function animateThreeJS() {
+      requestAnimationFrame(animateThreeJS);
+      const t = clock.getElapsedTime();
+
+      // Calculate live voice energy if mic is active
+      let audioBoost = 0;
+      if (micActive && micAnalyser) {
+        micAnalyser.getByteFrequencyData(micDataArray);
+        let sum = 0;
+        for (let i = 0; i < micDataArray.length; i++) sum += micDataArray[i];
+        audioBoost = (sum / micDataArray.length) / 140;
+      }
+
+      // Decay manual stage impulse
+      stageEnergy *= 0.93;
+      const totalPulse = 1 + audioBoost * 0.65 + stageEnergy;
+
+      // Rotate & pulse Triad Group
+      if (triadGroup) {
+        triadGroup.rotation.y = t * 0.45 + mouseX * 0.5;
+        triadGroup.rotation.x = Math.sin(t * 0.6) * 0.15 + mouseY * 0.25;
+        centerCore.rotation.x = -t * 1.2;
+        centerCore.rotation.y = t * 0.9;
+        centerCore.scale.setScalar(totalPulse);
+
+        nodeMeshes.forEach((m, idx) => {
+          m.rotation.x = t * 0.8 + idx;
+          m.rotation.y = t * 1.1;
+          const isSecret = (currentLevel === 2 && secretWordIndex === idx);
+          const targetScale = isSecret ? 1.45 * totalPulse : 1.0 * totalPulse;
+          m.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.12);
+          m.children[0].rotation.z = t * 2.2;
+        });
+      }
+
+      // Animate DJ Sonic Wave Floor
+      if (waveGridGeo) {
+        const pos = waveGridGeo.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+          const vx = pos.getX(i);
+          const vy = pos.getY(i);
+          const wave = Math.sin(vx * 0.6 + t * 2.4) * Math.cos(vy * 0.6 + t * 1.8) * (0.28 + audioBoost * 0.9 + stageEnergy * 0.6);
+          pos.setZ(i, wave);
+        }
+        pos.needsUpdate = true;
+      }
+
+      // Rotate ambient background particles
+      if (bgParticles) {
+        bgParticles.rotation.y = t * 0.04 + mouseX * 0.08;
+        bgParticles.rotation.x = mouseY * 0.06;
+      }
+
+      heroRenderer.render(heroScene, heroCamera);
+      bgRenderer.render(bgScene, bgCamera);
+    }
+
+    function pulse3DStage() {
+      stageEnergy = 0.85;
+      playWhooshChord();
+      if (triadGroup) {
+        gsap.fromTo(triadGroup.rotation, { z: -0.35 }, { z: 0, duration: 0.9, ease: "elastic.out(1, 0.4)" });
+      }
+    }
+
+    // ==========================================
+    // SHOWMANSHIP FX: CLUB MODE, BUZZER, CONFETTI
+    // ==========================================
+    function toggleClubMode() {
+      const isClub = document.body.classList.toggle("club-mode");
+      document.getElementById("theme-btn").textContent = isClub ? "☀️ Sanctuary Mode" : "🌙 DJ Booth Mode";
+      pulse3DStage();
+    }
+
+    function triggerTabooBuzzer(wordClicked = "") {
+      playBuzzerSfx();
+      stageEnergy = 1.2;
+      const stage = document.getElementById("flashcard-stage");
+      stage.classList.remove("shake-error");
+      void stage.offsetWidth; // trigger reflow
+      stage.classList.add("shake-error");
+
+      if (centerCore) {
+        centerCore.material.color.setHex(0xef4444);
+        setTimeout(() => centerCore.material.color.setHex(0xe2b086), 700);
+      }
+    }
+
+    function awardPointWithShowmanship() {
+      updateScore(1);
+      playSuccessFanfare();
+      stageEnergy = 0.95;
+      if (typeof confetti === "function") {
+        confetti({
+          particleCount: 70,
+          spread: 65,
+          origin: { y: 0.65 },
+          colors: ['#be6f38', '#5b826f', '#e2b086', '#ffffff']
+        });
+      }
+    }
+
+    // ==========================================
+    // STATE & GAME LOGIC
+    // ==========================================
+    let currentLevel = 1;
+    let currentCategory = "all";
+    let filteredDeck = [...TRIAD_CARDS];
+    let currentIndex = 0;
+    let secretWordIndex = null;
+    let roleAssignments = ["Unassigned", "Unassigned", "Unassigned"];
+    let score = 0;
+
+    let timerSeconds = 90;
+    let timerInterval = null;
+
+    function switchTab(tabId) {
+      ["game", "vocab", "guide"].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add("hidden");
+        const btn = document.getElementById(`tab-btn-${t}`);
+        btn.classList.remove("tab-active");
+      });
+      document.getElementById(`tab-${tabId}`).classList.remove("hidden");
+      document.getElementById(`tab-btn-${tabId}`).classList.add("tab-active");
+      pulse3DStage();
+    }
+
+    function setGameLevel(lvl) {
+      currentLevel = lvl;
+      secretWordIndex = null;
+      roleAssignments = ["Unassigned", "Unassigned", "Unassigned"];
+      [1, 2, 3].forEach(n => {
+        document.getElementById(`level-btn-${n}`).classList.toggle("level-active", n === lvl);
+      });
+      const labels = {
+        1: "Level 1: Draw the Line (90s Breakdown)",
+        2: "Level 2: Blind Triad Taboo (Detective Mode)",
+        3: "Level 3: The Villain, The Trap & The Ideal"
+      };
+      document.getElementById("level-indicator").textContent = labels[lvl];
+      document.getElementById("level2-controls").classList.toggle("hidden", lvl !== 2);
+      pulse3DStage();
+      renderCurrentCard();
+    }
+
+    function filterCards(cat) {
+      currentCategory = cat;
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        const isMatch = btn.getAttribute("data-cat") === cat;
+        btn.className = isMatch
+          ? "cat-btn bg-autumn-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-sm"
+          : "cat-btn bg-parchment-100 text-slatewarm-900 hover:bg-parchment-200 px-3 py-1.5 rounded-xl text-xs font-bold transition";
+      });
+      filteredDeck = cat === "all" ? [...TRIAD_CARDS] : TRIAD_CARDS.filter(c => c.category === cat);
+      currentIndex = 0;
+      secretWordIndex = null;
+      pulse3DStage();
+      renderCurrentCard();
+    }
+
+    function prevCard() {
+      currentIndex = (currentIndex - 1 + filteredDeck.length) % filteredDeck.length;
+      secretWordIndex = null;
+      roleAssignments = ["Unassigned", "Unassigned", "Unassigned"];
+      pulse3DStage();
+      renderCurrentCard();
+    }
+
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % filteredDeck.length;
+      secretWordIndex = null;
+      roleAssignments = ["Unassigned", "Unassigned", "Unassigned"];
+      pulse3DStage();
+      renderCurrentCard();
+    }
+
+    function randomCard() {
+      currentIndex = Math.floor(Math.random() * filteredDeck.length);
+      secretWordIndex = null;
+      roleAssignments = ["Unassigned", "Unassigned", "Unassigned"];
+      pulse3DStage();
+      renderCurrentCard();
+    }
+
+    function pickSecretTarget() {
+      secretWordIndex = Math.floor(Math.random() * 3);
+      pulse3DStage();
+      renderCurrentCard();
+    }
+
+    function cycleRole(idx) {
+      const roles = ["Unassigned", "🦹 THE VILLAIN", "🪤 THE TRAP", "🏆 THE IDEAL"];
+      const currentPos = roles.indexOf(roleAssignments[idx]);
+      roleAssignments[idx] = roles[(currentPos + 1) % roles.length];
+      playWhooshChord();
+      renderCurrentCard();
+    }
+
+    function renderCurrentCard() {
+      const card = filteredDeck[currentIndex];
+      document.getElementById("card-counter").textContent = `${currentIndex + 1} / ${filteredDeck.length}`;
+      document.getElementById("card-badge").textContent = card.category;
+      document.getElementById("hud-category-label").textContent = card.category;
+      document.getElementById("card-probe").textContent = `"${card.probe}"`;
+
+      // Update 3D HUD labels
+      card.words.forEach((w, i) => {
+        const hudEl = document.getElementById(`hud-word-${i}`);
+        if (hudEl) hudEl.textContent = w;
+      });
+
+      // Render 3 Triad Words
+      const grid = document.getElementById("triad-words-grid");
+      const nodeBorders = ["border-autumn-500/60", "border-sage-500/60", "border-amber-500/60"];
+      const nodeBadges = ["NODE ALPHA • 01", "NODE BETA • 02", "NODE GAMMA • 03"];
+
+      grid.innerHTML = card.words.map((word, idx) => {
+        const isSecret = currentLevel === 2 && secretWordIndex === idx;
+        const role = roleAssignments[idx];
+        let roleBadge = "";
+        if (currentLevel === 3) {
+          const roleColors = {
+            "Unassigned": "bg-parchment-200 text-slatewarm-900 hover:bg-parchment-300",
+            "🦹 THE VILLAIN": "bg-red-600 text-white shadow-md",
+            "🪤 THE TRAP": "bg-autumn-500 text-white shadow-md",
+            "🏆 THE IDEAL": "bg-sage-600 text-white shadow-md"
+          };
+          roleBadge = `<button onclick="cycleRole(${idx})" class="mt-3 px-3.5 py-1 rounded-full text-xs font-mono font-extrabold transition ${roleColors[role]}">${role === "Unassigned" ? "Assign Role ↻" : role}</button>`;
+        }
+
+        return `
+          <div class="triad-node-card rounded-2xl p-5 text-center border-2 flex flex-col items-center justify-center bg-white/95 text-slatewarm-900 shadow-md ${isSecret ? 'ring-4 ring-autumn-500 border-autumn-600' : nodeBorders[idx]}">
+            <span class="text-xs font-mono font-bold uppercase tracking-widest text-slatewarm-700 mb-1">${nodeBadges[idx]}</span>
+            <h4 class="font-serif text-2xl md:text-3xl font-bold text-slatewarm-900">${word}</h4>
+            <div class="mt-2.5 flex items-center gap-1.5">
+              <button onclick="speakText('${word.replace(/'/g, "\\'")}', 'en-GB')" class="px-2.5 py-0.5 rounded-md bg-parchment-100 hover:bg-parchment-200 text-xs font-mono font-bold text-slatewarm-800">🇬🇧 UK</button>
+              <button onclick="speakText('${word.replace(/'/g, "\\'")}', 'en-US')" class="px-2.5 py-0.5 rounded-md bg-parchment-100 hover:bg-parchment-200 text-xs font-mono font-bold text-slatewarm-800">🇺🇸 US</button>
+            </div>
+            ${isSecret ? `<span class="mt-2.5 px-3 py-0.5 rounded-full bg-autumn-600 text-white font-mono text-xs font-extrabold animate-bounce">🤫 SECRET TARGET (LOUIE ONLY)</span>` : ''}
+            ${roleBadge}
+          </div>
+        `;
+      }).join("");
+
+      // Animate cards entrance with GSAP
+      if (typeof gsap !== "undefined") {
+        gsap.fromTo(".triad-node-card",
+          { y: 18, opacity: 0, rotateX: -12 },
+          { y: 0, opacity: 1, rotateX: 0, duration: 0.42, stagger: 0.08, ease: "back.out(1.4)" }
+        );
+      }
+
+      // Render Taboo words (clickable to trigger buzzer)
+      const tabooContainer = document.getElementById("card-taboo-list");
+      tabooContainer.innerHTML = card.taboo.map(t => `
+        <button onclick="triggerTabooBuzzer('${t}')" class="px-3 py-1 rounded-xl bg-white hover:bg-red-600 hover:text-white border border-red-300 text-red-800 font-mono text-xs font-extrabold shadow-sm transition active:scale-95">
+          🚫 ${t}
+        </button>
+      `).join("");
+
+      // Render Answer Key
+      const keyDiv = document.getElementById("card-answer-key");
+      keyDiv.innerHTML = card.defs.map(d => `<div class="p-2.5 rounded-xl bg-white border border-sage-200 shadow-sm">${d}</div>`).join("");
+      keyDiv.classList.add("hidden");
+      document.getElementById("card-answer-placeholder").classList.remove("hidden");
+      document.getElementById("toggle-key-btn").textContent = "Reveal Key ✨";
+    }
+
+    function toggleAnswerKey() {
+      const keyDiv = document.getElementById("card-answer-key");
+      const placeholder = document.getElementById("card-answer-placeholder");
+      const btn = document.getElementById("toggle-key-btn");
+      const isHidden = keyDiv.classList.contains("hidden");
+      keyDiv.classList.toggle("hidden", !isHidden);
+      placeholder.classList.toggle("hidden", isHidden);
+      btn.textContent = isHidden ? "Hide Key" : "Reveal Key ✨";
+      if (isHidden) playWhooshChord();
+    }
+
+    // ==========================================
+    // VOCABULARY RENDERER & SPEECH SYNTHESIS
+    // ==========================================
+    function renderVocab() {
+      const q = (document.getElementById("vocab-search").value || "").toLowerCase().trim();
+      const domain = document.getElementById("vocab-domain-filter").value;
+      const container = document.getElementById("vocab-grid");
+
+      const matches = WORK_VOCAB.filter(item => {
+        const domainMatch = domain === "all" || item.domain === domain;
+        const textMatch = !q ||
+          item.term.toLowerCase().includes(q) ||
+          item.es.toLowerCase().includes(q) ||
+          item.def.toLowerCase().includes(q) ||
+          item.ex.toLowerCase().includes(q);
+        return domainMatch && textMatch;
+      });
+
+      const badgeColors = {
+        "Systems & IT": "bg-sage-600 text-white",
+        "Audio & DJing": "bg-autumn-500 text-white",
+        "Executive & PM": "bg-slatewarm-800 text-amber-200"
+      };
+
+      container.innerHTML = matches.map(item => `
+        <div class="glass-card rounded-2xl p-4 shadow-sm hover:shadow-lg transition flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full font-mono text-xs font-bold ${badgeColors[item.domain]}">${item.domain}</span>
+                <span class="px-2 py-0.5 rounded bg-autumn-500/15 text-autumn-600 font-mono text-xs font-extrabold">${item.cefr}</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <button onclick="speakText('${item.term.replace(/'/g, "\\'")}', 'en-GB')" class="px-2 py-0.5 rounded bg-parchment-100 text-slatewarm-900 hover:bg-parchment-200 text-xs font-mono font-bold">🇬🇧 UK</button>
+                <button onclick="speakText('${item.term.replace(/'/g, "\\'")}', 'en-US')" class="px-2 py-0.5 rounded bg-parchment-100 text-slatewarm-900 hover:bg-parchment-200 text-xs font-mono font-bold">🇺🇸 US</button>
+              </div>
+            </div>
+            <div class="flex items-baseline gap-2">
+              <h3 class="font-serif text-2xl font-bold">${item.term}</h3>
+              <span class="font-mono text-xs opacity-70">${item.ipa}</span>
+            </div>
+            <div class="text-xs font-bold text-autumn-500 mb-2">🇪🇸 ${item.es}</div>
+            <p class="text-xs opacity-90 leading-relaxed mb-2.5">${item.def}</p>
+          </div>
+          <div class="bg-parchment-50 text-slatewarm-900 border border-[#e6decb] rounded-xl p-2.5 text-xs italic font-medium">
+            💬 "${item.ex}"
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function speakText(text, lang) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = lang;
+      utter.rate = 0.95;
+      window.speechSynthesis.speak(utter);
+    }
+
+    // ==========================================
+    // SCORE & TIMER CONTROLS
+    // ==========================================
+    function updateScore(delta) {
+      score = Math.max(0, score + delta);
+      document.getElementById("score-display").textContent = score;
+    }
+
+    function formatTime(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, "0");
+      const s = String(sec % 60).padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    function toggleTimer() {
+      const btn = document.getElementById("timer-btn");
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        btn.textContent = "Resume";
+      } else {
+        btn.textContent = "Pause";
+        playWhooshChord();
+        timerInterval = setInterval(() => {
+          if (timerSeconds > 0) {
+            timerSeconds--;
+            const disp = document.getElementById("timer-display");
+            disp.textContent = formatTime(timerSeconds);
+            if (timerSeconds <= 15) {
+              disp.className = "font-mono font-extrabold text-lg text-red-600 animate-pulse min-w-[4.5ch] text-center";
+              stageEnergy = 0.35;
+            } else {
+              disp.className = "font-mono font-extrabold text-lg text-slatewarm-900 min-w-[4.5ch] text-center";
+            }
+          } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            btn.textContent = "Time's Up!";
+            triggerTabooBuzzer();
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer(sec) {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      timerSeconds = sec;
+      const disp = document.getElementById("timer-display");
+      disp.textContent = formatTime(timerSeconds);
+      disp.className = "font-mono font-extrabold text-lg text-slatewarm-900 min-w-[4.5ch] text-center";
+      document.getElementById("timer-btn").textContent = "Start";
+    }
+
+    // Initialize Everything
+    window.addEventListener("DOMContentLoaded", () => {
+      renderCurrentCard();
+      renderVocab();
+      initThreeJS();
+    });
+  </script>
+</body>
+</html>

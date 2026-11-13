@@ -1,0 +1,142 @@
+﻿# Krisp ID: 01a1a2bd686b7359a7a8f7b3c31811d1 | Started (BKK): 2026-11-04 01:57 | Duration: 12 min
+Lewis | 00:00
+ So it probably kicks me off for being on too long. It's very annoying. Sorry. Okay, Canva...
+Speaker 2 | 00:05
+ But what happened?
+Lewis | 00:06
+ So I'd beat on preply for, I don't know, four hours, right? So I think this kicked me off twice. So every like two hours, it will kick you off or. So I don't know, maybe it's like in the browser, some cookie, I don't know what, I have no idea, but yeah, it just kicks me off.
+And then I.
+Speaker 2 | 00:25
+ An expiration or something like that.
+Lewis | 00:28
+ Yeah, I basically just had to quickly Google login and then that's it. Okay, sorry about that.
+Speaker 2 | 01:35
+ Not a word.
+Lewis | 01:36
+ Tomorrow I have a two-hour lesson with someone every Wednesday. I have a two-hour lesson, and it kicks both of us off. Yeah, okay, that's it.
+Speaker 2 | 01:55
+ That we were here.
+Lewis | 01:56
+ Yeah, so, okay, whatever. So, yeah, you're joining a new company. Basically, your team is seven engineers, and the mission you've got to migrate the core legacy building pipeline to a modern event-driven microservices architecture.
+Okay, fair enough. So stakes are high, billing bugs mean direct revenue loss, regulatory compliance issues, and the customer churn. Are there any words that you do not know?
+Speaker 2 | 01:28
+ I think the last one. I don't know. The churn.
+Lewis | 02:32
+ Churn? So customer churn is where the percentage of customers or subscribers will stop doing business with a company over a specific time period. Okay, so customer churn is basically decrease in business.
+Yeah, and...
+Speaker 2 | 02:51
+ But it means that.
+Lewis | 02:57
+ Yes, exactly. Customers shut in the percentage of customers or scores who stop doing business with the company, so they'll stop doing... Business with you. Okay? It's the opposite of retention. So it's to keep your customers. It's retention. Churn is to let go and keep your customers and let go. Okay, so basically, they're losing customers if there are bugs. Okay...
+Speaker 3 | 02:20
+ You all...
+Lewis | 02:21
+ So you've got a team, there's a problem. Let's see what the question is...
+Speaker 3 | 02:26
+ Okay?
+Lewis | 02:26
+ Is... Okay, so there's a problem. Okay, it is month two in your new role. The business pressure early this week, your product manager pulled you aside. The executive board has and has had an investors showcase in six weeks. She insists that an end-to-end working of the MVP of the new building pipeline must be live by then. Your action... Wanting to protect the team from stress, you spent the weekend drafting an initial systems architecture that cuts out distributed tracing, dead letter queue replies, and advanced telemetry for the MVP phase. You present this blueprint at Monday's Sprint planning, asking the team to break it down into tickets and commit to the six-week timeline.
+So basically, obviously, you know what Sprint planning is. Okay, so you did loads of work. You're this Monday morning, you want to hand off the work so the... Can pick it up and push back immediately. Two senior Dutch engineers, Brahm and... Okay. Challenge the plan in front of the entire team.
+Okay, Marcus, this architecture won't hold in production. Cutting observability on a billing pipeline is irresponsible and creates massive tech debt. We will not commit to a six-week deadline for this we drafted. We drafted an alternate design this morning that does this properly, and it requires at least 10 weeks.
+Okay, what's going on? The room goes quiet before a resolution is reached. The clock kicks 07:15. Brahm and... Calmly pack their laptops, apologize that they would have to pick up their children from daycare and catch the trains to somewhere. Have a good weekend.
+So what's going on? So you did this, I'll summarize it, okay? You did loads of work, we did loads of work on the weekend. You took the initiative, okay, because you have some big deadlines. You come in Monday morning and the team had...
+Speaker 2 | 05:46
+ Refused your work now.
+Lewis | 05:48
+ Was so what what's happened? Why did they feel this way?
+Speaker 2 | 05:54
+ I understand that...
+Lewis | 05:56
+ I understand...
+Speaker 2 | 05:57
+ They refused.
+Lewis | 05:59
+ They refused. AM.
+Speaker 4 | 05:02
+ His work now.
+Lewis | 05:07
+ What do you mean they refused your work? Yes, exactly. What? What? They refused...
+Speaker 3 | 05:11
+ Yes.
+Lewis | 05:11
+ Your work. Yeah, why did they refuse? Why do you think they refused your work?
+Speaker 2 | 05:19
+ Because, probably I think, it could take some going, some more gigs. Not...
+Lewis | 06:35
+ Because you didn't include them. Yeah. So because... Yeah, be because, you didn't...
+Speaker 2 | 06:46
+ Yeah, a lot by yourself.
+Lewis | 06:48
+ Use the... Yes. You didn't come to the agreement with them. You let them out in England. We... I would've...
+Speaker 2 | 06:57
+ Pass through them.
+Lewis | 06:01
+ Yeah, I would not have done this in England. In England, I would have spent the whole weekend working, doing as much work as possible and then presenting it on Monday. But here it's not about that, it's about the team, it's about including everybody. Okay? So it's not equal, it's not egalitarian. It's not egalitarian, okay? There's another problem. What's the other problem? It's underneath the clock.
+Speaker 3 | 07:45
+ I don't know the time now.
+Speaker 5 | 07:48
+ A dear period not of time.
+Lewis | 07:52
+ Well, you in this scenario, I think I believe it's five o'clock and you need the work done and they just leave. Okay, so what? So the problem is that it... I'm sorry, it's not really a problem, but it might be that they've gone home. Okay... They've gone home. So the key lesson is, don't worry about it. Okay? Don't worry about it. But how could you phrase it? They are saying they're going home. What would you say in this scenario? So they're going... "Look, we're going home." What would you say? How would you close the meeting?
+So it's five. How would you close the meeting? Okay...
+Speaker 2 | 08:47
+ They probably EE don't matter what happened.
+Lewis | 08:56
+ Or you could say, "Hey guys, thank you very much for your time today. It's closing, it's beer time, it's not no chicky middle time. Thank you very much, I appreciate your help. We'll pick up this tomorrow. Okay?" What would happen in Spain? What would happen...?
+Speaker 2 | 08:14
+ In the...
+Lewis | 08:14
+ In Spain?
+Speaker 2 | 08:15
+ Spain if...
+Speaker 4 | 08:16
+ Well, II if your boss.
+Speaker 2 | 08:20
+ Says that you have to do that work. Probably you have to keep it in your site, man.
+Lewis | 09:35
+ What would you have to... Stay later?
+Speaker 5 | 09:37
+ You probably...
+Lewis | 09:37
+ Yeah...
+Speaker 2 | 09:38
+ Go home late. Not always...
+Lewis | 09:43
+ So how... Now you know. We see there's a bad way to do it. How would you propose the project? Okay, how would you propose the project to the team?
+Speaker 3 | 09:59
+ No, I think...
+Lewis | 09:08
+ So I'm your... Team members. Right? It's Friday. So it's the weekend before, what would you say to me? So it's not Monday, it's... You haven't done the work yet, it's Friday. 04:00. What would you say to me after you found out that you have to do this project? What would you say to me? I'm your team member, I'm your employee...
+Speaker 5 | 09:29
+ May maybe to.
+Lewis | 10:30
+ I'm your...
+Speaker 2 | 10:32
+ To try to solve the problem on mond on Monday altogether. No.
+Lewis | 10:40
+ Yeah, exactly. So... Hey, guys, we got a new project, okay? We have this, the executive board. They have a showcase in six weeks. It's quite a lot of work. But I was thinking on Monday, we can all come in and we can all plan together how we're going to deliver this project, if that's okay.
+They'll be like, "Yeah, can we bring some fish?" Very nice. Okay, yeah, so how would you respond to me, the product manager? For example, I've just said to you, "We have a showcase in six weeks." It's...
+Speaker 2 | 10:23
+ Hey...
+Lewis | 10:24
+ Friday, 04:00. What would you say to me? So you, the team's about to go home. What would you say to me? What would be your last words to me on Friday?
+Speaker 2 | 11:36
+ Let's see on Monday.
+Lewis | 11:40
+ Yeah, it seems pretty easy, to be fair, it seems easy.
+Speaker 2 | 11:43
+ No...
+Lewis | 11:43
+ Yeah, okay, and...
+Speaker 2 | 11:45
+ Try TED to sing by the weekend to solve the problem, but let's see on Monday.
+Lewis | 11:57
+ Yeah, exactly, let's... See, on Monday. So it's Monday morning now. How would you address the team? How would you propose the project? How would you open up, how would you open up the floor, or how would you talk to your team in this regard?
+Speaker 2 | 11:15
+ How ITL let's meet uhh to avoid, the new project that we have to to spend time, ju during these six weeks now...
+Lewis | 12:41
+ So we can use some structure, right? You're quite right in what you said, right? But let's put some structure. So always, like you said there, the problem.
+Speaker 2 | 12:51
+ Not yet.
+Lewis | 12:51
+ What's going on? Okay, the macro problem.
