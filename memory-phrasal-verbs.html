@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phrasal Verbs Memory Game 🚀🧩</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0f4ff;
+      --orange: #FF6B35;
+      --yellow: #FFD93D;
+      --pink: #FF6B9D;
+      --green: #6BCB77;
+      --blue: #2563eb;
+      --purple: #7c3aed;
+      --red: #FF4757;
+      --card-back: #4f46e5;
+      --card-back2: #818cf8;
+      --shadow: rgba(0,0,0,0.12);
+      --dark: #1e1b4b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      font-family: 'Nunito', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 10px 12px;
+      gap: 8px;
+    }
+
+    /* ── Header ── */
+    header { text-align: center; width: 100%; }
+
+    .title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(24px, 4vw, 44px);
+      color: var(--dark);
+      text-shadow: 3px 3px 0 var(--yellow), 5px 5px 0 rgba(0,0,0,0.08);
+      line-height: 1;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--purple);
+      margin-top: 2px;
+    }
+
+    /* ── Scoreboard ── */
+    .scoreboard {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .player-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: white;
+      border-radius: 20px;
+      padding: 8px 20px;
+      box-shadow: 0 4px 14px var(--shadow);
+      border: 3px solid transparent;
+      transition: all 0.25s;
+      min-width: 105px;
+    }
+
+    .player-score.active-p1 {
+      border-color: #ff4757;
+      box-shadow: 0 4px 18px rgba(255,71,87,0.35);
+      transform: translateY(-2px);
+    }
+
+    .player-score.active-p2 {
+      border-color: #ffa502;
+      box-shadow: 0 4px 18px rgba(255,165,2,0.35);
+      transform: translateY(-2px);
+    }
+
+    .player-name {
+      font-family: 'Fredoka One';
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    .player-score.active-p1 .player-name { color: #ff4757; }
+    .player-score.active-p2 .player-name { color: #ffa502; }
+
+    .player-pts {
+      font-family: 'Fredoka One';
+      font-size: 32px;
+      color: var(--dark);
+      line-height: 1;
+    }
+
+    .player-score.active-p1 .player-pts { color: #ff4757; }
+    .player-score.active-p2 .player-pts { color: #ffa502; }
+
+    .turn-arrow {
+      font-family: 'Fredoka One';
+      font-size: 22px;
+      color: #ccc;
+      transition: all 0.25s;
+    }
+
+    .pairs-left {
+      font-family: 'Fredoka One';
+      font-size: 13px;
+      color: #64748b;
+      background: white;
+      border-radius: 50px;
+      padding: 6px 16px;
+      box-shadow: 0 3px 8px var(--shadow);
+    }
+
+    /* ── Diff & Control buttons ── */
+    .diff-row {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 1100px;
+    }
+
+    .diff-btn, .deck-btn {
+      font-family: 'Fredoka One';
+      font-size: 13px;
+      border: 3px solid transparent;
+      border-radius: 50px;
+      padding: 5px 13px;
+      cursor: pointer;
+      background: white;
+      color: var(--dark);
+      box-shadow: 0 3px 8px var(--shadow);
+      transition: all 0.2s;
+    }
+    .diff-btn:hover, .deck-btn:hover { transform: translateY(-1px); }
+    .diff-btn.active { background: var(--pink); color: white; border-color: var(--pink); }
+    .deck-btn { font-size: 12px; padding: 4px 11px; color: #475569; }
+    .deck-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
+
+    .sound-toggle-btn {
+      font-family: 'Fredoka One';
+      font-size: 13px;
+      border: 3px solid transparent;
+      border-radius: 50px;
+      padding: 5px 13px;
+      cursor: pointer;
+      background: white;
+      color: var(--dark);
+      box-shadow: 0 3px 8px var(--shadow);
+      transition: all 0.2s;
+    }
+    .sound-toggle-btn.active { border-color: var(--green); color: #16a34a; }
+    #btn-wild.active { border-color: var(--purple); color: var(--purple); }
+    #btn-mode.active { border-color: var(--orange); color: var(--orange); background: #fff7ed; }
+
+    .reset-btn {
+      font-family: 'Fredoka One';
+      font-size: 13px;
+      border: none;
+      border-radius: 50px;
+      padding: 5px 15px;
+      cursor: pointer;
+      background: var(--orange);
+      color: white;
+      box-shadow: 0 3px 8px var(--shadow);
+      transition: all 0.2s;
+    }
+    .reset-btn:hover { transform: translateY(-1px); }
+
+    /* ── Live Decoder Banner ── */
+    .decoder-bar {
+      width: 100%;
+      max-width: 980px;
+      background: white;
+      border-radius: 16px;
+      padding: 7px 14px;
+      box-shadow: 0 3px 10px var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      min-height: 42px;
+      border-left: 5px solid var(--purple);
+    }
+
+    .decoder-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .decoder-verb {
+      font-family: 'Fredoka One';
+      font-size: 16px;
+      color: var(--blue);
+    }
+
+    .decoder-meaning {
+      background: #ede9fe;
+      color: var(--purple);
+      padding: 2px 9px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .decoder-pronoun {
+      background: #fef3c7;
+      color: #b45309;
+      padding: 2px 9px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .decoder-ex {
+      color: #475569;
+      font-style: italic;
+      font-size: 12.5px;
+    }
+
+    .decoder-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mini-action-btn {
+      font-family: 'Fredoka One';
+      font-size: 11px;
+      border: none;
+      border-radius: 50px;
+      padding: 4px 10px;
+      cursor: pointer;
+      background: #f1f5f9;
+      color: var(--dark);
+      transition: all 0.15s;
+    }
+    .mini-action-btn:hover { background: #e2e8f0; transform: translateY(-1px); }
+
+    /* ── Grid ── */
+    .grid-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      width: 100%;
+    }
+
+    .grid { display: grid; gap: 8px; justify-content: center; }
+
+    /* ── Card ── */
+    .card {
+      perspective: 700px;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.38s cubic-bezier(.4,0,.2,1);
+    }
+
+    .card.flipped .card-inner,
+    .card.matched .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .card-back {
+      background: linear-gradient(135deg, var(--card-back), var(--card-back2));
+      box-shadow: 0 5px 0 rgba(0,0,0,0.15);
+      border: 3px solid white;
+    }
+
+    .card-back-inner {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(20px, 3vw, 34px);
+      color: white;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+    }
+
+    .card-front {
+      background: white;
+      transform: rotateY(180deg);
+      box-shadow: 0 5px 0 #ddd;
+      padding: 5px;
+      overflow: hidden;
+      border: 3px solid white;
+    }
+
+    .card.matched .card-front {
+      background: #f0fff4;
+      box-shadow: 0 5px 0 var(--green);
+    }
+
+    .card.matched-p1 .card-front {
+      background: #fff0f0;
+      box-shadow: 0 5px 0 #ff4757;
+    }
+
+    .card.matched-p2 .card-front {
+      background: #fffbf0;
+      box-shadow: 0 5px 0 #ffa502;
+    }
+
+    .card-placeholder-gradient {
+      width: 100%;
+      flex: 1;
+      border-radius: 10px;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 4px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .card-particle-pill {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(255,255,255,0.88);
+      color: var(--dark);
+      font-family: 'Fredoka One';
+      font-size: 8px;
+      padding: 1px 5px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .card-emoji {
+      font-size: clamp(22px, 3.2vw, 36px);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+      line-height: 1;
+    }
+
+    .card-word {
+      font-family: 'Fredoka One';
+      color: var(--dark);
+      font-size: clamp(9px, 1.15vw, 12.5px);
+      margin-top: 3px;
+      text-align: center;
+      line-height: 1.1;
+      flex-shrink: 0;
+      width: 100%;
+      word-break: break-word;
+    }
+
+    .card-submeaning {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      color: #64748b;
+      font-size: clamp(7.5px, 0.9vw, 9.5px);
+      text-align: center;
+      line-height: 1.1;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 1px;
+    }
+
+    /* Meaning Card Variant (when in Verb <-> Meaning match mode) */
+    .card-front.meaning-card .card-placeholder-gradient {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+      border: 1.5px dashed #f59e0b;
+    }
+    .card-front.meaning-card .card-meaning-text {
+      font-family: 'Fredoka One';
+      color: #92400e;
+      font-size: clamp(9px, 1.1vw, 12px);
+      text-align: center;
+      line-height: 1.15;
+      padding: 2px;
+    }
+
+    /* ── Win overlay ── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 27, 75, 0.75);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+    }
+    .overlay.show { display: flex; }
+
+    .win-box {
+      background: white;
+      border-radius: 28px;
+      padding: 36px 28px;
+      text-align: center;
+      max-width: 380px;
+      width: 90%;
+      animation: popIn 0.4s cubic-bezier(.4,0,.2,1);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.6); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes cardShuffle {
+      0% { transform: scale(1) rotate(0deg); filter: blur(0px); }
+      20% { transform: scale(0.9) rotate(-10deg); }
+      50% { transform: scale(0.15) rotate(360deg); filter: blur(2px); }
+      80% { transform: scale(0.9) rotate(730deg); }
+      100% { transform: scale(1) rotate(720deg); filter: blur(0px); }
+    }
+
+    .card.shuffling {
+      animation: cardShuffle 1.4s cubic-bezier(.4, 0, .2, 1) forwards;
+      pointer-events: none;
+    }
+
+    .win-emoji { font-size: 64px; }
+    .win-title {
+      font-family: 'Fredoka One';
+      font-size: 34px;
+      color: var(--pink);
+      margin: 8px 0 4px;
+    }
+    .win-final-scores {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin: 12px 0;
+    }
+    .win-score-box {
+      border-radius: 16px;
+      padding: 10px 20px;
+      text-align: center;
+      font-family: 'Fredoka One';
+    }
+    .win-score-box.p1 { background: #fff0f0; color: #ff4757; }
+    .win-score-box.p2 { background: #fffbf0; color: #ffa502; }
+    .win-score-box .wsb-name { font-size: 13px; }
+    .win-score-box .wsb-pts  { font-size: 32px; line-height: 1; }
+    .win-msg {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--purple);
+      margin-bottom: 20px;
+    }
+    .play-again-btn {
+      font-family: 'Fredoka One';
+      font-size: 20px;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 32px;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: white;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.15);
+      transition: all 0.2s;
+    }
+    .play-again-btn:hover { transform: translateY(-2px); }
+
+    /* ── Confetti ── */
+    .confetti-piece {
+      position: fixed;
+      width: 10px; height: 14px;
+      top: -20px;
+      border-radius: 3px;
+      animation: confettiFall linear forwards;
+      z-index: 200;
+      pointer-events: none;
+    }
+    @keyframes confettiFall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ── Match burst ── */
+    @keyframes burst {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.18); }
+      70%  { transform: scale(0.94); }
+      100% { transform: scale(1); }
+    }
+    .card.matched { animation: burst 0.5s ease; }
+
+    /* ── Teach overlay ── */
+    .teach-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 27, 75, 0.88);
+      z-index: 150;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+      padding: 16px;
+    }
+    .teach-overlay.show { display: flex; }
+
+    .teach-box {
+      background: white;
+      border-radius: 32px;
+      padding: 24px 24px 24px;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      animation: popIn 0.35s cubic-bezier(.4,0,.2,1);
+      position: relative;
+    }
+
+    .teach-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .teach-counter {
+      font-family: 'Fredoka One';
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .teach-jump-select {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 50px;
+      border: 2px solid #e2e8f0;
+      color: var(--dark);
+      outline: none;
+      cursor: pointer;
+      max-width: 240px;
+    }
+
+    .teach-slide-placeholder {
+      width: 240px;
+      height: 140px;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 6px;
+      position: relative;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: opacity 0.15s, transform 0.15s;
+    }
+
+    .teach-slide-particle {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: rgba(255,255,255,0.92);
+      color: var(--dark);
+      font-family: 'Fredoka One';
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 50px;
+    }
+
+    .teach-slide-emoji {
+      font-size: 62px;
+      line-height: 1;
+    }
+
+    .teach-slide-word-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 8px 0 6px;
+    }
+
+    .teach-slide-word {
+      font-family: 'Fredoka One';
+      font-size: 34px;
+      color: var(--dark);
+      transition: opacity 0.15s;
+    }
+
+    .btn-speak-slide {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: none;
+      background: var(--bg);
+      font-size: 19px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      box-shadow: 0 3px 0 #ddd;
+    }
+    .btn-speak-slide:hover { transform: scale(1.05); }
+
+    .teach-info-card {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      text-align: left;
+      border: 2px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .teach-meaning-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .teach-formal-badge {
+      font-family: 'Fredoka One';
+      font-size: 15px;
+      color: var(--purple);
+    }
+
+    .teach-pronoun-badge {
+      background: #fef3c7;
+      color: #b45309;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 2px 10px;
+      border-radius: 50px;
+    }
+
+    .teach-metaphor {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #475569;
+    }
+
+    .teach-example {
+      font-size: 13px;
+      font-weight: 800;
+      color: #065f46;
+      background: #ecfdf5;
+      padding: 6px 10px;
+      border-radius: 10px;
+      border-left: 3px solid #10b981;
+      font-style: italic;
+    }
+
+    .teach-nav {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .nav-btn {
+      font-family: 'Fredoka One';
+      font-size: 20px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: var(--bg);
+      color: var(--dark);
+      box-shadow: 0 4px 0 #ddd;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #ddd; }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; transform: none; }
+
+    .slide-dots {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 280px;
+      max-height: 44px;
+      overflow-y: auto;
+      margin: 0 auto;
+      padding: 2px;
+    }
+
+    .slide-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #ddd;
+      transition: background 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .slide-dot.active { background: var(--pink); transform: scale(1.3); }
+
+    .teach-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .teach-play-btn {
+      font-family: 'Fredoka One';
+      font-size: 16px;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 22px;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      color: white;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.15);
+      transition: all 0.2s;
+    }
+    .teach-play-btn:hover { transform: translateY(-2px); }
+
+    .teach-close-btn {
+      font-family: 'Fredoka One';
+      font-size: 13px;
+      border: 3px solid #ddd;
+      border-radius: 50px;
+      padding: 8px 16px;
+      cursor: pointer;
+      background: white;
+      color: #777;
+      transition: all 0.2s;
+    }
+    .teach-close-btn:hover { border-color: var(--pink); color: var(--pink); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="title">🚀 Phrasal Verbs Memory! 🧩</div>
+  <div class="subtitle" id="deck-subtitle">Decode by Particle & Visual Metaphor • 120 Phrasal Verbs Database</div>
+</header>
+
+<div class="scoreboard">
+  <div class="player-score" id="p1-score">
+    <div class="player-name">🔴 Player 1</div>
+    <div class="player-pts" id="p1-pts">0</div>
+  </div>
+  <div class="turn-arrow" id="turn-arrow">▶</div>
+  <div class="player-score" id="p2-score">
+    <div class="player-name">🟡 Player 2</div>
+    <div class="player-pts" id="p2-pts">0</div>
+  </div>
+  <div class="pairs-left" id="pairs-left"></div>
+</div>
+
+<!-- Row 1: Difficulty & Game Controls (Exact Clothes Memory Setup) -->
+<div class="diff-row">
+  <button class="diff-btn active" id="btn-easy"   onclick="setDiff('easy')">🌱 Easy (6)</button>
+  <button class="diff-btn"        id="btn-medium" onclick="setDiff('medium')">🌟 Medium (12)</button>
+  <button class="diff-btn"        id="btn-hard"   onclick="setDiff('hard')">🔥 Hard (18)</button>
+  <button class="diff-btn"        id="btn-mega"   onclick="setDiff('mega')">🚀 Mega (24)</button>
+  <button class="sound-toggle-btn active" id="btn-sound" onclick="toggleSound()">🔊 Sound</button>
+  <button class="sound-toggle-btn" id="btn-wild" onclick="toggleWildCards()">🌀 Wild: Off</button>
+  <button class="sound-toggle-btn" id="btn-mode" onclick="toggleMatchMode()" title="Switch between identical cards or matching Phrasal Verb to its Formal Meaning">🔁 Pair: Identical</button>
+  <button class="reset-btn" style="background:var(--purple);" onclick="openTeach()">📚 Teach</button>
+  <button class="reset-btn" onclick="startGame()">🔄 New Game</button>
+  <a href="index.html" class="reset-btn" style="background:var(--blue); text-decoration:none; display:inline-flex; align-items:center;">⚡ Anki Cloud</a>
+</div>
+
+<!-- Row 2: Particle & Category Deck Filter Pills -->
+<div class="diff-row" id="deck-filter-row">
+  <button class="deck-btn active" id="deck-ALL"       onclick="setDeck('ALL')">🌐 All Verbs (120)</button>
+  <button class="deck-btn"        id="deck-DIEGO"     onclick="setDeck('DIEGO')">⭐ Diego's Core (14)</button>
+  <button class="deck-btn"        id="deck-TECH"      onclick="setDeck('TECH')">💻 Tech & Leadership (78)</button>
+  <button class="deck-btn"        id="deck-OUT"       onclick="setDeck('OUT')">📤 OUT: Expand / Eliminate (24)</button>
+  <button class="deck-btn"        id="deck-UP"        onclick="setDeck('UP')">⬆️ UP: Visible / Increase (29)</button>
+  <button class="deck-btn"        id="deck-OFF"       onclick="setDeck('OFF')">🚀 OFF: Launch / Approve (21)</button>
+  <button class="deck-btn"        id="deck-DOWN"      onclick="setDeck('DOWN')">⬇️ DOWN: Reduce / Split (18)</button>
+  <button class="deck-btn"        id="deck-IN_ON"     onclick="setDeck('IN_ON')">🔄 IN / INTO / ON (24)</button>
+  <button class="deck-btn"        id="deck-BACK_OVER" onclick="setDeck('BACK_OVER')">🔙 BACK / OVER / THROUGH (21)</button>
+</div>
+
+<!-- Live Flip / Match Decoder Bar -->
+<div class="decoder-bar" id="decoder-bar">
+  <div class="decoder-main" id="decoder-main">
+    <span>💡 <strong>Flip any numbered card!</strong> When you match a pair, say a sentence using its <em>Pronoun Sandwich</em> form!</span>
+  </div>
+  <div class="decoder-actions" id="decoder-actions" style="display:none;">
+    <button class="mini-action-btn" onclick="speakLastVerb()" title="Speak Phrasal Verb">🔊 Speak</button>
+    <button class="mini-action-btn" id="btn-copy-preply" onclick="copyLastVerbToPreply()">📋 Copy to Preply</button>
+  </div>
+</div>
+
+<div class="grid-wrap">
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- Study / Teach Overlay Screen -->
+<div class="teach-overlay" id="teach-overlay">
+  <div class="teach-box">
+    <div class="teach-top-row">
+      <div class="teach-counter" id="teach-counter">1 / 120</div>
+      <select class="teach-jump-select" id="teach-jump-select" onchange="jumpToSlide(this.value)"></select>
+    </div>
+
+    <div class="teach-slide-placeholder" id="slide-placeholder">
+      <div class="teach-slide-particle" id="slide-particle">PARTICLE: OUT</div>
+      <div class="teach-slide-emoji" id="slide-emoji">🚀</div>
+    </div>
+
+    <div class="teach-slide-word-container">
+      <div class="teach-slide-word" id="slide-word">Roll out</div>
+      <button class="btn-speak-slide" onclick="speakCurrentWord()" title="Speak Word">🔊</button>
+    </div>
+
+    <div class="teach-info-card">
+      <div class="teach-meaning-row">
+        <div class="teach-formal-badge" id="slide-meaning">= Deploy gradually</div>
+        <div class="teach-pronoun-badge" id="slide-pronoun">🥪 "roll it out"</div>
+      </div>
+      <div class="teach-metaphor" id="slide-metaphor">💡 Unroll a carpet across a room → release step by step</div>
+      <div class="teach-example" id="slide-example">"We'll roll out the new billing update to 10% of users first."</div>
+    </div>
+
+    <!-- Spanish translation container (hidden by default) -->
+    <div id="slide-es-container" style="display:none; align-items:center; justify-content:center; gap:8px; margin-top:-4px; margin-bottom:10px;">
+      <div id="slide-es-word" style="font-family: 'Nunito'; font-size:18px; color:#c2410c; font-weight:900;">🇪🇸 Desplegar / lanzar gradualmente</div>
+    </div>
+
+    <!-- Thai translation container (hidden by default) -->
+    <div id="slide-thai-container" style="display:none; align-items:center; justify-content:center; gap:8px; margin-top:-4px; margin-bottom:10px;">
+      <div id="slide-thai-word" style="font-family: 'Nunito'; font-size:20px; color:var(--purple); font-weight:800;">🇹🇭 ทยอยเปิดตัว / ปล่อยใช้งาน</div>
+    </div>
+
+    <div class="teach-nav">
+      <button class="nav-btn" id="prev-btn" onclick="teachNav(-1)">◀</button>
+      <div class="slide-dots" id="slide-dots"></div>
+      <button class="nav-btn" id="next-btn" onclick="teachNav(1)">▶</button>
+    </div>
+    <div class="teach-actions">
+      <button class="teach-play-btn" onclick="closeTeachAndPlay()">▶ Let's Play! 🎮</button>
+      <button class="teach-close-btn" id="btn-toggle-es" onclick="toggleEs()">🇪🇸 Spanish: Off</button>
+      <button class="teach-close-btn" id="btn-toggle-thai" onclick="toggleThai()">🇹🇭 Thai: Off</button>
+      <button class="teach-close-btn" onclick="closeTeach()">✕ Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Winner Pop-up Overlay -->
+<div class="overlay" id="overlay">
+  <div class="win-box">
+    <div class="win-emoji" id="win-emoji">🎉</div>
+    <div class="win-title" id="win-title">Game Over!</div>
+    <div class="win-final-scores">
+      <div class="win-score-box p1"><div class="wsb-name">🔴 Player 1</div><div class="wsb-pts" id="win-p1-pts">0</div></div>
+      <div class="win-score-box p2"><div class="wsb-name">🟡 Player 2</div><div class="wsb-pts" id="win-p2-pts">0</div></div>
+    </div>
+    <div class="win-msg" id="win-msg"></div>
+    <button class="play-again-btn" onclick="startGame()">Play Again! 🚀</button>
+  </div>
+</div>
+
+<!-- Wild Card Reshuffle Overlay -->
+<div class="teach-overlay" id="wild-overlay" style="background: rgba(30, 27, 75, 0.45); backdrop-filter: blur(2px);">
+  <div style="text-align: center; color: white; animation: popIn 0.4s cubic-bezier(.4,0,.2,1);">
+    <div style="font-size: 100px; animation: spin 1.2s infinite linear; display: inline-block;">🌀</div>
+    <div style="font-family: 'Fredoka One'; font-size: 48px; color: var(--yellow); text-shadow: 2px 2px 0 rgba(0,0,0,0.4); margin: 20px 0;">WILD CARD!</div>
+    <div style="font-family: 'Fredoka One'; font-size: 24px; color: white; margin-bottom: 20px;">Reshuffling unmatched cards... 🃏</div>
+  </div>
+</div>
+
+<!-- Load External Phrasal Verbs Script (with embedded fallback below) -->
+<script src="phrasal-verbs/phrasal-verbs.js"></script>
+
+<script>
+  // Diego's 14 Core Masterclass Phrasal Verbs
+  const DIEGO_CORE_VERBS = [
+    "Roll out", "Iron out", "Rule out", "Phase out",
+    "Flag up", "Bring up", "Spin up", "Scale up",
+    "Kick off", "Sign off on", "Put off",
+    "Break down", "Narrow down", "Turn down"
+  ];
+
+  // ─── Dynamic Sound Effects (Web Audio API Synth) ───
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  let soundEnabled = true;
+
+  function playBeep(type) {
+    if (!soundEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    const now = audioCtx.currentTime;
+
+    if (type === 'flip') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(150, now + 0.15);
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+      osc.start(now);
+      osc.stop(now + 0.15);
+    } else if (type === 'match') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, now); // C5
+      osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+      osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc.start(now);
+      osc.stop(now + 0.35);
+    } else if (type === 'miss') {
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.setValueAtTime(180, now + 0.12);
+      gain.gain.setValueAtTime(0.06, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+      osc.start(now);
+      osc.stop(now + 0.28);
+    } else if (type === 'win') {
+      const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((f, idx) => {
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(f, now + idx * 0.08);
+        gain2.gain.setValueAtTime(0.08, now + idx * 0.08);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+        osc2.start(now + idx * 0.08);
+        osc2.stop(now + idx * 0.08 + 0.4);
+      });
+    } else if (type === 'click') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(400, now);
+      gain.gain.setValueAtTime(0.05, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      osc.start(now);
+      osc.stop(now + 0.05);
+    }
+  }
+
+  function toggleSound() {
+    soundEnabled = !soundEnabled;
+    const btn = document.getElementById('btn-sound');
+    btn.textContent = soundEnabled ? '🔊 Sound' : '🔇 Muted';
+    btn.classList.toggle('active', soundEnabled);
+    playBeep('click');
+  }
+
+  let wildCardsEnabled = false;
+  function toggleWildCards() {
+    wildCardsEnabled = !wildCardsEnabled;
+    const btn = document.getElementById('btn-wild');
+    btn.textContent = wildCardsEnabled ? '🌀 Wild: On' : '🌀 Wild: Off';
+    btn.classList.toggle('active', wildCardsEnabled);
+    playBeep('click');
+    startGame();
+  }
+
+  let matchMeaningMode = false; // false = Identical cards, true = Phrasal Verb <-> Formal Meaning
+  function toggleMatchMode() {
+    matchMeaningMode = !matchMeaningMode;
+    const btn = document.getElementById('btn-mode');
+    btn.textContent = matchMeaningMode ? '🧩 Pair: Verb ↔ Meaning' : '🔁 Pair: Identical';
+    btn.classList.toggle('active', matchMeaningMode);
+    playBeep('click');
+    startGame();
+  }
+
+  // Sizing and grid settings (same as Clothes Memory, slightly wider for phrasal verb text)
+  const CONFIGS = {
+    easy:   { pairs: 6,  cols: 4, cardW: 120, cardH: 142 },
+    medium: { pairs: 12, cols: 6, cardW: 108, cardH: 130 },
+    hard:   { pairs: 18, cols: 6, cardW: 98,  cardH: 116 },
+    mega:   { pairs: 24, cols: 8, cardW: 88,  cardH: 104 }
+  };
+
+  let difficulty = 'easy';
+  let currentDeck = 'ALL';
+  let flipped = [];
+  let lock = false;
+  let scores = [0, 0];
+  let currentPlayer = 1;
+  let totalPairs = 0;
+  let matched = 0;
+  let lastInspectedItem = null;
+
+  function getFilteredPool() {
+    const base = PHRASAL_VERBS_DATA.filter(item => item.w !== 'Wild Card');
+    if (currentDeck === 'ALL') return base;
+    if (currentDeck === 'DIEGO') return base.filter(item => DIEGO_CORE_VERBS.includes(item.w));
+    if (currentDeck === 'TECH') return base.filter(item => item.tech);
+    return base.filter(item => item.particle === currentDeck);
+  }
+
+  function setDeck(deckKey) {
+    playBeep('click');
+    currentDeck = deckKey;
+    document.querySelectorAll('.deck-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('deck-' + deckKey);
+    if (btn) btn.classList.add('active');
+    startGame();
+  }
+
+  function setDiff(d) {
+    playBeep('click');
+    difficulty = d;
+    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + d).classList.add('active');
+    startGame();
+  }
+
+  function updateDecoderBar(item) {
+    if (!item || item.w === 'Wild Card') return;
+    lastInspectedItem = item;
+    const mainEl = document.getElementById('decoder-main');
+    const actEl = document.getElementById('decoder-actions');
+    mainEl.innerHTML = `
+      <span>${item.emoji}</span>
+      <span class="decoder-verb">${item.w}</span>
+      <span class="decoder-meaning">= ${item.meaning}</span>
+      <span class="decoder-pronoun">🥪 "${item.pronoun}"</span>
+      <span class="decoder-ex">"${item.ex}"</span>
+    `;
+    actEl.style.display = 'flex';
+  }
+
+  function speakLastVerb() {
+    if (!lastInspectedItem) return;
+    speakText(`${lastInspectedItem.w}. ${lastInspectedItem.meaning}. ${lastInspectedItem.ex}`);
+  }
+
+  function copyLastVerbToPreply() {
+    if (!lastInspectedItem) return;
+    const txt = `• ${lastInspectedItem.w.toUpperCase()} (${lastInspectedItem.pronoun}) = ${lastInspectedItem.meaning}\n  💡 ${lastInspectedItem.metaphor}\n  🗣️ "${lastInspectedItem.ex}"`;
+    navigator.clipboard.writeText(txt).then(() => {
+      const btn = document.getElementById('btn-copy-preply');
+      const old = btn.textContent;
+      btn.textContent = '✅ Copied!';
+      setTimeout(() => { btn.textContent = old; }, 1400);
+    });
+  }
+
+  function startGame() {
+    scores = [0, 0];
+    currentPlayer = 1;
+    matched = 0;
+    flipped = [];
+    lock = false;
+
+    const cfg = CONFIGS[difficulty];
+    let filtered = [...getFilteredPool()];
+
+    // If a deck has fewer items than cfg.pairs (e.g., Diego's Core has 14 and user clicks Hard/Mega), top up from TECH
+    if (filtered.length < cfg.pairs) {
+      const extra = PHRASAL_VERBS_DATA.filter(x => x.w !== 'Wild Card' && !filtered.includes(x))
+        .sort(() => Math.random() - 0.5);
+      filtered = [...filtered, ...extra];
+    }
+
+    totalPairs = cfg.pairs;
+    updateScoreboard();
+    updatePairsLeft();
+
+    let pool;
+    if (wildCardsEnabled) {
+      pool = filtered.sort(() => Math.random() - 0.5).slice(0, cfg.pairs - 1);
+      const wildCardItem = PHRASAL_VERBS_DATA.find(item => item.w === 'Wild Card');
+      pool.push(wildCardItem);
+    } else {
+      pool = filtered.sort(() => Math.random() - 0.5).slice(0, cfg.pairs);
+    }
+
+    // Build deck cards (supports Identical mode or Verb <-> Meaning mode)
+    let deck = [];
+    pool.forEach(item => {
+      if (matchMeaningMode && item.w !== 'Wild Card') {
+        deck.push({ ...item, cardVariant: 'verb' });
+        deck.push({ ...item, cardVariant: 'meaning' });
+      } else {
+        deck.push({ ...item, cardVariant: 'verb' });
+        deck.push({ ...item, cardVariant: 'verb' });
+      }
+    });
+    deck.sort(() => Math.random() - 0.5);
+
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    grid.style.gridTemplateColumns = `repeat(${cfg.cols}, ${cfg.cardW}px)`;
+
+    deck.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.width  = cfg.cardW + 'px';
+      card.style.height = cfg.cardH + 'px';
+      card.style.order  = i;
+      card.dataset.placeWord = item.w;
+
+      let frontInner = '';
+      if (item.cardVariant === 'meaning') {
+        frontInner = `
+          <div class="card-face card-front meaning-card">
+            <div class="card-placeholder-gradient">
+              <div class="card-particle-pill">MEANING</div>
+              <div class="card-meaning-text">${item.meaning}</div>
+            </div>
+            <div class="card-word" style="color:#b45309; font-size:10px;">Match the Verb!</div>
+            <div class="card-submeaning">🥪 "${item.pronoun}"</div>
+          </div>`;
+      } else {
+        const pBadge = item.particle && item.particle !== 'WILD'
+          ? `<div class="card-particle-pill">${item.particle.replace('_', '/')}</div>`
+          : '';
+        frontInner = `
+          <div class="card-face card-front">
+            <div class="card-placeholder-gradient" style="background: ${item.grad || 'linear-gradient(135deg, #667eea, #764ba2)'};">
+              ${pBadge}
+              <div class="card-emoji">${item.emoji}</div>
+            </div>
+            <div class="card-word">${item.w}</div>
+            <div class="card-submeaning">${item.meaning}</div>
+          </div>`;
+      }
+
+      card.innerHTML = `
+        <div class="card-inner">
+          <div class="card-face card-back">
+            <div class="card-back-inner">${i + 1}</div>
+          </div>
+          ${frontInner}
+        </div>`;
+      card.addEventListener('click', () => flipCard(card, item));
+      grid.appendChild(card);
+    });
+
+    document.getElementById('overlay').classList.remove('show');
+  }
+
+  function flipCard(card, item) {
+    if (lock || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+    playBeep('flip');
+    card.classList.add('flipped');
+    flipped.push(card);
+    updateDecoderBar(item);
+
+    if (card.dataset.placeWord === 'Wild Card' && (totalPairs - matched > 1)) {
+      lock = true;
+      setTimeout(() => {
+        triggerWildCardShuffle();
+      }, 1000);
+      return;
+    }
+
+    if (flipped.length === 2) {
+      lock = true;
+      const [a, b] = flipped;
+
+      if (a.dataset.placeWord === b.dataset.placeWord) {
+        scores[currentPlayer - 1]++;
+        matched++;
+        const pClass = 'matched-p' + currentPlayer;
+        setTimeout(() => {
+          playBeep('match');
+          a.classList.add('matched', pClass);
+          b.classList.add('matched', pClass);
+          flipped = [];
+          lock = false;
+          updateScoreboard();
+          updatePairsLeft();
+          if (matched === totalPairs) setTimeout(endGame, 400);
+        }, 400);
+      } else {
+        setTimeout(() => {
+          playBeep('miss');
+          a.classList.remove('flipped');
+          b.classList.remove('flipped');
+          flipped = [];
+          lock = false;
+          currentPlayer = currentPlayer === 1 ? 2 : 1;
+          updateScoreboard();
+        }, 1200);
+      }
+    }
+  }
+
+  function updateScoreboard() {
+    document.getElementById('p1-pts').textContent = scores[0];
+    document.getElementById('p2-pts').textContent = scores[1];
+    const p1el = document.getElementById('p1-score');
+    const p2el = document.getElementById('p2-score');
+    const arrow = document.getElementById('turn-arrow');
+    p1el.className = 'player-score' + (currentPlayer === 1 ? ' active-p1' : '');
+    p2el.className = 'player-score' + (currentPlayer === 2 ? ' active-p2' : '');
+    arrow.textContent = currentPlayer === 1 ? '▶' : '◀';
+  }
+
+  function updatePairsLeft() {
+    const left = totalPairs - matched;
+    document.getElementById('pairs-left').textContent =
+      left > 0 ? `${left} pair${left !== 1 ? 's' : ''} left` : '';
+  }
+
+  function endGame() {
+    playBeep('win');
+    const [s1, s2] = scores;
+    let emoji, title, msg;
+    if (s1 > s2) {
+      emoji = '🏆'; title = '🔴 Player 1 Wins!'; msg = `Player 1 wins with ${s1} pairs! Phrasal Verb Master! 🌟`;
+    } else if (s2 > s1) {
+      emoji = '🏆'; title = '🟡 Player 2 Wins!'; msg = `Player 2 wins with ${s2} pairs! Amazing memory! 🌟`;
+    } else {
+      emoji = '🤝'; title = 'It\'s a Tie!'; msg = `Both players got ${s1} pairs — fantastic! 🤝`;
+    }
+    document.getElementById('win-emoji').textContent = emoji;
+    document.getElementById('win-title').textContent = title;
+    document.getElementById('win-p1-pts').textContent = s1;
+    document.getElementById('win-p2-pts').textContent = s2;
+    document.getElementById('win-msg').textContent = msg;
+    document.getElementById('overlay').classList.add('show');
+    launchConfetti();
+  }
+
+  function launchConfetti() {
+    const colors = ['#ff6b9d','#FFD93D','#4f46e5','#6BCB77','#4ECDC4','#9B59B6'];
+    for (let i = 0; i < 60; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + 'vw';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+      piece.style.animationDelay = (Math.random() * 0.8) + 's';
+      piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+      document.body.appendChild(piece);
+      piece.addEventListener('animationend', () => piece.remove());
+    }
+  }
+
+  // ─── Teach overlay / Study Room functions ───
+  let teachList = [];
+  let teachIndex = 0;
+  let showEs = false;
+  let showThai = false;
+
+  function toggleEs() {
+    playBeep('click');
+    showEs = !showEs;
+    const btn = document.getElementById('btn-toggle-es');
+    btn.textContent = showEs ? '🇪🇸 Spanish: On' : '🇪🇸 Spanish: Off';
+    btn.style.background = showEs ? '#fff7ed' : 'white';
+    btn.style.color = showEs ? '#c2410c' : '#777';
+    btn.style.borderColor = showEs ? '#c2410c' : '#ddd';
+    renderSlide();
+  }
+
+  function toggleThai() {
+    playBeep('click');
+    showThai = !showThai;
+    const btn = document.getElementById('btn-toggle-thai');
+    btn.textContent = showThai ? '🇹🇭 Thai: On' : '🇹🇭 Thai: Off';
+    btn.style.background = showThai ? '#e8f5e9' : 'white';
+    btn.style.color = showThai ? '#2e7d32' : '#777';
+    btn.style.borderColor = showThai ? '#2e7d32' : '#ddd';
+    renderSlide();
+  }
+
+  function openTeach() {
+    playBeep('click');
+    teachList = getFilteredPool();
+    teachIndex = 0;
+
+    // Populate Jump Select
+    const jumpSelect = document.getElementById('teach-jump-select');
+    jumpSelect.innerHTML = '';
+    teachList.forEach((item, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = `${idx + 1}. ${item.w} (${item.meaning})`;
+      jumpSelect.appendChild(opt);
+    });
+
+    const dotsEl = document.getElementById('slide-dots');
+    dotsEl.innerHTML = '';
+    teachList.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => { teachIndex = i; renderSlide(); });
+      dotsEl.appendChild(dot);
+    });
+    renderSlide();
+    document.getElementById('teach-overlay').classList.add('show');
+  }
+
+  function jumpToSlide(idxStr) {
+    playBeep('click');
+    teachIndex = parseInt(idxStr, 10) || 0;
+    renderSlide();
+  }
+
+  function renderSlide() {
+    const item = teachList[teachIndex];
+    if (!item) return;
+
+    const placeholderEl = document.getElementById('slide-placeholder');
+    const particleEl = document.getElementById('slide-particle');
+    const emojiEl = document.getElementById('slide-emoji');
+    const wordEl = document.getElementById('slide-word');
+    const meaningEl = document.getElementById('slide-meaning');
+    const pronounEl = document.getElementById('slide-pronoun');
+    const metaphorEl = document.getElementById('slide-metaphor');
+    const exampleEl = document.getElementById('slide-example');
+
+    const esContainer = document.getElementById('slide-es-container');
+    const esWordEl = document.getElementById('slide-es-word');
+    const thaiContainer = document.getElementById('slide-thai-container');
+    const thaiWordEl = document.getElementById('slide-thai-word');
+
+    placeholderEl.style.opacity = '0'; placeholderEl.style.transform = 'scale(0.85)';
+    wordEl.style.opacity = '0';
+
+    setTimeout(() => {
+      placeholderEl.style.background = item.grad || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+      particleEl.textContent = `PARTICLE: ${(item.particle || 'OUT').replace('_', ' / ')}`;
+      emojiEl.textContent = item.emoji;
+      placeholderEl.style.opacity = '1'; placeholderEl.style.transform = 'scale(1)';
+
+      wordEl.textContent = item.w;
+      wordEl.style.opacity = '1';
+
+      meaningEl.textContent = `= ${item.meaning}`;
+      pronounEl.textContent = `🥪 "${item.pronoun}"`;
+      metaphorEl.textContent = `💡 ${item.metaphor}`;
+      exampleEl.textContent = `"${item.ex}"`;
+
+      esWordEl.textContent = `🇪🇸 ${item.es || ''}`;
+      esContainer.style.display = showEs ? 'flex' : 'none';
+
+      thaiWordEl.textContent = `🇹🇭 ${item.th || ''}`;
+      thaiContainer.style.display = showThai ? 'flex' : 'none';
+    }, 100);
+
+    document.getElementById('teach-counter').textContent = `${teachIndex + 1} / ${teachList.length}`;
+    document.getElementById('teach-jump-select').value = teachIndex;
+    document.getElementById('prev-btn').disabled = teachIndex === 0;
+    document.getElementById('next-btn').disabled = teachIndex === teachList.length - 1;
+    document.querySelectorAll('.slide-dot').forEach((d, i) => d.classList.toggle('active', i === teachIndex));
+  }
+
+  function teachNav(dir) {
+    playBeep('click');
+    teachIndex = Math.max(0, Math.min(teachList.length - 1, teachIndex + dir));
+    renderSlide();
+  }
+
+  function speakText(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.92;
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  function speakCurrentWord() {
+    const item = teachList[teachIndex];
+    if (item) speakText(`${item.w}. ${item.meaning}. ${item.ex}`);
+  }
+
+  function triggerWildCardShuffle() {
+    playShuffleSound();
+    const wildOverlay = document.getElementById('wild-overlay');
+    wildOverlay.classList.add('show');
+
+    const cards = Array.from(document.querySelectorAll('.card'));
+    const unmatched = cards.filter(c => !c.classList.contains('matched'));
+
+    unmatched.forEach(c => c.classList.add('shuffling'));
+
+    setTimeout(() => {
+      unmatched.forEach(c => {
+        c.style.order = Math.floor(Math.random() * 100);
+        c.classList.remove('flipped');
+      });
+    }, 700);
+
+    setTimeout(() => {
+      unmatched.forEach(c => c.classList.remove('shuffling'));
+      flipped = [];
+      wildOverlay.classList.remove('show');
+      currentPlayer = currentPlayer === 1 ? 2 : 1;
+      updateScoreboard();
+      lock = false;
+    }, 1400);
+  }
+
+  function playShuffleSound() {
+    if (!soundEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const now = audioCtx.currentTime;
+    for (let i = 0; i < 8; i++) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(300 + Math.random() * 600, now + i * 0.1);
+      gain.gain.setValueAtTime(0.06, now + i * 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.08);
+      osc.start(now + i * 0.1);
+      osc.stop(now + i * 0.1 + 0.08);
+    }
+  }
+
+  function closeTeach() {
+    playBeep('click');
+    document.getElementById('teach-overlay').classList.remove('show');
+  }
+
+  function closeTeachAndPlay() {
+    closeTeach();
+    startGame();
+  }
+
+  function initDeckCounts() {
+    const base = PHRASAL_VERBS_DATA.filter(x => x.w !== 'Wild Card');
+    const counts = {
+      ALL: base.length,
+      DIEGO: base.filter(x => DIEGO_CORE_VERBS.includes(x.w)).length,
+      TECH: base.filter(x => x.tech).length,
+      OUT: base.filter(x => x.particle === 'OUT').length,
+      UP: base.filter(x => x.particle === 'UP').length,
+      OFF: base.filter(x => x.particle === 'OFF').length,
+      DOWN: base.filter(x => x.particle === 'DOWN').length,
+      IN_ON: base.filter(x => x.particle === 'IN_ON').length,
+      BACK_OVER: base.filter(x => x.particle === 'BACK_OVER').length
+    };
+    document.getElementById('deck-ALL').textContent       = `🌐 All Verbs (${counts.ALL})`;
+    document.getElementById('deck-DIEGO').textContent     = `⭐ Diego's Core (${counts.DIEGO})`;
+    document.getElementById('deck-TECH').textContent      = `💻 Tech & Work (${counts.TECH})`;
+    document.getElementById('deck-OUT').textContent       = `📤 OUT: Expand / Eliminate (${counts.OUT})`;
+    document.getElementById('deck-UP').textContent        = `⬆️ UP: Visible / Increase (${counts.UP})`;
+    document.getElementById('deck-OFF').textContent       = `🚀 OFF: Launch / Approve (${counts.OFF})`;
+    document.getElementById('deck-DOWN').textContent      = `⬇️ DOWN: Reduce / Split (${counts.DOWN})`;
+    document.getElementById('deck-IN_ON').textContent     = `🔄 IN / INTO / ON (${counts.IN_ON})`;
+    document.getElementById('deck-BACK_OVER').textContent = `🔙 BACK / OVER / THROUGH (${counts.BACK_OVER})`;
+  }
+
+  // Initialize first game on load
+  initDeckCounts();
+  startGame();
+</script>
+</body>
+</html>

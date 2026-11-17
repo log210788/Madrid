@@ -1,0 +1,1499 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title id="doc-title">Diego's Anki Cloud ⚡ | Spaced Repetition Phrasal Verbs & Tech English</title>
+
+  <!-- iOS / Apple Web App Meta Tags (Free iPhone & iPad Home Screen App) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Diego Anki">
+  <meta name="theme-color" content="#0f172a">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Outfit"', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Firebase Compat SDK for Realtime Database Sync -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+  <!-- Load 120 Phrasal Verbs Database -->
+  <script src="phrasal-verbs/phrasal-verbs.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #0b1120;
+      --card-dark: #151f32;
+      --border-dark: #263552;
+    }
+
+    body {
+      background: radial-gradient(circle at 15% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
+                  radial-gradient(circle at 85% 20%, rgba(139, 92, 246, 0.14) 0%, transparent 45%),
+                  #0b1120;
+      color: #f8fafc;
+      min-height: 100vh;
+    }
+
+    .glass-panel {
+      background: rgba(21, 31, 50, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    .anki-card-container {
+      perspective: 1400px;
+    }
+
+    .anki-card {
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    }
+
+    .rate-btn {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .rate-btn:hover {
+      transform: translateY(-2px);
+    }
+    .rate-btn:active {
+      transform: translateY(1px);
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+    .pulse-live {
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased pb-16">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-display font-black text-xl shadow-lg shadow-indigo-500/20">
+          ⚡
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-display font-extrabold text-lg sm:text-xl tracking-tight text-white">Diego's Anki Cloud</h1>
+            <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+              12-Hour SRS Engine
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Particle Decoder • Amsterdam Engineering Phrasal Verbs & Live Polish Deck</p>
+        </div>
+      </div>
+
+      <!-- Right Controls: Firebase Status + Companion Games -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <button onclick="forceFirebaseSync()" id="firebase-status-pill" class="px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 hover:bg-emerald-500/25 transition" title="Click to sync with Firebase Cloud now">
+          <span id="firebase-dot" class="w-2 h-2 rounded-full bg-emerald-400 pulse-live"></span>
+          <span id="firebase-status-text">☁️ Connecting...</span>
+        </button>
+
+        <button onclick="openReminderModal()" class="px-3 py-1.5 rounded-full text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition flex items-center gap-1">
+          <span>🔔</span>
+          <span id="reminder-btn-label">Reminders</span>
+        </button>
+
+        <button onclick="openAddCardModal()" class="px-3 py-1.5 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-200 border border-indigo-400/30 hover:bg-indigo-500/30 transition">
+          ➕ Add Card
+        </button>
+
+        <a href="memory-phrasal-verbs.html" class="px-3 py-1.5 rounded-full text-xs font-bold bg-pink-500/20 text-pink-200 border border-pink-400/30 hover:bg-pink-500/30 transition">
+          🎮 Memory Game
+        </a>
+
+        <a href="lesson-03-sanctuary.html" class="px-3 py-1.5 rounded-full text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition">
+          🌿 Sanctuary
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-6xl mx-auto px-4 pt-5 space-y-5">
+
+    <!-- LIVE SRS METRICS & REMINDER BANNER -->
+    <section class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+      <div class="glass-panel rounded-2xl p-3.5 flex items-center justify-between border-l-4 border-l-rose-500">
+        <div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Due Now</div>
+          <div id="stat-due" class="font-display font-black text-2xl text-rose-400">0</div>
+        </div>
+        <span class="text-2xl">🔴</span>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-3.5 flex items-center justify-between border-l-4 border-l-amber-400">
+        <div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">12h / Learning</div>
+          <div id="stat-learning" class="font-display font-black text-2xl text-amber-300">0</div>
+        </div>
+        <span class="text-2xl">⏳</span>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-3.5 flex items-center justify-between border-l-4 border-l-sky-400">
+        <div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">New Cards</div>
+          <div id="stat-new" class="font-display font-black text-2xl text-sky-300">0</div>
+        </div>
+        <span class="text-2xl">🆕</span>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-3.5 flex items-center justify-between border-l-4 border-l-emerald-400">
+        <div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Mastered</div>
+          <div id="stat-mastered" class="font-display font-black text-2xl text-emerald-300">0</div>
+        </div>
+        <span class="text-2xl">🏆</span>
+      </div>
+
+      <div class="col-span-2 sm:col-span-1 glass-panel rounded-2xl p-3.5 flex items-center justify-between border-l-4 border-l-purple-400">
+        <div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Next Wakeup</div>
+          <div id="stat-next-timer" class="font-mono font-bold text-sm text-purple-300 mt-1">Ready Now!</div>
+        </div>
+        <span class="text-2xl">⏰</span>
+      </div>
+    </section>
+
+    <!-- NAVIGATION TABS & DECK SELECTOR -->
+    <section class="flex flex-wrap items-center justify-between gap-3">
+      <!-- Tabs -->
+      <div class="flex items-center gap-2 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
+        <button onclick="switchMainTab('study')" id="tab-btn-study" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-indigo-600 text-white shadow">
+          ⚡ Study Flashcards
+        </button>
+        <button onclick="switchMainTab('decoder')" id="tab-btn-decoder" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition text-slate-400 hover:text-white">
+          🧠 Particle Decoder (128)
+        </button>
+        <button onclick="switchMainTab('stats')" id="tab-btn-stats" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition text-slate-400 hover:text-white">
+          📊 Teacher & Firebase Stats
+        </button>
+      </div>
+
+      <!-- Deck Filter & Card Mode -->
+      <div class="flex flex-wrap items-center gap-2">
+        <select id="deck-select" onchange="changeDeckFilter(this.value)" class="bg-slate-900 text-slate-200 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-xl border border-slate-700 outline-none focus:border-indigo-500">
+          <option value="PRIORITY">⭐ Diego's Priority Deck: Core Verbs + Nov 13 Fixes (22)</option>
+          <option value="ALL">🌐 Complete Database: All Phrasal Verbs & Polishes (128)</option>
+          <option value="POLISH">🔧 Diego's Personal Transcript Fixes (Nov 4 & Nov 13) (8)</option>
+          <option value="TECH">💻 Tech, Debugging & Leadership Phrasal Verbs (78)</option>
+          <option value="OUT">📤 Particle [OUT] — Expand & Eliminate (24)</option>
+          <option value="UP">⬆️ Particle [UP] — Visible & Increase (29)</option>
+          <option value="OFF">🚀 Particle [OFF] — Launch, Separate & Approve (21)</option>
+          <option value="DOWN">⬇️ Particle [DOWN] — Reduce, Split & Track (18)</option>
+          <option value="IN_ON">🔄 Particle [IN / INTO / ON] — Investigate & Continue (24)</option>
+          <option value="BACK_OVER">🔙 Particle [BACK / OVER / THROUGH] — Revert & Review (21)</option>
+          <option value="LEECHES">⚠️ My Struggle Cards (Clicked "Again")</option>
+        </select>
+
+        <select id="prompt-mode-select" onchange="changePromptMode(this.value)" class="bg-slate-900 text-slate-200 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-xl border border-slate-700 outline-none focus:border-indigo-500">
+          <option value="cloze">🎯 Mode: Context Sentence Cloze → Verb</option>
+          <option value="formal">🗣️ Mode: Formal / Spanish → Phrasal Verb</option>
+          <option value="verb">👀 Mode: Phrasal Verb → Meaning & Metaphor</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 1: ANKI FLASHCARD STUDY ROOM                                   -->
+    <!-- =================================================================== -->
+    <section id="view-study" class="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
+
+      <!-- Left 2 Columns: The Flashcard -->
+      <div class="lg:col-span-2 space-y-4">
+        <div class="anki-card-container">
+          <div id="anki-card-box" class="anki-card glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-700/80 min-h-[370px] flex flex-col justify-between relative overflow-hidden">
+
+            <!-- Card Header Badges -->
+            <div class="flex items-center justify-between gap-2 flex-wrap z-10">
+              <div class="flex items-center gap-2">
+                <span id="card-badge-particle" class="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
+                  📤 PARTICLE: OUT
+                </span>
+                <span id="card-badge-status" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                  New Card
+                </span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button onclick="toggleSpanishHint()" id="btn-es-hint" class="px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition">
+                  🇪🇸 ES Hint: On
+                </button>
+                <button onclick="speakActiveCard()" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-indigo-600 text-white flex items-center justify-center transition border border-slate-700" title="Listen (Pronunciation)">
+                  🔊
+                </button>
+              </div>
+            </div>
+
+            <!-- FRONT OF CARD -->
+            <div id="card-front-area" class="my-6 text-center space-y-4 z-10">
+              <div id="card-emoji-bubble" class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-4xl shadow-lg">
+                🚀
+              </div>
+
+              <div id="card-prompt-label" class="text-xs font-bold uppercase tracking-widest text-indigo-400">
+                Complete the Engineering Sentence
+              </div>
+
+              <div id="card-front-main" class="font-display font-extrabold text-2xl sm:text-3xl text-white leading-snug max-w-xl mx-auto">
+                "We'll _______ the new billing update to 10% of users first."
+              </div>
+
+              <div id="card-front-sub" class="text-sm sm:text-base font-semibold text-amber-300">
+                Formal Meaning: Deploy gradually
+              </div>
+
+              <div id="card-front-es" class="text-sm font-bold text-emerald-300/90">
+                🇪🇸 Desplegar / lanzar gradualmente
+              </div>
+
+              <!-- Optional Quick Type-In Check -->
+              <div id="type-check-wrap" class="max-w-sm mx-auto pt-2 flex items-center gap-2">
+                <input id="type-answer-input" type="text" placeholder="Type answer or press Space to flip..." onkeydown="handleInputKey(event)" class="w-full bg-slate-900/90 border border-slate-700 focus:border-indigo-400 rounded-xl px-3.5 py-2 text-sm text-white outline-none font-semibold" />
+              </div>
+            </div>
+
+            <!-- BACK OF CARD (Revealed on Flip) -->
+            <div id="card-back-area" class="hidden border-t border-slate-700/80 pt-5 mt-2 space-y-4 z-10">
+              <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-900/80 p-4 rounded-2xl border border-indigo-500/30">
+                <div>
+                  <div class="text-[11px] font-bold uppercase tracking-wider text-indigo-400">Target Phrasal Verb / Upgrade</div>
+                  <div id="card-back-answer" class="font-display font-black text-2xl sm:text-3xl text-white">
+                    Roll out
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Pronoun Sandwich</div>
+                  <div id="card-back-pronoun" class="font-mono font-bold text-sm sm:text-base px-3 py-1 rounded-xl bg-amber-400/15 text-amber-300 border border-amber-400/30">
+                    🥪 "roll it out"
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                <div class="bg-slate-900/60 p-3.5 rounded-2xl border border-slate-800">
+                  <div class="text-[11px] font-bold uppercase text-purple-400">💡 Visual Metaphor & Particle Logic</div>
+                  <p id="card-back-metaphor" class="text-xs sm:text-sm text-slate-200 font-medium mt-1">
+                    Unroll a carpet across a room → release step by step
+                  </p>
+                </div>
+
+                <div class="bg-emerald-950/30 p-3.5 rounded-2xl border border-emerald-500/25">
+                  <div class="text-[11px] font-bold uppercase text-emerald-400">🗣️ Full Native Example</div>
+                  <p id="card-back-example" class="text-xs sm:text-sm text-emerald-100 italic font-medium mt-1">
+                    "We'll roll out the new billing update to 10% of users first."
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Action Area: Show Answer Button OR 4 Anki Interval Buttons -->
+            <div class="pt-4 z-10">
+              <button id="btn-show-answer" onclick="revealAnswer()" class="w-full py-3.5 rounded-2xl font-display font-extrabold text-base sm:text-lg bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white shadow-lg shadow-indigo-500/25 transition">
+                Show Answer (Space) 👀
+              </button>
+
+              <div id="anki-rating-buttons" class="hidden grid grid-cols-4 gap-2.5">
+                <button onclick="rateCard(1)" class="rate-btn flex flex-col items-center py-2.5 px-2 rounded-2xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-200">
+                  <span id="ivl-again" class="font-mono text-[11px] font-bold text-rose-300">12h</span>
+                  <span class="font-display font-extrabold text-sm sm:text-base text-white">1 · Again</span>
+                  <span class="text-[10px] text-rose-300/80">Mistake</span>
+                </button>
+
+                <button onclick="rateCard(2)" class="rate-btn flex flex-col items-center py-2.5 px-2 rounded-2xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-200">
+                  <span id="ivl-hard" class="font-mono text-[11px] font-bold text-amber-300">18h</span>
+                  <span class="font-display font-extrabold text-sm sm:text-base text-white">2 · Hard</span>
+                  <span class="text-[10px] text-amber-300/80">Tricky</span>
+                </button>
+
+                <button onclick="rateCard(3)" class="rate-btn flex flex-col items-center py-2.5 px-2 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200">
+                  <span id="ivl-good" class="font-mono text-[11px] font-bold text-emerald-300">1d</span>
+                  <span class="font-display font-extrabold text-sm sm:text-base text-white">3 · Good</span>
+                  <span class="text-[10px] text-emerald-300/80">Got it</span>
+                </button>
+
+                <button onclick="rateCard(4)" class="rate-btn flex flex-col items-center py-2.5 px-2 rounded-2xl bg-sky-500/20 hover:bg-sky-500/30 border border-sky-500/40 text-sky-200">
+                  <span id="ivl-easy" class="font-mono text-[11px] font-bold text-sky-300">4d</span>
+                  <span class="font-display font-extrabold text-sm sm:text-base text-white">4 · Easy</span>
+                  <span class="text-[10px] text-sky-300/80">Instant</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Keyboard Shortcut Helper -->
+        <div class="flex flex-wrap items-center justify-between text-xs text-slate-400 px-2">
+          <div>⌨️ Shortcuts: <kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-200">Space</kbd> Flip • <kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-200">1</kbd> Again • <kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-200">2</kbd> Hard • <kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-200">3</kbd> Good • <kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-200">4</kbd> Easy</div>
+          <button onclick="cramNextCard()" class="text-indigo-400 hover:text-indigo-300 font-bold">Skip / Practice Next →</button>
+        </div>
+      </div>
+
+      <!-- Right Column: Quick Particle Cheat-Sheet & Upcoming Queue -->
+      <aside class="space-y-4">
+        <div class="glass-panel rounded-3xl p-5 space-y-3 border border-slate-800">
+          <div class="flex items-center justify-between">
+            <h2 class="font-display font-extrabold text-base text-white">🧭 The 4-Particle Decoder</h2>
+            <span class="text-[11px] font-bold text-indigo-400">Don't memorize blindly!</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            In Spanish, formal verbs (<em>deploy, resolve, postpone</em>) are easy because they're Latin. To master English phrasal verbs, look at the <strong>particle</strong> + picture the action:
+          </p>
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+              <span class="font-bold text-indigo-300">📤 OUT</span> = Expand outward OR Eliminate completely
+              <div class="text-slate-400 mt-0.5"><em>roll out, iron out, rule out, phase out</em></div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+              <span class="font-bold text-emerald-300">⬆️ UP</span> = Make visible / Appear OR Increase
+              <div class="text-slate-400 mt-0.5"><em>flag up, bring up, spin up, scale up</em></div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+              <span class="font-bold text-amber-300">🚀 OFF</span> = Launch, Separate, or Pass a gate
+              <div class="text-slate-400 mt-0.5"><em>kick off, sign off on, put off, call off</em></div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+              <span class="font-bold text-rose-300">⬇️ DOWN</span> = Reduce, Split into pieces, or Track
+              <div class="text-slate-400 mt-0.5"><em>break down, narrow down, turn down, pay down</em></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Review Queue (12-Hour Mistake Queue) -->
+        <div class="glass-panel rounded-3xl p-5 space-y-3 border border-slate-800">
+          <div class="flex items-center justify-between">
+            <h3 class="font-display font-extrabold text-sm text-white">⏳ Upcoming Review Queue</h3>
+            <button onclick="exportAnkiTSV()" class="text-[11px] font-bold text-sky-400 hover:underline">📥 Export .TSV</button>
+          </div>
+          <div id="upcoming-queue-list" class="space-y-2 max-h-52 overflow-y-auto pr-1 text-xs">
+          </div>
+        </div>
+      </aside>
+
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 2: PARTICLE DECODER & ALL 128 CARDS BROWSER                    -->
+    <!-- =================================================================== -->
+    <section id="view-decoder" class="hidden space-y-4">
+      <div class="glass-panel rounded-3xl p-5 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2 flex-1 min-w-[240px]">
+          <span>🔍</span>
+          <input id="browser-search" type="text" oninput="renderCardBrowser()" placeholder="Search 128 phrasal verbs, Spanish meaning, or formal synonym..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white outline-none focus:border-indigo-500" />
+        </div>
+        <div class="text-xs text-slate-400 font-semibold">
+          Click any card's <strong>⚡ Study Now</strong> button to jump straight to it.
+        </div>
+      </div>
+
+      <div id="browser-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 3: TEACHER & FIREBASE CLOUD DASHBOARD                          -->
+    <!-- =================================================================== -->
+    <section id="view-stats" class="hidden space-y-5">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="glass-panel rounded-3xl p-5 space-y-2">
+          <div class="text-xs font-bold uppercase text-indigo-400">🔥 Study Activity (Firebase Synced)</div>
+          <div id="stats-total-reviews" class="font-display font-black text-3xl text-white">0 Reviews</div>
+          <p id="stats-last-sync" class="text-xs text-slate-400">Synced with Firebase project: esl-games-lewis-34</p>
+        </div>
+
+        <div class="glass-panel rounded-3xl p-5 space-y-2">
+          <div class="text-xs font-bold uppercase text-amber-400">⚠️ Mistake Interval Rule</div>
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-lg text-white" id="mistake-mode-label">12-Hour Strict Mode</span>
+            <button onclick="toggleMistakeIntervalMode()" class="px-3 py-1 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              Switch Rule
+            </button>
+          </div>
+          <p class="text-xs text-slate-400">When you click <strong>Again (1)</strong>, the card wakes up again in <strong id="mistake-hours-desc">12 hours</strong> (or 10 mins in rapid mode).</p>
+        </div>
+
+        <div class="glass-panel rounded-3xl p-5 space-y-2">
+          <div class="text-xs font-bold uppercase text-rose-400">🔄 Deck Management</div>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button onclick="makeAllPriorityDueNow()" class="px-3 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white">
+              ⚡ Practice Priority Deck Now
+            </button>
+            <button onclick="exportAnkiTSV()" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">
+              📥 Download Anki .TSV
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Struggle Cards / Leeches for Teacher Lewis -->
+      <div class="glass-panel rounded-3xl p-6 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-display font-extrabold text-lg text-white">⚠️ Struggle Cards ("Again" Clicks — Teacher View)</h3>
+            <p class="text-xs text-slate-400">Cards Diego marked as "Again" most frequently—automatically synced to Firebase so Lewis can review them in class.</p>
+          </div>
+        </div>
+        <div id="leeches-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: SMART REMINDERS & iOS / CALENDAR SETUP                       -->
+  <!-- ===================================================================== -->
+  <div id="reminder-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl max-w-md w-full p-6 space-y-4 border border-slate-700 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="font-display font-extrabold text-xl text-white">🔔 Smart Anki Reminders</h3>
+        <button onclick="closeReminderModal()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
+      </div>
+
+      <p class="text-xs text-slate-300 leading-relaxed">
+        As we discussed in class, Anki works because of <strong>spaced intervals</strong>—when you make a mistake, it reminds you in <strong>12 hours</strong> so you never forget.
+      </p>
+
+      <!-- Option 1: Browser Notification -->
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-bold text-white">1. Browser & Desktop Notifications</span>
+          <button onclick="enableBrowserNotifications()" id="btn-enable-notif" class="px-3 py-1 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white">
+            Enable Alerts
+          </button>
+        </div>
+        <p class="text-xs text-slate-400">Alerts you with a notification & chime whenever your 12-hour review cards wake up.</p>
+      </div>
+
+      <!-- Option 2: Daily Reminder Time & 1-Click iPhone/Mac Calendar (.ics) -->
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+        <div class="text-sm font-bold text-white">2. iPhone / iPad / Mac Calendar Alarm (.ics)</div>
+        <p class="text-xs text-slate-400">
+          Add a 5-minute daily recurring reminder to your Apple/Google Calendar with a direct link to this Anki deck:
+        </p>
+        <div class="flex items-center gap-2">
+          <input id="reminder-time-input" type="time" value="09:30" class="bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-sm text-white font-mono" />
+          <button onclick="downloadCalendarReminderICS()" class="flex-1 py-2 px-3 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white">
+            📅 Add to iPhone / Mac Calendar
+          </button>
+        </div>
+      </div>
+
+      <!-- Option 3: Free iOS Home Screen Web App Tip -->
+      <div class="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 space-y-1">
+        <div class="text-xs font-bold text-indigo-300">📱 Free iPhone / iPad App (Save €30!)</div>
+        <p class="text-xs text-slate-300">
+          On your iPhone or iPad in Safari, tap <strong>Share (⬆️) → Add to Home Screen</strong>. It installs this Anki app right on your phone for free and syncs via Firebase!
+        </p>
+      </div>
+
+      <button onclick="closeReminderModal()" class="w-full py-2.5 rounded-xl font-bold text-sm bg-slate-800 hover:bg-slate-700 text-slate-200">
+        Done
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: ADD CUSTOM CARD TO FIREBASE                                  -->
+  <!-- ===================================================================== -->
+  <div id="add-card-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl max-w-md w-full p-6 space-y-3.5 border border-slate-700 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <h3 class="font-display font-extrabold text-xl text-white">➕ Add Card to Diego's Deck</h3>
+        <button onclick="closeAddCardModal()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
+      </div>
+
+      <div class="space-y-2.5 text-xs">
+        <div>
+          <label class="block text-slate-400 font-bold mb-1">Phrasal Verb or Target Phrase</label>
+          <input id="new-card-w" type="text" placeholder="e.g. Iron out" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-400 font-bold mb-1">Formal Meaning</label>
+            <input id="new-card-meaning" type="text" placeholder="e.g. Fix small bugs" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none" />
+          </div>
+          <div>
+            <label class="block text-slate-400 font-bold mb-1">Pronoun Sandwich</label>
+            <input id="new-card-pronoun" type="text" placeholder="e.g. iron them out" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-400 font-bold mb-1">Particle Group</label>
+            <select id="new-card-particle" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none">
+              <option value="OUT">OUT (Expand / Eliminate)</option>
+              <option value="UP">UP (Visible / Increase)</option>
+              <option value="OFF">OFF (Launch / Approve)</option>
+              <option value="DOWN">DOWN (Reduce / Split)</option>
+              <option value="IN_ON">IN / INTO / ON</option>
+              <option value="BACK_OVER">BACK / OVER / THROUGH</option>
+              <option value="POLISH">POLISH (Grammar Fix)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-400 font-bold mb-1">Spanish Translation</label>
+            <input id="new-card-es" type="text" placeholder="e.g. Resolver detalles" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-slate-400 font-bold mb-1">Visual Metaphor / Rule Note</label>
+          <input id="new-card-metaphor" type="text" placeholder="e.g. Iron wrinkles out of a shirt until flat" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none" />
+        </div>
+        <div>
+          <label class="block text-slate-400 font-bold mb-1">Example Sentence</label>
+          <input id="new-card-ex" type="text" placeholder="e.g. Let's iron out the alerting bugs before Friday." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none" />
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <button onclick="saveCustomCard()" class="flex-1 py-2.5 rounded-xl font-bold text-sm bg-indigo-600 hover:bg-indigo-500 text-white">
+          ☁️ Save & Sync to Firebase
+        </button>
+        <button onclick="closeAddCardModal()" class="py-2.5 px-4 rounded-xl font-bold text-sm bg-slate-800 text-slate-300">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. FIREBASE CONFIGURATION (From D:\class aids\code\esl-snap-online.html)
+    // =========================================================================
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyD8Qb4REPWY2o9JJBCBv2Qww3-5LlxlfAM",
+      authDomain: "esl-games-lewis-34.firebaseapp.com",
+      databaseURL: "https://esl-games-lewis-34-default-rtdb.firebaseio.com",
+      projectId: "esl-games-lewis-34"
+    };
+
+    const FIREBASE_REST_BASE = "https://esl-games-lewis-34-default-rtdb.firebaseio.com/anki_diego";
+    let firebaseDb = null;
+    let isFirebaseConnected = false;
+
+    // =========================================================================
+    // 2. DIEGO'S PERSONAL TRANSCRIPT POLISH CARDS (From Nov 4 & Nov 13 Lessons)
+    // =========================================================================
+    const DIEGO_POLISH_CARDS = [
+      {
+        id: "polish_usually_bill",
+        w: "We usually split the bill",
+        meaning: "Present habit (NOT 'used to split the account/will')",
+        particle: "POLISH",
+        tech: true,
+        priority: true,
+        pronoun: "usually split it",
+        metaphor: "'Usually' = present routine. 'Used to' = dead past habit! And at a restaurant/cafe, say 'the bill' (not 'the account').",
+        ex: "In Amsterdam, we usually split the bill with a Tikkie link.",
+        es: "Normalmente dividimos la cuenta (hábito actual)",
+        emoji: "🧾",
+        grad: "linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)"
+      },
+      {
+        id: "polish_half_hour_late",
+        w: "Half an hour late to a half-hour meeting",
+        meaning: "Singular hyphenated modifier (NOT 'half hours')",
+        particle: "POLISH",
+        tech: true,
+        priority: true,
+        pronoun: "was half an hour late",
+        metaphor: "When a time phrase goes before a noun ('a half-hour meeting', 'a six-week deadline'), never add an -s!",
+        ex: "I was half an hour late to a half-hour meeting.",
+        es: "Llegué media hora tarde a una reunión de media hora",
+        emoji: "⏱️",
+        grad: "linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)"
+      },
+      {
+        id: "polish_is_there_easier",
+        w: "Is there an easier way to understand them?",
+        meaning: "Question inversion + avoid repeating 'way'",
+        particle: "POLISH",
+        tech: true,
+        priority: true,
+        pronoun: "Is there an easier way",
+        metaphor: "Invert 'There is' → 'Is there...?' for questions, and upgrade the second 'way' to 'understand' or 'retain'.",
+        ex: "Is there an easier way to understand all the phrasal verbs?",
+        es: "¿Hay alguna forma más fácil de entenderlos?",
+        emoji: "❓",
+        grad: "linear-gradient(135deg, #10b981 0%, #059669 100%)"
+      },
+      {
+        id: "polish_many_people_c1",
+        w: "Many people / A lot of people at C1 level",
+        meaning: "Countable plural (NOT 'much people')",
+        particle: "POLISH",
+        tech: true,
+        priority: true,
+        pronoun: "many people / a lot of people",
+        metaphor: "'People' is countable plural → use 'many' or 'a lot of' (never 'much people').",
+        ex: "I know a lot of people at C1 level who say phrasal verbs are hard.",
+        es: "Conozco a mucha gente con nivel C1...",
+        emoji: "👥",
+        grad: "linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)"
+      },
+      {
+        id: "polish_how_long_take",
+        w: "How long do you think it'll take?",
+        meaning: "Natural duration question (NOT 'how much time')",
+        particle: "POLISH",
+        tech: true,
+        priority: true,
+        pronoun: "How long will it take",
+        metaphor: "Native speakers ask 'How long...?' instead of literal Spanish '¿Cuánto tiempo?' ('How much time?').",
+        ex: "How long do you think it'll take before people leak the new GTA?",
+        es: "¿Cuánto tiempo crees que tardarán en filtrarlo?",
+        emoji: "⏳",
+        grad: "linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)"
+      },
+      {
+        id: "polish_all_together",
+        w: "Solve this all together",
+        meaning: "As a group (2 words: 'all together' vs 'altogether')",
+        particle: "POLISH",
+        tech: true,
+        priority: true,
+        pronoun: "plan it all together",
+        metaphor: "'All together' (2 words) = everyone in the team together. 'Altogether' (1 word) = completely.",
+        ex: "Let's come in on Monday and solve this problem all together.",
+        es: "Vamos a resolver el problema todos juntos el lunes",
+        emoji: "🤝",
+        grad: "linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)"
+      },
+      {
+        id: "polish_customer_churn",
+        w: "Customer churn vs. Retention",
+        meaning: "Losing subscribers vs. keeping them",
+        particle: "POLISH",
+        tech: true,
+        priority: true,
+        pronoun: "reduce churn / protect retention",
+        metaphor: "Churn = customers leaving; Retention = keeping customers happy.",
+        ex: "45 minutes of failed invoices creates a serious customer churn risk.",
+        es: "Pérdida/fuga de clientes vs. Retención",
+        emoji: "📉",
+        grad: "linear-gradient(135deg, #f43f5e 0%, #fb923c 100%)"
+      },
+      {
+        id: "polish_polder_model",
+        w: "The Polder Model",
+        meaning: "Dutch consensus-based decision making",
+        particle: "POLISH",
+        tech: true,
+        priority: true,
+        pronoun: "build consensus",
+        metaphor: "Everyone in the Dutch engineering team has a voice before signing off on a plan.",
+        ex: "In Amsterdam's Polder model, you consult the team before committing to a deadline.",
+        es: "El modelo pólder (decisiones por consenso en Países Bajos)",
+        emoji: "🌷",
+        grad: "linear-gradient(135deg, #fb923c 0%, #facc15 100%)"
+      }
+    ];
+
+    const DIEGO_CORE_14 = [
+      "Roll out", "Iron out", "Rule out", "Phase out",
+      "Flag up", "Bring up", "Spin up", "Scale up",
+      "Kick off", "Sign off on", "Put off",
+      "Break down", "Narrow down", "Turn down"
+    ];
+
+    // =========================================================================
+    // 3. BUILD MASTER DECK & ANKI SM-2 STATE
+    // =========================================================================
+    let allCards = [];
+    let srsState = {
+      cards: {},         // cardId -> { state, intervalMs, ease, reps, lapses, dueAt, lastReviewedAt }
+      customCards: [],   // extra cards added by Lewis or Diego
+      totalReviews: 0,
+      mistakeMode12h: true, // Default: 12-hour mistake interval as discussed in Nov 13 lesson!
+      reminderTime: "09:30",
+      updatedAt: 0
+    };
+
+    let currentDeckFilter = "PRIORITY";
+    let currentPromptMode = "cloze";
+    let showSpanishHint = true;
+    let activeCard = null;
+    let isAnswerRevealed = false;
+
+    function slugify(str) {
+      return "pv_" + str.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+    }
+
+    function buildMasterDeck() {
+      const baseVerbs = (typeof PHRASAL_VERBS_DATA !== "undefined" ? PHRASAL_VERBS_DATA : [])
+        .filter(item => item.w !== "Wild Card")
+        .map(item => ({
+          ...item,
+          id: slugify(item.w),
+          priority: DIEGO_CORE_14.includes(item.w)
+        }));
+
+      const custom = (srsState.customCards || []).map(item => ({
+        ...item,
+        id: item.id || slugify(item.w),
+        priority: true
+      }));
+
+      // Combine Diego's 14 core phrasal verbs + 8 personal polish cards first, then the rest
+      const map = new Map();
+      [...DIEGO_POLISH_CARDS, ...baseVerbs, ...custom].forEach(c => map.set(c.id, c));
+      allCards = Array.from(map.values());
+    }
+
+    function getCardSRS(cardId) {
+      if (!srsState.cards[cardId]) {
+        srsState.cards[cardId] = {
+          state: "new",
+          intervalMs: 0,
+          ease: 2.5,
+          reps: 0,
+          lapses: 0,
+          dueAt: 0,
+          lastReviewedAt: 0
+        };
+      }
+      return srsState.cards[cardId];
+    }
+
+    // =========================================================================
+    // 4. LOCALSTORAGE + FIREBASE REALTIME CLOUD SYNC
+    // =========================================================================
+    const LOCAL_STORAGE_KEY = "diego_anki_cloud_v1";
+
+    function loadLocalState() {
+      try {
+        const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          srsState = { ...srsState, ...parsed, cards: parsed.cards || {}, customCards: parsed.customCards || [] };
+        }
+      } catch (e) {
+        console.warn("Local storage load warning:", e);
+      }
+    }
+
+    function saveLocalState() {
+      srsState.updatedAt = Date.now();
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(srsState));
+      } catch (e) {}
+    }
+
+    function updateFirebaseIndicator(status, text) {
+      const dot = document.getElementById("firebase-dot");
+      const label = document.getElementById("firebase-status-text");
+      const pill = document.getElementById("firebase-status-pill");
+      if (!dot || !label) return;
+
+      label.textContent = text;
+      if (status === "online") {
+        dot.className = "w-2 h-2 rounded-full bg-emerald-400 pulse-live";
+        pill.className = "px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 hover:bg-emerald-500/25 transition";
+      } else if (status === "syncing") {
+        dot.className = "w-2 h-2 rounded-full bg-amber-400 pulse-live";
+      } else {
+        dot.className = "w-2 h-2 rounded-full bg-slate-400";
+      }
+    }
+
+    async function initFirebaseSync() {
+      updateFirebaseIndicator("syncing", "☁️ Syncing Firebase...");
+      // 1. Immediate REST pull from Firebase Realtime DB so it works everywhere without auth friction
+      try {
+        const res = await fetch(`${FIREBASE_REST_BASE}/diego_state.json`);
+        if (res.ok) {
+          const remote = await res.json();
+          if (remote && remote.updatedAt && remote.updatedAt > (srsState.updatedAt || 0)) {
+            srsState = {
+              ...srsState,
+              ...remote,
+              cards: { ...(srsState.cards || {}), ...(remote.cards || {}) },
+              customCards: remote.customCards || srsState.customCards || []
+            };
+            saveLocalState();
+            buildMasterDeck();
+            refreshAllUI();
+          } else if (!remote && Object.keys(srsState.cards).length > 0) {
+            await pushStateToFirebase();
+          }
+          isFirebaseConnected = true;
+          updateFirebaseIndicator("online", "☁️ Firebase Live · Synced");
+        }
+      } catch (e) {
+        updateFirebaseIndicator("offline", "💾 Local Mode (Offline)");
+      }
+
+      // 2. Also attach Firebase Realtime SDK listener for live Teacher <-> Student updates
+      try {
+        if (typeof firebase !== "undefined") {
+          const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(FIREBASE_CONFIG);
+          firebaseDb = firebase.database(app);
+          const stateRef = firebaseDb.ref("anki_diego/diego_state");
+          stateRef.on("value", (snapshot) => {
+            const val = snapshot.val();
+            if (val && val.updatedAt && val.updatedAt > (srsState.updatedAt || 0)) {
+              srsState = {
+                ...srsState,
+                ...val,
+                cards: { ...(srsState.cards || {}), ...(val.cards || {}) },
+                customCards: val.customCards || srsState.customCards || []
+              };
+              localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(srsState));
+              buildMasterDeck();
+              refreshAllUI();
+              updateFirebaseIndicator("online", "☁️ Firebase Live · Synced");
+            }
+          });
+        }
+      } catch (e) {}
+    }
+
+    async function pushStateToFirebase() {
+      saveLocalState();
+      updateFirebaseIndicator("syncing", "☁️ Saving...");
+      try {
+        await fetch(`${FIREBASE_REST_BASE}/diego_state.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(srsState)
+        });
+        isFirebaseConnected = true;
+        updateFirebaseIndicator("online", "☁️ Firebase Live · Synced");
+        const syncEl = document.getElementById("stats-last-sync");
+        if (syncEl) syncEl.textContent = `Last synced to Firebase: ${new Date().toLocaleTimeString()}`;
+      } catch (e) {
+        updateFirebaseIndicator("offline", "💾 Saved Locally");
+      }
+    }
+
+    function forceFirebaseSync() {
+      pushStateToFirebase();
+    }
+
+    // =========================================================================
+    // 5. FILTERING, SCHEDULING & INTERVAL CALCULATIONS
+    // =========================================================================
+    const HOUR_MS = 3600 * 1000;
+    const DAY_MS  = 24 * HOUR_MS;
+    const MIN_MS  = 60 * 1000;
+
+    function getFilteredDeckCards() {
+      if (currentDeckFilter === "ALL") return allCards;
+      if (currentDeckFilter === "PRIORITY") return allCards.filter(c => c.priority);
+      if (currentDeckFilter === "POLISH") return allCards.filter(c => c.particle === "POLISH");
+      if (currentDeckFilter === "TECH") return allCards.filter(c => c.tech);
+      if (currentDeckFilter === "LEECHES") {
+        const leeches = allCards.filter(c => (getCardSRS(c.id).lapses || 0) > 0);
+        return leeches.length ? leeches : allCards.filter(c => c.priority);
+      }
+      return allCards.filter(c => c.particle === currentDeckFilter);
+    }
+
+    function computeNextIntervals(cardId) {
+      const s = getCardSRS(cardId);
+      const againMs = srsState.mistakeMode12h ? (12 * HOUR_MS) : (10 * MIN_MS);
+
+      if (s.state === "new" || s.intervalMs === 0) {
+        return {
+          1: againMs,
+          2: 18 * HOUR_MS,
+          3: 1 * DAY_MS,
+          4: 4 * DAY_MS
+        };
+      }
+
+      const cur = Math.max(s.intervalMs, 12 * HOUR_MS);
+      return {
+        1: againMs,
+        2: Math.round(cur * 1.2),
+        3: Math.round(cur * (s.ease || 2.5)),
+        4: Math.round(cur * (s.ease || 2.5) * 1.35)
+      };
+    }
+
+    function formatInterval(ms) {
+      if (ms < HOUR_MS) return Math.max(1, Math.round(ms / MIN_MS)) + "m";
+      if (ms < DAY_MS) return Math.round(ms / HOUR_MS) + "h";
+      return Math.round(ms / DAY_MS) + "d";
+    }
+
+    function formatCountdown(dueAt) {
+      const diff = dueAt - Date.now();
+      if (diff <= 0) return "Due Now";
+      const hrs = Math.floor(diff / HOUR_MS);
+      const mins = Math.ceil((diff % HOUR_MS) / MIN_MS);
+      if (hrs >= 24) return `in ${Math.round(hrs / 24)}d`;
+      if (hrs > 0) return `in ${hrs}h ${mins}m`;
+      return `in ${mins}m`;
+    }
+
+    function pickNextStudyCard() {
+      const now = Date.now();
+      const deck = getFilteredDeckCards();
+
+      // 1. Due cards first (oldest dueAt first)
+      const dueCards = deck
+        .filter(c => {
+          const s = getCardSRS(c.id);
+          return s.state !== "new" && s.dueAt <= now;
+        })
+        .sort((a, b) => getCardSRS(a.id).dueAt - getCardSRS(b.id).dueAt);
+
+      if (dueCards.length > 0) return dueCards[0];
+
+      // 2. New cards next
+      const newCards = deck.filter(c => getCardSRS(c.id).state === "new");
+      if (newCards.length > 0) return newCards[0];
+
+      // 3. Otherwise, the card waking up soonest (so Diego can always keep practicing!)
+      const soonest = [...deck].sort((a, b) => getCardSRS(a.id).dueAt - getCardSRS(b.id).dueAt);
+      return soonest[0] || allCards[0];
+    }
+
+    // =========================================================================
+    // 6. RENDER ACTIVE CARD & STUDY INTERACTIONS
+    // =========================================================================
+    function maskTargetInSentence(sentence, targetWord) {
+      if (!sentence || !targetWord) return sentence;
+      // Match base verb words inside sentence (case-insensitive)
+      const parts = targetWord.split(" ");
+      const firstWord = parts[0].replace(/[^a-zA-Z]/g, "");
+      const regex = new RegExp(`\\b${firstWord}[a-z]*\\b(\\s+(?:it|them|me|you|us|this|that)\\s+)?(\\s+${parts.slice(1).join("\\s+")})?`, "i");
+      if (regex.test(sentence)) {
+        return sentence.replace(regex, "________");
+      }
+      return sentence;
+    }
+
+    function renderActiveCard() {
+      if (!activeCard) activeCard = pickNextStudyCard();
+      if (!activeCard) return;
+
+      isAnswerRevealed = false;
+      const s = getCardSRS(activeCard.id);
+      const ivls = computeNextIntervals(activeCard.id);
+
+      // Update Interval Labels on the 4 buttons
+      document.getElementById("ivl-again").textContent = formatInterval(ivls[1]);
+      document.getElementById("ivl-hard").textContent  = formatInterval(ivls[2]);
+      document.getElementById("ivl-good").textContent  = formatInterval(ivls[3]);
+      document.getElementById("ivl-easy").textContent  = formatInterval(ivls[4]);
+
+      // Badges
+      const pBadge = document.getElementById("card-badge-particle");
+      pBadge.textContent = activeCard.particle === "POLISH"
+        ? "🔧 LIVE TRANSCRIPT FIX"
+        : `🧭 PARTICLE: ${activeCard.particle.replace("_", " / ")}`;
+
+      const statusBadge = document.getElementById("card-badge-status");
+      if (s.state === "new") {
+        statusBadge.textContent = "🆕 New Card";
+        statusBadge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30";
+      } else if (s.dueAt <= Date.now()) {
+        statusBadge.textContent = `🔴 Due Now (Reps: ${s.reps})`;
+        statusBadge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30";
+      } else {
+        statusBadge.textContent = `⏳ Due ${formatCountdown(s.dueAt)}`;
+        statusBadge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30";
+      }
+
+      const emojiBubble = document.getElementById("card-emoji-bubble");
+      emojiBubble.textContent = activeCard.emoji || "🚀";
+      emojiBubble.style.background = activeCard.grad || "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+
+      const promptLabel = document.getElementById("card-prompt-label");
+      const frontMain = document.getElementById("card-front-main");
+      const frontSub = document.getElementById("card-front-sub");
+      const frontEs = document.getElementById("card-front-es");
+
+      if (currentPromptMode === "cloze") {
+        promptLabel.textContent = "Recall the Phrasal Verb for This Context";
+        frontMain.textContent = `"${maskTargetInSentence(activeCard.ex, activeCard.w)}"`;
+        frontSub.textContent = `Meaning: ${activeCard.meaning}`;
+      } else if (currentPromptMode === "formal") {
+        promptLabel.textContent = "Upgrade This Formal Meaning to a Phrasal Verb";
+        frontMain.textContent = activeCard.meaning;
+        frontSub.textContent = `Particle Hint: [${activeCard.particle.replace("_", " / ")}]`;
+      } else {
+        promptLabel.textContent = "What Does This Phrasal Verb Mean?";
+        frontMain.textContent = activeCard.w;
+        frontSub.textContent = `Say its meaning & Pronoun Sandwich out loud!`;
+      }
+
+      frontEs.textContent = `🇪🇸 ${activeCard.es || ""}`;
+      frontEs.style.display = showSpanishHint ? "block" : "none";
+
+      // Reset input & back area
+      const inputEl = document.getElementById("type-answer-input");
+      inputEl.value = "";
+      inputEl.className = "w-full bg-slate-900/90 border border-slate-700 focus:border-indigo-400 rounded-xl px-3.5 py-2 text-sm text-white outline-none font-semibold";
+
+      document.getElementById("card-back-area").classList.add("hidden");
+      document.getElementById("btn-show-answer").classList.remove("hidden");
+      document.getElementById("anki-rating-buttons").classList.add("hidden");
+
+      // Populate Back
+      document.getElementById("card-back-answer").textContent   = activeCard.w;
+      document.getElementById("card-back-pronoun").textContent  = `🥪 "${activeCard.pronoun}"`;
+      document.getElementById("card-back-metaphor").textContent = activeCard.metaphor;
+      document.getElementById("card-back-example").textContent  = `"${activeCard.ex}"`;
+    }
+
+    function revealAnswer() {
+      if (!activeCard) return;
+      isAnswerRevealed = true;
+      document.getElementById("card-back-area").classList.remove("hidden");
+      document.getElementById("btn-show-answer").classList.add("hidden");
+      document.getElementById("anki-rating-buttons").classList.remove("hidden");
+
+      // Check typed input if user typed something
+      const inputEl = document.getElementById("type-answer-input");
+      const typed = inputEl.value.trim().toLowerCase();
+      if (typed) {
+        const target = activeCard.w.toLowerCase();
+        const pronoun = (activeCard.pronoun || "").toLowerCase();
+        if (target.includes(typed) || pronoun.includes(typed)) {
+          inputEl.className = "w-full bg-emerald-950/80 border-2 border-emerald-400 rounded-xl px-3.5 py-2 text-sm text-emerald-200 outline-none font-bold";
+        } else {
+          inputEl.className = "w-full bg-rose-950/80 border-2 border-rose-400 rounded-xl px-3.5 py-2 text-sm text-rose-200 outline-none font-bold";
+        }
+      }
+
+      speakActiveCard();
+    }
+
+    function rateCard(rating) {
+      if (!activeCard) return;
+      const s = getCardSRS(activeCard.id);
+      const ivls = computeNextIntervals(activeCard.id);
+      const nextMs = ivls[rating];
+      const now = Date.now();
+
+      s.lastReviewedAt = now;
+      s.intervalMs = nextMs;
+      s.dueAt = now + nextMs;
+
+      if (rating === 1) {
+        s.state = "relearning";
+        s.lapses = (s.lapses || 0) + 1;
+        s.ease = Math.max(1.3, (s.ease || 2.5) - 0.2);
+      } else if (rating === 2) {
+        s.state = "learning";
+        s.reps = (s.reps || 0) + 1;
+        s.ease = Math.max(1.3, (s.ease || 2.5) - 0.15);
+      } else if (rating === 3) {
+        s.state = nextMs >= 3 * DAY_MS ? "mastered" : "review";
+        s.reps = (s.reps || 0) + 1;
+      } else if (rating === 4) {
+        s.state = "mastered";
+        s.reps = (s.reps || 0) + 1;
+        s.ease = (s.ease || 2.5) + 0.15;
+      }
+
+      srsState.totalReviews = (srsState.totalReviews || 0) + 1;
+      pushStateToFirebase();
+
+      // Advance to next card
+      activeCard = pickNextStudyCard();
+      refreshAllUI();
+    }
+
+    function cramNextCard() {
+      const deck = getFilteredDeckCards();
+      if (!deck.length) return;
+      const idx = deck.findIndex(c => activeCard && c.id === activeCard.id);
+      activeCard = deck[(idx + 1) % deck.length];
+      renderActiveCard();
+    }
+
+    function handleInputKey(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (!isAnswerRevealed) revealAnswer();
+      }
+    }
+
+    // Global Keyboard Shortcuts (Space, 1, 2, 3, 4)
+    window.addEventListener("keydown", (e) => {
+      if (["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)) return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        if (!isAnswerRevealed) revealAnswer();
+      } else if (isAnswerRevealed && ["1", "2", "3", "4"].includes(e.key)) {
+        e.preventDefault();
+        rateCard(parseInt(e.key, 10));
+      }
+    });
+
+    // =========================================================================
+    // 7. STATS, UPCOMING QUEUE & BROWSER RENDERERS
+    // =========================================================================
+    function refreshStatsAndQueue() {
+      const now = Date.now();
+      let dueCount = 0;
+      let learningCount = 0;
+      let newCount = 0;
+      let masteredCount = 0;
+      let nextWakeup = Infinity;
+
+      allCards.forEach(c => {
+        const s = getCardSRS(c.id);
+        if (s.state === "new") {
+          newCount++;
+        } else if (s.dueAt <= now) {
+          dueCount++;
+        } else {
+          if (s.dueAt < nextWakeup) nextWakeup = s.dueAt;
+          if (s.state === "mastered" && s.intervalMs >= 3 * DAY_MS) {
+            masteredCount++;
+          } else {
+            learningCount++;
+          }
+        }
+      });
+
+      document.getElementById("stat-due").textContent      = dueCount;
+      document.getElementById("stat-learning").textContent = learningCount;
+      document.getElementById("stat-new").textContent      = newCount;
+      document.getElementById("stat-mastered").textContent = masteredCount;
+
+      const timerEl = document.getElementById("stat-next-timer");
+      if (dueCount > 0) {
+        timerEl.textContent = `${dueCount} Due Now!`;
+        document.getElementById("doc-title").textContent = `(${dueCount} Due) Diego's Anki Cloud ⚡`;
+      } else if (nextWakeup < Infinity) {
+        timerEl.textContent = formatCountdown(nextWakeup);
+        document.getElementById("doc-title").textContent = `Diego's Anki Cloud ⚡ | Next ${formatCountdown(nextWakeup)}`;
+      } else {
+        timerEl.textContent = "Ready!";
+      }
+
+      // Upcoming Queue List
+      const queueEl = document.getElementById("upcoming-queue-list");
+      const scheduled = allCards
+        .filter(c => getCardSRS(c.id).state !== "new")
+        .sort((a, b) => getCardSRS(a.id).dueAt - getCardSRS(b.id).dueAt)
+        .slice(0, 8);
+
+      if (!scheduled.length) {
+        queueEl.innerHTML = `<div class="text-slate-500 italic py-2">Rate cards with 1–4 to populate your 12-hour review queue!</div>`;
+      } else {
+        queueEl.innerHTML = scheduled.map(c => {
+          const s = getCardSRS(c.id);
+          const isDue = s.dueAt <= now;
+          return `
+            <div onclick="jumpToStudyCard('${c.id}')" class="cursor-pointer p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span>${c.emoji || '🚀'}</span>
+                <div>
+                  <div class="font-bold text-white">${c.w}</div>
+                  <div class="text-[11px] text-slate-400">${c.meaning}</div>
+                </div>
+              </div>
+              <span class="font-mono font-bold text-[11px] px-2 py-0.5 rounded-full ${isDue ? 'bg-rose-500/20 text-rose-300' : 'bg-amber-500/20 text-amber-300'}">
+                ${formatCountdown(s.dueAt)}
+              </span>
+            </div>
+          `;
+        }).join("");
+      }
+
+      // Teacher & Firebase Stats View
+      document.getElementById("stats-total-reviews").textContent = `${srsState.totalReviews || 0} Reviews`;
+      document.getElementById("mistake-mode-label").textContent = srsState.mistakeMode12h ? "12-Hour Strict Mode" : "10-Minute Rapid Mode";
+      document.getElementById("mistake-hours-desc").textContent = srsState.mistakeMode12h ? "12 hours" : "10 minutes";
+
+      const leeches = allCards
+        .filter(c => (getCardSRS(c.id).lapses || 0) > 0)
+        .sort((a, b) => (getCardSRS(b.id).lapses || 0) - (getCardSRS(a.id).lapses || 0));
+
+      const leechContainer = document.getElementById("leeches-list");
+      if (!leeches.length) {
+        leechContainer.innerHTML = `<div class="text-xs text-slate-400 col-span-3">No struggle cards recorded yet! Whenever Diego clicks "1 · Again", that card appears here automatically.</div>`;
+      } else {
+        leechContainer.innerHTML = leeches.map(c => {
+          const s = getCardSRS(c.id);
+          return `
+            <div class="p-3.5 rounded-2xl bg-rose-950/25 border border-rose-500/30 flex items-center justify-between">
+              <div>
+                <div class="font-bold text-white">${c.emoji} ${c.w}</div>
+                <div class="text-xs text-slate-300">${c.meaning} • <span class="text-amber-300">"${c.pronoun}"</span></div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs font-extrabold text-rose-400">${s.lapses}x Again</div>
+                <button onclick="jumpToStudyCard('${c.id}')" class="text-[11px] text-indigo-300 hover:underline font-bold">Drill →</button>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+    }
+
+    function renderCardBrowser() {
+      const q = (document.getElementById("browser-search")?.value || "").trim().toLowerCase();
+      const list = getFilteredDeckCards().filter(c => {
+        if (!q) return true;
+        return c.w.toLowerCase().includes(q) ||
+               c.meaning.toLowerCase().includes(q) ||
+               (c.es || "").toLowerCase().includes(q) ||
+               (c.ex || "").toLowerCase().includes(q);
+      });
+
+      const grid = document.getElementById("browser-grid");
+      grid.innerHTML = list.map(c => {
+        const s = getCardSRS(c.id);
+        const badge = s.state === "new"
+          ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">New</span>`
+          : `<span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300">${formatCountdown(s.dueAt)}</span>`;
+        return `
+          <div class="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-col justify-between gap-2">
+            <div>
+              <div class="flex items-center justify-between gap-2">
+                <span class="font-display font-extrabold text-base text-white">${c.emoji || '🚀'} ${c.w}</span>
+                ${badge}
+              </div>
+              <div class="text-xs font-bold text-indigo-300 mt-0.5">= ${c.meaning} • <span class="text-amber-300">🥪 "${c.pronoun}"</span></div>
+              <div class="text-xs text-slate-400 mt-1">💡 ${c.metaphor}</div>
+              <div class="text-xs text-emerald-300/90 italic mt-1">"${c.ex}"</div>
+              <div class="text-[11px] text-slate-400 mt-1">🇪🇸 ${c.es || ''}</div>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+              <span class="text-[10px] font-bold uppercase text-slate-500">Particle: ${c.particle}</span>
+              <button onclick="jumpToStudyCard('${c.id}')" class="px-3 py-1 rounded-xl text-xs font-bold bg-indigo-600/30 hover:bg-indigo-600 text-indigo-200 hover:text-white transition">
+                ⚡ Study Now
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function jumpToStudyCard(cardId) {
+      const found = allCards.find(c => c.id === cardId);
+      if (!found) return;
+      activeCard = found;
+      switchMainTab("study");
+      renderActiveCard();
+    }
+
+    function switchMainTab(tab) {
+      ["study", "decoder", "stats"].forEach(t => {
+        document.getElementById(`view-${t}`).classList.toggle("hidden", t !== tab);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tab) {
+          btn.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-indigo-600 text-white shadow";
+        } else {
+          btn.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition text-slate-400 hover:text-white";
+        }
+      });
+      if (tab === "decoder") renderCardBrowser();
+      if (tab === "stats") refreshStatsAndQueue();
+    }
+
+    function changeDeckFilter(val) {
+      currentDeckFilter = val;
+      activeCard = pickNextStudyCard();
+      refreshAllUI();
+    }
+
+    function changePromptMode(val) {
+      currentPromptMode = val;
+      renderActiveCard();
+    }
+
+    function toggleSpanishHint() {
+      showSpanishHint = !showSpanishHint;
+      document.getElementById("btn-es-hint").textContent = showSpanishHint ? "🇪🇸 ES Hint: On" : "🇪🇸 ES Hint: Off";
+      renderActiveCard();
+    }
+
+    function toggleMistakeIntervalMode() {
+      srsState.mistakeMode12h = !srsState.mistakeMode12h;
+      pushStateToFirebase();
+      refreshAllUI();
+    }
+
+    function makeAllPriorityDueNow() {
+      const now = Date.now() - 1000;
+      allCards.filter(c => c.priority).forEach(c => {
+        const s = getCardSRS(c.id);
+        s.state = "learning";
+        s.dueAt = now;
+      });
+      pushStateToFirebase();
+      currentDeckFilter = "PRIORITY";
+      document.getElementById("deck-select").value = "PRIORITY";
+      activeCard = pickNextStudyCard();
+      switchMainTab("study");
+      refreshAllUI();
+    }
+
+    function speakActiveCard() {
+      if (!activeCard || !("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(`${activeCard.w}. ${activeCard.pronoun}. ${activeCard.ex}`);
+      u.lang = "en-US";
+      u.rate = 0.93;
+      window.speechSynthesis.speak(u);
+    }
+
+    // =========================================================================
+    // 8. REMINDERS, NOTIFICATIONS, .ICS CALENDAR & ANKI .TSV EXPORT
+    // =========================================================================
+    function openReminderModal() {
+      document.getElementById("reminder-modal").classList.remove("hidden");
+    }
+    function closeReminderModal() {
+      document.getElementById("reminder-modal").classList.add("hidden");
+    }
+
+    function enableBrowserNotifications() {
+      if (!("Notification" in window)) {
+        alert("Use the 'Add to iPhone / Mac Calendar' button below for native iOS alerts!");
+        return;
+      }
+      Notification.requestPermission().then(perm => {
+        const btn = document.getElementById("btn-enable-notif");
+        if (perm === "granted") {
+          btn.textContent = "✅ Alerts Active";
+          btn.className = "px-3 py-1 rounded-xl text-xs font-bold bg-emerald-600 text-white";
+          new Notification("Diego's Anki Cloud ⚡", {
+            body: "Smart 12-hour review alerts are now active!"
+          });
+        }
+      });
+    }
+
+    function downloadCalendarReminderICS() {
+      const timeVal = document.getElementById("reminder-time-input").value || "09:30";
+      const [hh, mm] = timeVal.split(":");
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const d = String(now.getDate()).padStart(2, "0");
+
+      const url = window.location.href.split("#")[0];
+      const ics = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Diego Anki Cloud//EN",
+        "BEGIN:VEVENT",
+        `DTSTART:${y}${m}${d}T${hh}${mm}00`,
+        `DTEND:${y}${m}${d}T${hh}${String(Math.min(59, parseInt(mm, 10) + 10)).padStart(2, "0")}00`,
+        "RRULE:FREQ=DAILY",
+        "SUMMARY:⚡ 5-Min Anki Phrasal Verbs Review (Diego)",
+        `DESCRIPTION:Open your Firebase-synced Anki deck: ${url}`,
+        `URL:${url}`,
+        "BEGIN:VALARM",
+        "TRIGGER:-PT0M",
+        "ACTION:DISPLAY",
+        "DESCRIPTION:Time for your 5-minute Anki Phrasal Verbs check!",
+        "END:VALARM",
+        "END:VEVENT",
+        "END:VCALENDAR"
+      ].join("\r\n");
+
+      const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "Diego_Anki_Daily_Reminder.ics";
+      a.click();
+    }
+
+    function exportAnkiTSV() {
+      const lines = allCards.map(c => {
+        const front = `${c.meaning} (${c.es || ""}) — [Particle: ${c.particle}]`;
+        const back = `<b>${c.w}</b> (<i>${c.pronoun}</i>)<br>💡 ${c.metaphor}<br>🗣️ "${c.ex}"`;
+        return `${front.replace(/\t/g, " ")}\t${back.replace(/\t/g, " ")}\t${c.particle}`;
+      });
+      const blob = new Blob([lines.join("\n")], { type: "text/tab-separated-values;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "Diego_Phrasal_Verbs_Anki_Deck.tsv";
+      a.click();
+    }
+
+    // Add Custom Card Modal
+    function openAddCardModal() {
+      document.getElementById("add-card-modal").classList.remove("hidden");
+    }
+    function closeAddCardModal() {
+      document.getElementById("add-card-modal").classList.add("hidden");
+    }
+    function saveCustomCard() {
+      const w = document.getElementById("new-card-w").value.trim();
+      const meaning = document.getElementById("new-card-meaning").value.trim();
+      if (!w || !meaning) return;
+
+      const card = {
+        id: slugify(w) + "_" + Date.now(),
+        w,
+        meaning,
+        pronoun: document.getElementById("new-card-pronoun").value.trim() || w.toLowerCase(),
+        particle: document.getElementById("new-card-particle").value,
+        es: document.getElementById("new-card-es").value.trim(),
+        metaphor: document.getElementById("new-card-metaphor").value.trim() || "Custom lesson card",
+        ex: document.getElementById("new-card-ex").value.trim() || `Example with ${w}.`,
+        tech: true,
+        priority: true,
+        emoji: "⭐"
+      };
+
+      srsState.customCards = srsState.customCards || [];
+      srsState.customCards.push(card);
+      buildMasterDeck();
+      activeCard = card;
+      pushStateToFirebase();
+      closeAddCardModal();
+      refreshAllUI();
+    }
+
+    function refreshAllUI() {
+      renderActiveCard();
+      refreshStatsAndQueue();
+      if (!document.getElementById("view-decoder").classList.contains("hidden")) {
+        renderCardBrowser();
+      }
+    }
+
+    // Check every 60 seconds if any 12-hour cards just woke up
+    setInterval(() => {
+      refreshStatsAndQueue();
+    }, 60000);
+
+    // Boot App
+    loadLocalState();
+    buildMasterDeck();
+    activeCard = pickNextStudyCard();
+    refreshAllUI();
+    initFirebaseSync();
+  </script>
+</body>
+</html>
